@@ -7,6 +7,11 @@
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+    <script>
+        if (window.self !== window.top) {
+            document.documentElement.classList.add('iframe-mode');
+        }
+    </script>
     <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
@@ -77,6 +82,23 @@
         }
     </script>
     <style>
+        /* Iframe Mode Styles to hide mockup frame when embedded */
+        .iframe-mode body {
+            background-color: transparent !important;
+            padding: 0 !important;
+            min-height: 100vh !important;
+            display: block !important;
+        }
+        .iframe-mode #mobile-frame {
+            width: 100% !important;
+            max-width: none !important;
+            height: 100vh !important;
+            max-height: none !important;
+            border: none !important;
+            border-radius: 0 !important;
+            box-shadow: none !important;
+        }
+
         body, input, textarea, select, button {
             font-family: "Plus Jakarta Sans", sans-serif !important;
             -webkit-tap-highlight-color: transparent;
