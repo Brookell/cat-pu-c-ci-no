@@ -471,8 +471,8 @@
                     <h1 id="app-title" class="text-xl font-black text-[#6f5b40] tracking-tighter transition-all duration-300 transform">Cat-puccino</h1>
                 </div>
                 <div class="flex items-center gap-1">
-                    <!-- Edit Dashboard Layout Button -->
-                    <button id="btn-edit-layout" onclick="toggleEditLayout()" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-stone-200/50 transition-all active:scale-90 duration-200" title="Rearrange Layout">
+                    <!-- Edit Dashboard Layout Button (Always hidden to lock layout configuration) -->
+                    <button id="btn-edit-layout" onclick="toggleEditLayout()" class="hidden w-10 h-10 items-center justify-center rounded-full hover:bg-stone-200/50 transition-all active:scale-90 duration-200" title="Rearrange Layout" style="display: none !important;">
                         <span id="edit-layout-icon" class="material-symbols-outlined text-[#6f5b40]">dashboard_customize</span>
                     </button>
                     <button onclick="toggleNotifications()" class="relative w-10 h-10 flex items-center justify-center rounded-full hover:bg-stone-200/50 transition-all active:scale-90 duration-200">
@@ -2404,14 +2404,10 @@
                 toggleEditLayout();
             }
             
-            // Hide the edit button if not on home tab
+            // Hide the edit button if not on home tab (Kept hidden to disable layout editing)
             const editBtn = document.getElementById('btn-edit-layout');
             if (editBtn) {
-                if (activeTab === 'home') {
-                    editBtn.classList.remove('hidden');
-                } else {
-                    editBtn.classList.add('hidden');
-                }
+                editBtn.classList.add('hidden');
             }
 
             // Update Title with tiny slide animation
