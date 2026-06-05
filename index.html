@@ -1035,23 +1035,22 @@
                             <div class="flex gap-3">
                                 <input id="input-drink-brand" type="text" placeholder="Brand / Shop" class="flex-1 bg-surface-container-low border-none focus:ring-2 focus:ring-primary text-on-surface rounded-xl py-3 px-4 transition-all duration-300 text-xs font-bold placeholder:font-medium placeholder:text-xs placeholder:text-outline/60" />
                                 <div class="relative w-1/3">
-                                    <span class="absolute left-4 top-1/2 -translate-y-1/2 text-outline/60 text-xs font-bold">¥</span>
-                                    <input id="input-drink-price" type="number" placeholder="Price" class="w-full bg-surface-container-low border-none focus:ring-2 focus:ring-primary text-on-surface rounded-xl py-3 pl-8 pr-4 transition-all duration-300 text-xs font-bold placeholder:font-medium placeholder:text-xs placeholder:text-outline/60" />
+                                    <span class="absolute left-4 top-1/2 -translate-y-1/2 text-outline/60 text-xs font-bold pointer-events-none">¥</span>
+                                    <input id="input-drink-price" type="number" placeholder="Price" class="w-full bg-surface-container-low border-none focus:ring-2 focus:ring-primary text-on-surface rounded-xl py-3 pl-8 pr-8 transition-all duration-300 text-xs font-bold placeholder:font-medium placeholder:text-xs placeholder:text-outline/60" />
+                                    <!-- Custom Up/Down Spinner Buttons -->
+                                    <div class="absolute right-2 top-1/2 -translate-y-1/2 flex flex-col items-center justify-center select-none z-10">
+                                        <button type="button" onclick="adjustPrice(1)" class="w-4 h-3.5 flex items-center justify-center hover:bg-stone-200/50 rounded active:scale-75 transition-all text-outline hover:text-primary">
+                                            <span class="material-symbols-outlined text-[12px] font-bold">keyboard_arrow_up</span>
+                                        </button>
+                                        <button type="button" onclick="adjustPrice(-1)" class="w-4 h-3.5 flex items-center justify-center hover:bg-stone-200/50 rounded active:scale-75 transition-all text-outline hover:text-primary">
+                                            <span class="material-symbols-outlined text-[12px] font-bold">keyboard_arrow_down</span>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </section>
 
-                    <!-- Category -->
-                    <section class="space-y-3">
-                        <h3 class="text-sm font-bold text-on-surface-variant tracking-wide">Category</h3>
-                        <div>
-                            <button type="button" class="w-full flex items-center justify-center gap-2 py-3.5 px-4 rounded-full bg-primary-container text-on-primary-container shadow-sm pointer-events-none select-none">
-                                <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">coffee</span>
-                                <span class="text-sm font-bold">Coffee</span>
-                            </button>
-                        </div>
-                    </section>
  
                     <!-- Photo Upload -->
                     <section class="space-y-3">
@@ -1165,18 +1164,36 @@
                                 <button type="button" onclick="insertEmoji('🥤')" class="hover:bg-primary-container/20 p-1.5 rounded-lg text-lg active:scale-90 transition-all select-none">🥤</button>
                                 <button type="button" onclick="insertEmoji('🧋')" class="hover:bg-primary-container/20 p-1.5 rounded-lg text-lg active:scale-90 transition-all select-none">🧋</button>
                                 <button type="button" onclick="insertEmoji('🥛')" class="hover:bg-primary-container/20 p-1.5 rounded-lg text-lg active:scale-90 transition-all select-none">🥛</button>
-                                <button type="button" onclick="insertEmoji('🐾')" class="hover:bg-primary-container/20 p-1.5 rounded-lg text-lg active:scale-90 transition-all select-none">🐾</button>
+                                <button type="button" onclick="insertEmoji('🧉')" class="hover:bg-primary-container/20 p-1.5 rounded-lg text-lg active:scale-90 transition-all select-none">🧉</button>
                                 <button type="button" onclick="insertEmoji('🐱')" class="hover:bg-primary-container/20 p-1.5 rounded-lg text-lg active:scale-90 transition-all select-none">🐱</button>
                                 <button type="button" onclick="insertEmoji('😸')" class="hover:bg-primary-container/20 p-1.5 rounded-lg text-lg active:scale-90 transition-all select-none">😸</button>
+                                <button type="button" onclick="insertEmoji('🐈')" class="hover:bg-primary-container/20 p-1.5 rounded-lg text-lg active:scale-90 transition-all select-none">🐈</button>
+                                <button type="button" onclick="insertEmoji('🐈‍⬛')" class="hover:bg-primary-container/20 p-1.5 rounded-lg text-lg active:scale-90 transition-all select-none">🐈‍⬛</button>
+                                <button type="button" onclick="insertEmoji('🐾')" class="hover:bg-primary-container/20 p-1.5 rounded-lg text-lg active:scale-90 transition-all select-none">🐾</button>
+                                <button type="button" onclick="insertEmoji('🦁')" class="hover:bg-primary-container/20 p-1.5 rounded-lg text-lg active:scale-90 transition-all select-none">🦁</button>
                                 <button type="button" onclick="insertEmoji('😋')" class="hover:bg-primary-container/20 p-1.5 rounded-lg text-lg active:scale-90 transition-all select-none">😋</button>
                                 <button type="button" onclick="insertEmoji('😍')" class="hover:bg-primary-container/20 p-1.5 rounded-lg text-lg active:scale-90 transition-all select-none">😍</button>
                                 <button type="button" onclick="insertEmoji('🥰')" class="hover:bg-primary-container/20 p-1.5 rounded-lg text-lg active:scale-90 transition-all select-none">🥰</button>
+                                <button type="button" onclick="insertEmoji('😎')" class="hover:bg-primary-container/20 p-1.5 rounded-lg text-lg active:scale-90 transition-all select-none">😎</button>
+                                <button type="button" onclick="insertEmoji('🫠')" class="hover:bg-primary-container/20 p-1.5 rounded-lg text-lg active:scale-90 transition-all select-none">🫠</button>
+                                <button type="button" onclick="insertEmoji('🥳')" class="hover:bg-primary-container/20 p-1.5 rounded-lg text-lg active:scale-90 transition-all select-none">🥳</button>
+                                <button type="button" onclick="insertEmoji('😊')" class="hover:bg-primary-container/20 p-1.5 rounded-lg text-lg active:scale-90 transition-all select-none">😊</button>
+                                <button type="button" onclick="insertEmoji('😭')" class="hover:bg-primary-container/20 p-1.5 rounded-lg text-lg active:scale-90 transition-all select-none">😭</button>
+                                <button type="button" onclick="insertEmoji('🥱')" class="hover:bg-primary-container/20 p-1.5 rounded-lg text-lg active:scale-90 transition-all select-none">🥱</button>
+                                <button type="button" onclick="insertEmoji('😴')" class="hover:bg-primary-container/20 p-1.5 rounded-lg text-lg active:scale-90 transition-all select-none">😴</button>
+                                <button type="button" onclick="insertEmoji('🤪')" class="hover:bg-primary-container/20 p-1.5 rounded-lg text-lg active:scale-90 transition-all select-none">🤪</button>
+                                <button type="button" onclick="insertEmoji('🤔')" class="hover:bg-primary-container/20 p-1.5 rounded-lg text-lg active:scale-90 transition-all select-none">🤔</button>
                                 <button type="button" onclick="insertEmoji('✨')" class="hover:bg-primary-container/20 p-1.5 rounded-lg text-lg active:scale-90 transition-all select-none">✨</button>
                                 <button type="button" onclick="insertEmoji('❤️')" class="hover:bg-primary-container/20 p-1.5 rounded-lg text-lg active:scale-90 transition-all select-none">❤️</button>
                                 <button type="button" onclick="insertEmoji('👍')" class="hover:bg-primary-container/20 p-1.5 rounded-lg text-lg active:scale-90 transition-all select-none">👍</button>
-                                <button type="button" onclick="insertEmoji('😴')" class="hover:bg-primary-container/20 p-1.5 rounded-lg text-lg active:scale-90 transition-all select-none">😴</button>
-                                <button type="button" onclick="insertEmoji('☀️')" class="hover:bg-primary-container/20 p-1.5 rounded-lg text-lg active:scale-90 transition-all select-none">☀️</button>
-                                <button type="button" onclick="insertEmoji('🍃')" class="hover:bg-primary-container/20 p-1.5 rounded-lg text-lg active:scale-90 transition-all select-none">🍃</button>
+                                <button type="button" onclick="insertEmoji('👎')" class="hover:bg-primary-container/20 p-1.5 rounded-lg text-lg active:scale-90 transition-all select-none">👎</button>
+                                <button type="button" onclick="insertEmoji('👌')" class="hover:bg-primary-container/20 p-1.5 rounded-lg text-lg active:scale-90 transition-all select-none">👌</button>
+                                <button type="button" onclick="insertEmoji('👏')" class="hover:bg-primary-container/20 p-1.5 rounded-lg text-lg active:scale-90 transition-all select-none">👏</button>
+                                <button type="button" onclick="insertEmoji('🥐')" class="hover:bg-primary-container/20 p-1.5 rounded-lg text-lg active:scale-90 transition-all select-none">🥐</button>
+                                <button type="button" onclick="insertEmoji('🥞')" class="hover:bg-primary-container/20 p-1.5 rounded-lg text-lg active:scale-90 transition-all select-none">🥞</button>
+                                <button type="button" onclick="insertEmoji('🍰')" class="hover:bg-primary-container/20 p-1.5 rounded-lg text-lg active:scale-90 transition-all select-none">🍰</button>
+                                <button type="button" onclick="insertEmoji('🍩')" class="hover:bg-primary-container/20 p-1.5 rounded-lg text-lg active:scale-90 transition-all select-none">🍩</button>
+                                <button type="button" onclick="insertEmoji('🍪')" class="hover:bg-primary-container/20 p-1.5 rounded-lg text-lg active:scale-90 transition-all select-none">🍪</button>
                                 <button type="button" onclick="insertEmoji('🍋')" class="hover:bg-primary-container/20 p-1.5 rounded-lg text-lg active:scale-90 transition-all select-none">🍋</button>
                             </div>
                         </div>
@@ -1419,6 +1436,9 @@
                     </div>
                     <span class="text-xs font-extrabold text-primary">¥${record.price}</span>
                 `;
+                item.onclick = () => {
+                    openBrewDetailModal(record);
+                };
                 list.appendChild(item);
             });
             renderVisualFeed();
@@ -1525,9 +1545,23 @@
             document.getElementById('detail-brew-sweetness').innerText = record.sweetness || 'Regular (100%)';
             document.getElementById('detail-brew-ice').innerText = record.iceLevel || 'Regular (100%)';
             
-            const timeStr = new Date(record.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            document.getElementById('detail-brew-time').innerText = timeStr;
+            const dateObj = new Date(record.timestamp);
+            const dateStr = dateObj.toLocaleDateString([], { month: 'short', day: 'numeric', weekday: 'short' });
+            const timeStr = dateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            document.getElementById('detail-brew-time').innerText = `${dateStr}, ${timeStr}`;
             document.getElementById('detail-brew-category').innerText = record.category || 'Coffee';
+
+            // Populate Review
+            const reviewContainer = document.getElementById('detail-brew-review-container');
+            const reviewEl = document.getElementById('detail-brew-review');
+            if (reviewContainer && reviewEl) {
+                if (record.review && record.review.trim() !== '') {
+                    reviewEl.innerText = record.review;
+                    reviewContainer.classList.remove('hidden');
+                } else {
+                    reviewContainer.classList.add('hidden');
+                }
+            }
 
             // Open animations
             modal.classList.remove('hidden', 'pointer-events-none');
@@ -1754,6 +1788,16 @@
             btn.classList.remove('bg-surface-container-high', 'text-on-surface-variant');
             btn.classList.add('bg-primary-container', 'text-on-primary-container', 'shadow-sm');
             selectedCategory = cat;
+        }
+
+        function adjustPrice(amount) {
+            const priceInput = document.getElementById('input-drink-price');
+            if (priceInput) {
+                let val = parseFloat(priceInput.value);
+                if (isNaN(val)) val = 0;
+                val = Math.max(0, val + amount);
+                priceInput.value = val;
+            }
         }
 
         function updateSweetness(val) {
@@ -2059,7 +2103,8 @@
                 sweetness: `${sweetDesc} (${sweetNum}%)`,
                 iceLevel: `${iceDesc} (${iceNum}%)`,
                 photo: uploadedDrinkPhotoData,
-                timestamp: selectedDrinkTimestamp
+                timestamp: selectedDrinkTimestamp,
+                review: document.getElementById('input-drink-review')?.value || ''
             };
             historyRecords.unshift(record);
             
@@ -2218,10 +2263,10 @@
             currentUsername = demoUser;
             
             const mockRecords = [
-                { name: "Spanish Latte", brand: "% Arabica", price: 38, category: "Coffee", sweetness: "Regular (50%)", iceLevel: "Less Ice (30%)", photo: "./cat-cup.png", timestamp: Date.now() - 3600000 * 1 },
-                { name: "Matcha Latte", brand: "Starbucks", price: 35, category: "Tea", sweetness: "Regular (70%)", iceLevel: "Regular (50%)", timestamp: Date.now() - 3600000 * 3 },
-                { name: "Coconut Latte", brand: "Luckin Coffee", price: 21, category: "Coffee", sweetness: "Half (30%)", iceLevel: "Extra (85%)", timestamp: Date.now() - 86400000 * 1 - 3600000 * 2 },
-                { name: "Oolong Milk Tea", brand: "HeyTea", price: 19, category: "Tea", sweetness: "Regular (50%)", iceLevel: "Less Ice (30%)", timestamp: Date.now() - 86400000 * 1 - 3600000 * 6 },
+                { name: "Spanish Latte", brand: "% Arabica", price: 38, category: "Coffee", sweetness: "Regular (50%)", iceLevel: "Less Ice (30%)", photo: "./cat-cup.png", timestamp: Date.now() - 3600000 * 1, review: "Very smooth and creamy Spanish Latte! The cat-cup presentation was absolutely adorable! ☕😻" },
+                { name: "Matcha Latte", brand: "Starbucks", price: 35, category: "Tea", sweetness: "Regular (70%)", iceLevel: "Regular (50%)", timestamp: Date.now() - 3600000 * 3, review: "A bit too sweet, but the matcha flavor is solid. 🍵" },
+                { name: "Coconut Latte", brand: "Luckin Coffee", price: 21, category: "Coffee", sweetness: "Half (30%)", iceLevel: "Extra (85%)", timestamp: Date.now() - 86400000 * 1 - 3600000 * 2, review: "Amazing coconut flavor! Very refreshing! 🥥🐾" },
+                { name: "Oolong Milk Tea", brand: "HeyTea", price: 19, category: "Tea", sweetness: "Regular (50%)", iceLevel: "Less Ice (30%)", timestamp: Date.now() - 86400000 * 1 - 3600000 * 6, review: "HeyTea classic milk tea. Perfectly balanced sweetness." },
                 { name: "Flat White", brand: "Manner Coffee", price: 20, category: "Coffee", sweetness: "No Sugar (0%)", iceLevel: "Less Ice (30%)", timestamp: Date.now() - 86400000 * 2 - 3600000 * 4 },
                 { name: "Orange Juice", brand: "Super Juice", price: 18, category: "Juice", sweetness: "Regular (60%)", iceLevel: "Regular (50%)", timestamp: Date.now() - 86400000 * 2 - 3600000 * 8 },
                 { name: "Cold Brew", brand: "Peet's Coffee", price: 28, category: "Coffee", sweetness: "No Sugar (0%)", iceLevel: "Less Ice (20%)", timestamp: Date.now() - 86400000 * 3 - 3600000 * 1 },
@@ -3311,6 +3356,12 @@
                         <span class="text-[8px] font-black uppercase tracking-widest text-outline">Ice Level</span>
                         <p id="detail-brew-ice" class="text-xs font-extrabold text-primary truncate mt-0.5">Regular (100%)</p>
                     </div>
+                </div>
+
+                <!-- Purr-sonal Review -->
+                <div id="detail-brew-review-container" class="bg-surface-container-low p-4 rounded-2xl border border-surface-container-high space-y-1.5 hidden">
+                    <span class="text-[8px] font-black uppercase tracking-widest text-outline block">Purr-sonal Review</span>
+                    <p id="detail-brew-review" class="text-xs text-on-surface italic leading-relaxed font-semibold">Great coffee!</p>
                 </div>
 
                 <!-- Footer Info -->
