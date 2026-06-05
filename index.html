@@ -3176,7 +3176,7 @@
             // Restore layouts state
             loadLayoutSizes();
             loadBentoSizes();
-            loadLayoutHeights();
+            // loadLayoutHeights(); // Disabled to allow natural module heights
             
             const userKey = currentUsername ? `catpuccino_layout_${currentUsername}` : 'catpuccino_layout_global';
             const savedOrder = localStorage.getItem(userKey);
@@ -3204,7 +3204,7 @@
             const modules = document.querySelectorAll('.home-module');
             modules.forEach(mod => {
                 setupModuleDragEvents(mod);
-                initModuleResizer(mod); // Add resize handle!
+                // initModuleResizer(mod); // Disabled resize handles (removed horizontal lines)
             });
 
             // If still on login view (not auto-logged in), keep heatmap at 0
