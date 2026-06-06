@@ -748,22 +748,24 @@
                 
                 <!-- Gamification Progress: The Froth Tracker -->
                 <section onclick="openProgressionView()" class="bg-surface-container/90 backdrop-blur-sm rounded-xl p-4 space-y-3 shadow-sm mb-4 transition-transform duration-300 hover:scale-[1.02] active:scale-95 cursor-pointer group">
-                    <div class="flex justify-between items-end">
+                    <div class="flex justify-between items-center">
                         <div class="space-y-0.5">
                             <span class="text-[9px] font-black uppercase tracking-widest text-primary/60 group-hover:text-primary transition-colors">Current Rank</span>
-                            <h2 class="text-base font-bold text-primary">Espresso Expert</h2>
+                            <h2 id="profile-rank-title" class="text-base font-bold text-primary">Espresso Expert</h2>
                         </div>
-                        <div class="flex items-center gap-1">
-                            <span class="text-primary text-xs font-bold">750 / 1000 XP</span>
-                            <span class="material-symbols-outlined text-primary text-sm">chevron_right</span>
+                        <div class="flex items-center gap-2">
+                            <span id="profile-xp-text" class="text-primary text-xs font-bold">750 / 1000 XP</span>
+                            <div class="flex items-center gap-1 bg-primary/10 text-primary px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider transition-colors group-hover:bg-primary group-hover:text-white">
+                                <span class="material-symbols-outlined text-[10px] font-bold">add</span>
+                                Titles
+                            </div>
                         </div>
                     </div>
                     <div class="w-full h-4 bg-surface-variant rounded-full overflow-hidden relative shadow-inner">
-                        <div class="h-full bg-gradient-to-r from-primary to-primary-container w-3/4 rounded-full relative overflow-hidden transition-all duration-1000 ease-out">
+                        <div id="profile-bar-fill" class="h-full bg-gradient-to-r from-primary to-primary-container w-3/4 rounded-full relative overflow-hidden transition-all duration-1000 ease-out">
                             <div class="absolute inset-0 froth-overlay"></div>
                         </div>
                     </div>
-                    <p class="text-[10px] text-center text-on-surface-variant italic">Only 250 XP to "Macchiato Master"!</p>
                 </section>
                 
                 <!-- Lifetime Stats Bento Grid -->
@@ -1994,6 +1996,11 @@
             const barFill = document.getElementById('prog-bar-fill');
             const nextRank = document.getElementById('prog-next-rank');
 
+            // Profile Tab specific elements
+            const profileRankTitle = document.getElementById('profile-rank-title');
+            const profileXpText = document.getElementById('profile-xp-text');
+            const profileBarFill = document.getElementById('profile-bar-fill');
+
             // Home Stats
             const hydration = document.getElementById('home-hydration');
             const energy = document.getElementById('home-energy');
@@ -2009,6 +2016,11 @@
             if (xpText) xpText.innerText = `${currentXP} / ${xpNeeded} XP`;
             if (barFill) barFill.style.width = `${progress}%`;
             if (nextRank) nextRank.innerText = `Next: ${rankTitles[nextRankIdx]}`;
+
+            // Update Profile Tab Card
+            if (profileRankTitle) profileRankTitle.innerText = rankTitles[rankIdx];
+            if (profileXpText) profileXpText.innerText = `${currentXP} / ${xpNeeded} XP`;
+            if (profileBarFill) profileBarFill.style.width = `${progress}%`;
             
             renderRanks();
         }
