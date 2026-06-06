@@ -571,17 +571,17 @@
                                     <p class="text-lg font-black text-primary"><span id="home-cups">0</span><span class="text-xs font-normal text-outline"> cups</span></p>
                                 </div>
                             </div>
-                            <!-- Caffeine Card -->
-                            <div id="bento-caffeine" class="bento-card col-span-1 bg-surface-container/80 backdrop-blur-md rounded-lg p-3.5 h-24 flex flex-col justify-between border border-white/40 shadow-sm transition-transform duration-300 hover:scale-[1.02] active:scale-95 relative">
+                            <!-- Volume Card -->
+                            <div id="bento-volume" class="bento-card col-span-1 bg-surface-container/80 backdrop-blur-md rounded-lg p-3.5 h-24 flex flex-col justify-between border border-white/40 shadow-sm transition-transform duration-300 hover:scale-[1.02] active:scale-95 relative">
                                 <div class="bento-card-overlay absolute top-2 right-2 hidden z-40 pointer-events-auto">
-                                    <button onclick="toggleBentoCardSize(event, 'bento-caffeine')" class="w-4 h-4 rounded bg-[#6f5b40]/90 text-white hover:bg-primary flex items-center justify-center active:scale-90 transition-all shadow-sm" title="Resize Box">
+                                    <button onclick="toggleBentoCardSize(event, 'bento-volume')" class="w-4 h-4 rounded bg-[#6f5b40]/90 text-white hover:bg-primary flex items-center justify-center active:scale-90 transition-all shadow-sm" title="Resize Box">
                                         <span class="material-symbols-outlined text-[10px]">swap_horiz</span>
                                     </button>
                                 </div>
-                                <span class="material-symbols-outlined text-primary text-2xl">bolt</span>
+                                <span class="material-symbols-outlined text-primary text-2xl">water_drop</span>
                                 <div>
-                                    <p class="text-[9px] font-bold uppercase tracking-widest text-outline">Caffeine</p>
-                                    <p class="text-lg font-black text-primary"><span id="home-caffeine">0</span><span class="text-xs font-normal text-outline"> mg</span></p>
+                                    <p class="text-[9px] font-bold uppercase tracking-widest text-outline">Volume</p>
+                                    <p class="text-lg font-black text-primary"><span id="home-volume">0</span><span class="text-xs font-normal text-outline"> ml</span></p>
                                 </div>
                             </div>
                         </section>
@@ -2044,9 +2044,9 @@
 
             // Home Stats
             const cupsEl = document.getElementById('home-cups');
-            const caffeineEl = document.getElementById('home-caffeine');
+            const volumeEl = document.getElementById('home-volume');
             if (cupsEl) cupsEl.innerText = totalCupsCount;
-            if (caffeineEl) caffeineEl.innerText = (totalCupsCount * 120);
+            if (volumeEl) volumeEl.innerText = (totalCupsCount * 350);
 
             const xpNeeded = currentLevel * 500;
             const progress = (currentXP / xpNeeded) * 100;
@@ -3117,12 +3117,12 @@
 
         function saveBentoSizes() {
             const hydration = document.getElementById('bento-cups');
-            const energy = document.getElementById('bento-caffeine');
+            const energy = document.getElementById('bento-volume');
             if (!hydration || !energy) return;
             
             const bentoSizes = {
                 'bento-cups': hydration.classList.contains('col-span-2') ? 'col-span-2' : 'col-span-1',
-                'bento-caffeine': energy.classList.contains('col-span-2') ? 'col-span-2' : 'col-span-1'
+                'bento-volume': energy.classList.contains('col-span-2') ? 'col-span-2' : 'col-span-1'
             };
             
             const userKey = currentUsername ? `catpuccino_bento_sizes_${currentUsername}` : 'catpuccino_bento_sizes_global';
@@ -3131,7 +3131,7 @@
 
         function loadBentoSizes() {
             const hydration = document.getElementById('bento-cups');
-            const energy = document.getElementById('bento-caffeine');
+            const energy = document.getElementById('bento-volume');
             if (!hydration || !energy) return;
             
             const userKey = currentUsername ? `catpuccino_bento_sizes_${currentUsername}` : 'catpuccino_bento_sizes_global';
@@ -3151,7 +3151,7 @@
                 hydration.classList.add(bentoSizes['bento-cups'] || bentoSizes['bento-hydration'] || 'col-span-1');
                 
                 energy.classList.remove('col-span-1', 'col-span-2');
-                energy.classList.add(bentoSizes['bento-caffeine'] || bentoSizes['bento-energy'] || 'col-span-1');
+                energy.classList.add(bentoSizes['bento-volume'] || bentoSizes['bento-caffeine'] || bentoSizes['bento-energy'] || 'col-span-1');
             } catch (e) {
                 console.error('Error loading bento card sizes:', e);
             }
