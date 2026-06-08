@@ -95,7 +95,7 @@
             height: 100vh !important;
             max-height: none !important;
             border: none !important;
-            border-radius: 0 !important;
+            border-radius: 2.5rem !important;
             box-shadow: none !important;
         }
 
@@ -1131,7 +1131,6 @@
                             <textarea id="input-drink-review" class="w-full flex-1 bg-transparent border-none focus:ring-0 text-sm text-on-surface placeholder:text-outline resize-none p-0" placeholder="How was your drink? Any special notes about the beans or the latte art?"></textarea>
                             <div class="flex justify-between items-center pt-3 border-t border-surface-container-high mt-2">
                                 <div class="flex gap-3 text-outline">
-                                    <button type="button" class="hover:text-primary transition-colors"><span class="material-symbols-outlined text-xl">add_a_photo</span></button>
                                     <button type="button" onclick="toggleEmojiPicker(event)" class="hover:text-primary transition-colors relative"><span class="material-symbols-outlined text-xl">mood</span></button>
                                 </div>
                             </div>
@@ -1304,6 +1303,22 @@
                 </div>
             </div>
         </div>
+        <!-- Custom Confirm Dialog -->
+        <div id="confirm-dialog" class="absolute inset-0 z-[120] bg-black/60 backdrop-blur-sm hidden items-center justify-center p-6 opacity-0 pointer-events-none transition-all duration-300">
+            <div id="confirm-card" class="bg-background text-on-background rounded-[2rem] w-full max-w-[280px] p-6 shadow-2xl border border-surface-container-high/50 transform scale-95 transition-all duration-300 flex flex-col items-center text-center space-y-4">
+                <div class="w-12 h-12 rounded-full bg-error/10 text-error flex items-center justify-center">
+                    <span class="material-symbols-outlined text-2xl font-bold">delete_forever</span>
+                </div>
+                <div>
+                    <h4 class="text-sm font-black text-on-background tracking-tight">Delete Drink Record?</h4>
+                    <p class="text-[11px] font-semibold text-outline mt-1.5 leading-relaxed">Are you sure you want to delete this coffee record? This action cannot be undone. ฅ^•ﻌ•^ฅ</p>
+                </div>
+                <div class="flex gap-3 w-full pt-2">
+                    <button onclick="closeConfirmDialog()" class="flex-1 py-2 rounded-full font-bold text-xs text-on-surface-variant bg-surface-container hover:bg-surface-container-high active:scale-95 transition-colors">Cancel</button>
+                    <button onclick="confirmDeleteActiveRecord()" class="flex-1 py-2 rounded-full font-bold text-xs text-white bg-error hover:bg-error/90 active:scale-95 transition-colors shadow-md shadow-error/10">Delete</button>
+                </div>
+            </div>
+        </div>
 
     </div>
 
@@ -1361,20 +1376,53 @@
         function saveToStorage() {
             if (!currentUsername) return;
 
-            const appData = JSON.parse(localStorage.getItem('catpuccino_users') || '{}');
-            appData[currentUsername] = {
-                ...appData[currentUsername],
-                profileName: document.getElementById('profile-name').innerText,
-                profileImg: document.querySelector('#tab-profile img').src,
-                totalCups: totalCupsCount,
-                totalSpent: totalSpentAmount,
-                records: historyRecords,
-                level: currentLevel,
-                xp: currentXP
-            };
-            
-            localStorage.setItem('catpuccino_users', JSON.stringify(appData));
-            localStorage.setItem('catpuccino_session', currentUsername);
+            try {
+                const appData = JSON.parse(localStorage.getItem('catpuccino_users') || '{}');
+                appData[currentUsername] = {
+                    ...appData[currentUsername],
+                    profileName: document.getElementById('profile-name').innerText,
+                    profileImg: document.querySelector('#tab-profile img').src,
+                    totalCups: totalCupsCount,
+                    totalSpent: totalSpentAmount,
+                    records: historyRecords,
+                    level: currentLevel,
+                    xp: currentXP
+                };
+                
+                localStorage.setItem('catpuccino_users', JSON.stringify(appData));
+                localStorage.setItem('catpuccino_session', currentUsername);
+            } catch (e) {
+                if (e.name === 'QuotaExceededError' || e.code === 22) {
+                    console.warn("Storage quota exceeded! Pruning older image logs to free up space...");
+                    
+                    // Keep only the 3 most recent photos, clear the rest to recover storage
+                    let photoCount = 0;
+                    historyRecords.forEach(r => {
+                        if (r.photo) {
+                            photoCount++;
+                            if (photoCount > 3) {
+                                r.photo = null; 
+                            }
+                        }
+                    });
+                    
+                    try {
+                        const appData = JSON.parse(localStorage.getItem('catpuccino_users') || '{}');
+                        appData[currentUsername] = {
+                            ...appData[currentUsername],
+                            records: historyRecords,
+                            totalCups: totalCupsCount,
+                            totalSpent: totalSpentAmount
+                        };
+                        localStorage.setItem('catpuccino_users', JSON.stringify(appData));
+                        renderVisualFeed(); // refresh visual feed
+                    } catch (retryError) {
+                        alert("Your local storage is completely full. Please click 'Clear All Records' in profile settings to reset your workspace. 😿");
+                    }
+                } else {
+                    throw e;
+                }
+            }
         }
 
         function renderHistory() {
@@ -1430,21 +1478,47 @@
                 const file = input.files[0];
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    uploadedDrinkPhotoData = e.target.result;
-                    
-                    // Show preview
-                    const preview = document.getElementById('photo-upload-preview');
-                    const placeholderIcon = document.getElementById('photo-upload-placeholder-icon');
-                    const filenameEl = document.getElementById('photo-upload-filename');
-                    const removeBtn = document.getElementById('btn-remove-photo');
-                    
-                    if (preview) {
-                        preview.src = e.target.result;
-                        preview.classList.remove('hidden');
-                    }
-                    if (placeholderIcon) placeholderIcon.classList.add('hidden');
-                    if (filenameEl) filenameEl.innerText = file.name;
-                    if (removeBtn) removeBtn.classList.remove('hidden');
+                    const img = new Image();
+                    img.onload = function() {
+                        const maxW = 400;
+                        const maxH = 400;
+                        let w = img.width;
+                        let h = img.height;
+                        
+                        if (w > maxW || h > maxH) {
+                            if (w > h) {
+                                h = Math.round((h * maxW) / w);
+                                w = maxW;
+                            } else {
+                                w = Math.round((w * maxH) / h);
+                                h = maxH;
+                            }
+                        }
+                        
+                        const canvas = document.createElement('canvas');
+                        canvas.width = w;
+                        canvas.height = h;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, w, h);
+                        
+                        const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.7);
+                        uploadedDrinkPhotoData = compressedDataUrl;
+                        
+                        // Show preview
+                        const preview = document.getElementById('photo-upload-preview');
+                        const placeholderIcon = document.getElementById('photo-upload-placeholder-icon');
+                        const filenameEl = document.getElementById('photo-upload-filename');
+                        const removeBtn = document.getElementById('btn-remove-photo');
+                        
+                        if (preview) {
+                            preview.src = compressedDataUrl;
+                            preview.classList.remove('hidden');
+                        }
+                        if (placeholderIcon) placeholderIcon.classList.add('hidden');
+                        if (filenameEl) filenameEl.innerText = file.name;
+                        if (removeBtn) removeBtn.classList.remove('hidden');
+                    };
+                    img.src = e.target.result;
                 };
                 reader.readAsDataURL(file);
             }
@@ -1511,10 +1585,42 @@
             });
         }
  
+        let activeDetailRecordTimestamp = null;
+ 
+        function showToast(message) {
+            const frame = document.getElementById('mobile-frame');
+            if (!frame) return;
+            
+            const existing = document.getElementById('app-toast');
+            if (existing) existing.remove();
+            
+            const toast = document.createElement('div');
+            toast.id = 'app-toast';
+            toast.className = "absolute top-24 left-1/2 -translate-x-1/2 z-[150] bg-primary/95 backdrop-blur-md text-white text-xs font-bold px-5 py-3 rounded-full shadow-lg border border-white/20 flex items-center gap-2 transform -translate-y-4 opacity-0 transition-all duration-300 pointer-events-none";
+            toast.innerHTML = `
+                <span class="material-symbols-outlined text-sm font-bold">check_circle</span>
+                <span>${message}</span>
+            `;
+            frame.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.classList.remove('-translate-y-4', 'opacity-0');
+                toast.classList.add('translate-y-0', 'opacity-100');
+            }, 10);
+            
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('-translate-y-4', 'opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 1500);
+        }
+
         function openBrewDetailModal(record) {
             const modal = document.getElementById('modal-brew-detail');
             const card = document.getElementById('brew-detail-card');
             if (!modal || !card) return;
+            
+            activeDetailRecordTimestamp = record.timestamp;
             
             // Populate fields
             document.getElementById('detail-brew-img').src = record.photo || './cat-cup.png';
@@ -1568,6 +1674,65 @@
                 modal.classList.add('hidden', 'pointer-events-none');
             }, 300);
         }
+
+        function deleteActiveRecord() {
+            if (!activeDetailRecordTimestamp) return;
+            
+            const dialog = document.getElementById('confirm-dialog');
+            const card = document.getElementById('confirm-card');
+            if (!dialog || !card) return;
+            
+            dialog.classList.remove('hidden', 'pointer-events-none');
+            dialog.classList.add('flex');
+            setTimeout(() => {
+                dialog.classList.remove('opacity-0');
+                dialog.classList.add('opacity-100');
+                card.classList.remove('scale-95');
+                card.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeConfirmDialog() {
+            const dialog = document.getElementById('confirm-dialog');
+            const card = document.getElementById('confirm-card');
+            if (!dialog || !card) return;
+            
+            dialog.classList.remove('opacity-100');
+            dialog.classList.add('opacity-0');
+            card.classList.remove('scale-100');
+            card.classList.add('scale-95');
+            setTimeout(() => {
+                dialog.classList.remove('flex');
+                dialog.classList.add('hidden', 'pointer-events-none');
+            }, 300);
+        }
+
+        function confirmDeleteActiveRecord() {
+            closeConfirmDialog();
+            
+            const idx = historyRecords.findIndex(r => r.timestamp === activeDetailRecordTimestamp);
+            if (idx === -1) return;
+            
+            historyRecords.splice(idx, 1);
+            
+            // Recalculate stats
+            totalCupsCount = historyRecords.length;
+            totalSpentAmount = historyRecords.reduce((sum, r) => sum + (Number(r.price) || 0), 0);
+            
+            // Update UI element counters
+            const cupsEl = document.getElementById('total-cups');
+            const spentEl = document.getElementById('total-spent');
+            if (cupsEl) cupsEl.innerText = totalCupsCount;
+            if (spentEl) spentEl.innerText = '¥' + totalSpentAmount.toLocaleString('en-US');
+            
+            // Re-render dashboard, history list and visual feed
+            updateProgressionUI();
+            renderHistory();
+            renderVisualFeed();
+            saveToStorage();
+            
+            closeBrewDetailModal();
+        }
  
         function loadFromStorage() {
             const session = localStorage.getItem('catpuccino_session');
@@ -1620,8 +1785,30 @@
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    document.getElementById('edit-avatar-preview').src = e.target.result;
-                    tempAvatarData = e.target.result;
+                    const img = new Image();
+                    img.onload = function() {
+                        const maxDim = 150;
+                        let w = img.width;
+                        let h = img.height;
+                        if (w > maxDim || h > maxDim) {
+                            if (w > h) {
+                                h = Math.round((h * maxDim) / w);
+                                w = maxDim;
+                            } else {
+                                w = Math.round((w * maxDim) / h);
+                                h = maxDim;
+                            }
+                        }
+                        const canvas = document.createElement('canvas');
+                        canvas.width = w;
+                        canvas.height = h;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, w, h);
+                        const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.8);
+                        document.getElementById('edit-avatar-preview').src = compressedDataUrl;
+                        tempAvatarData = compressedDataUrl;
+                    };
+                    img.src = e.target.result;
                 };
                 reader.readAsDataURL(input.files[0]);
             }
@@ -2128,85 +2315,92 @@
 
 
         function recordSip() {
-            totalCupsCount++;
-            
-            const priceInput = document.getElementById('input-drink-price');
-            let sipPrice = 25; // default average
-            if (priceInput && priceInput.value.trim() !== '') {
-                const parsedPrice = parseFloat(priceInput.value);
-                if (!isNaN(parsedPrice)) {
-                    sipPrice = parsedPrice;
+            try {
+                totalCupsCount++;
+                
+                const priceInput = document.getElementById('input-drink-price');
+                let sipPrice = 25; // default average
+                if (priceInput && priceInput.value.trim() !== '') {
+                    const parsedPrice = parseFloat(priceInput.value);
+                    if (!isNaN(parsedPrice)) {
+                        sipPrice = parsedPrice;
+                    }
                 }
-            }
-            
-            totalSpentAmount += sipPrice;
-
-            // Create record object
-            const sweetNum = document.getElementById('sweetness-num-input')?.value || '100';
-            const sweetDesc = document.getElementById('sweetness-desc')?.innerText || 'Regular';
-            const iceNum = document.getElementById('ice-num-input')?.value || '100';
-            const iceDesc = document.getElementById('ice-desc')?.innerText || 'Regular';
-
-            const record = {
-                name: document.getElementById('input-drink-name')?.value || 'New Brew',
-                brand: document.getElementById('input-drink-brand')?.value || 'Cafe',
-                price: sipPrice,
-                category: selectedCategory || 'Coffee',
-                sweetness: `${sweetDesc} (${sweetNum}%)`,
-                iceLevel: `${iceDesc} (${iceNum}%)`,
-                photo: uploadedDrinkPhotoData,
-                timestamp: selectedDrinkTimestamp,
-                review: document.getElementById('input-drink-review')?.value || ''
-            };
-            historyRecords.unshift(record);
-            
-            const cupsEl = document.getElementById('total-cups');
-            const spentEl = document.getElementById('total-spent');
-            
-            if (cupsEl && spentEl) {
-                cupsEl.innerText = totalCupsCount;
-                spentEl.innerText = '¥' + totalSpentAmount.toLocaleString('en-US');
                 
-                cupsEl.classList.add('scale-125', 'text-primary-container');
-                spentEl.classList.add('scale-110', 'text-on-primary-container');
+                totalSpentAmount += sipPrice;
+    
+                // Create record object
+                const sweetNum = document.getElementById('sweetness-num-input')?.value || '100';
+                const sweetDesc = document.getElementById('sweetness-desc')?.innerText || 'Regular';
+                const iceNum = document.getElementById('ice-num-input')?.value || '100';
+                const iceDesc = document.getElementById('ice-desc')?.innerText || 'Regular';
+    
+                const record = {
+                    name: document.getElementById('input-drink-name')?.value || 'New Brew',
+                    brand: document.getElementById('input-drink-brand')?.value || 'Cafe',
+                    price: sipPrice,
+                    category: selectedCategory || 'Coffee',
+                    sweetness: `${sweetDesc} (${sweetNum}%)`,
+                    iceLevel: `${iceDesc} (${iceNum}%)`,
+                    photo: uploadedDrinkPhotoData,
+                    timestamp: selectedDrinkTimestamp,
+                    review: document.getElementById('input-drink-review')?.value || ''
+                };
+                historyRecords.unshift(record);
                 
+                const cupsEl = document.getElementById('total-cups');
+                const spentEl = document.getElementById('total-spent');
+                
+                if (cupsEl && spentEl) {
+                    cupsEl.innerText = totalCupsCount;
+                    spentEl.innerText = '¥' + totalSpentAmount.toLocaleString('en-US');
+                    
+                    cupsEl.classList.add('scale-125', 'text-primary-container');
+                    spentEl.classList.add('scale-110', 'text-on-primary-container');
+                    
+                    setTimeout(() => {
+                        cupsEl.classList.remove('scale-125', 'text-primary-container');
+                        spentEl.classList.remove('scale-110', 'text-on-primary-container');
+                    }, 300);
+                    
+                    // Update History List
+                    renderHistory();
+     
+                    // Save to storage
+                    saveToStorage();
+                }
+                
+                closeRecordModal();
+                
+                // Reset fields
+                if(document.getElementById('input-drink-name')) document.getElementById('input-drink-name').value = '';
+                if(document.getElementById('input-drink-brand')) document.getElementById('input-drink-brand').value = '';
+                if(priceInput) priceInput.value = '';
+                if(document.getElementById('input-drink-review')) document.getElementById('input-drink-review').value = '';
+                
+                // Reset Category to Coffee
+                const firstCatBtn = document.querySelector('.category-btn');
+                if (firstCatBtn) selectCategory(firstCatBtn, 'Coffee');
+                
+                // Reset Sliders
+                document.getElementById('sweetness-slider').value = 100;
+                updateSweetness(100);
+                document.getElementById('ice-slider').value = 100;
+                updateIceLevel(100);
+                
+                // Reset Uploaded Photo
+                removeDrinkPhoto();
+                
+                // Show success toast
+                showToast("Congratulations! Your coffee card is ready! ☕🐾");
+                
+                // Wait slightly before opening the newly created record's details modal
                 setTimeout(() => {
-                    cupsEl.classList.remove('scale-125', 'text-primary-container');
-                    spentEl.classList.remove('scale-110', 'text-on-primary-container');
-                }, 300);
-                
-                // Update History List
-                renderHistory();
- 
-                // Save to storage
-                saveToStorage();
+                    openBrewDetailModal(record);
+                }, 350);
+            } catch (e) {
+                alert("Error in recordSip: " + e.message + "\nStack: " + e.stack);
             }
-            
-            closeRecordModal();
-            
-            // Reset fields
-            if(document.getElementById('input-drink-name')) document.getElementById('input-drink-name').value = '';
-            if(document.getElementById('input-drink-brand')) document.getElementById('input-drink-brand').value = '';
-            if(priceInput) priceInput.value = '';
-            if(document.getElementById('input-drink-review')) document.getElementById('input-drink-review').value = '';
-            
-            // Reset Category to Coffee
-            const firstCatBtn = document.querySelector('.category-btn');
-            if (firstCatBtn) selectCategory(firstCatBtn, 'Coffee');
-            
-            // Reset Sliders
-            document.getElementById('sweetness-slider').value = 100;
-            updateSweetness(100);
-            document.getElementById('ice-slider').value = 100;
-            updateIceLevel(100);
-            
-            // Reset Uploaded Photo
-            removeDrinkPhoto();
-            
-            // Wait slightly before switching tab so the modal has time to close
-            setTimeout(() => {
-                switchTab('stats');
-            }, 300);
         }
         
         const tabs = ['home', 'stats', 'profile'];
@@ -3424,6 +3618,14 @@
                         <span id="detail-brew-time">12:34 PM</span>
                     </div>
                     <span id="detail-brew-category" class="bg-secondary-container text-on-secondary-container px-2.5 py-0.5 rounded-full text-[8px] font-black">Coffee</span>
+                </div>
+
+                <!-- Delete Record Action -->
+                <div class="pt-3 border-t border-surface-container/60">
+                    <button onclick="deleteActiveRecord()" class="w-full py-2.5 rounded-2xl bg-error/10 hover:bg-error text-error hover:text-white font-extrabold text-xs tracking-widest uppercase flex items-center justify-center gap-2 active:scale-[0.98] transition-all duration-200">
+                        <span class="material-symbols-outlined text-sm">delete</span>
+                        Delete Record
+                    </button>
                 </div>
             </div>
         </div>
