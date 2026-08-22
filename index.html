@@ -828,13 +828,13 @@
                         <div class="grid grid-cols-7 gap-1.5" id="heatmap-grid">
                             <!-- Heatmap squares (initially empty) -->
                         </div>
-                        <div class="mt-4 flex items-start gap-3 p-3 bg-surface-container-low rounded-lg transition-transform hover:scale-[1.02] active:scale-95">
+                        <div id="caffeine-insight-card" class="mt-4 hidden items-start gap-3 p-3 bg-surface-container-low rounded-lg transition-transform hover:scale-[1.02] active:scale-95">
                             <div class="w-10 h-10 bg-primary rounded-full flex items-center justify-center shrink-0 shadow-md">
-                                <span class="material-symbols-outlined text-surface text-lg">workspace_premium</span>
+                                <span id="caffeine-insight-icon" class="material-symbols-outlined text-surface text-lg">workspace_premium</span>
                             </div>
                             <div>
-                                <h4 class="text-xs font-bold text-on-surface">Bean Master</h4>
-                                <p class="text-[10px] text-on-surface-variant mt-0.5 leading-relaxed">4 new local cafes this month. Keep brewing the adventure!</p>
+                                <h4 id="caffeine-insight-title" class="text-xs font-bold text-on-surface">Bean Master</h4>
+                                <p id="caffeine-insight-copy" class="text-[10px] text-on-surface-variant mt-0.5 leading-relaxed"></p>
                             </div>
                         </div>
                     </div>
@@ -1410,6 +1410,19 @@
             return dateObj;
         }
 
+        function getLocalDateKey(dateValue) {
+            const dateObj = new Date(dateValue);
+            const year = dateObj.getFullYear();
+            const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+            const day = String(dateObj.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        function getRecordsForDate(dateValue) {
+            const targetKey = getLocalDateKey(dateValue);
+            return historyRecords.filter(record => getLocalDateKey(record.timestamp) === targetKey);
+        }
+
         function updateDateDisplay() {
             const dateObj = getActiveDate();
             
@@ -1436,6 +1449,9 @@
                 currentCalendarDate = new Date(dateObj);
                 renderCalendar();
             }
+
+            renderHistory();
+
             // Add a little pop animation
             valueEl.classList.remove('scale-100');
                             valueEl.classList.add('scale-110', 'text-primary');
@@ -1536,6 +1552,32 @@
             };
         }
 
+        function updateCaffeineInsight() {
+            const card = document.getElementById('caffeine-insight-card');
+            const titleEl = document.getElementById('caffeine-insight-title');
+            const copyEl = document.getElementById('caffeine-insight-copy');
+            if (!card || !titleEl || !copyEl) return;
+
+            const monthStart = getPeriodStart(1);
+            const monthRecords = historyRecords.filter(record => Number(record.timestamp || 0) >= monthStart);
+            const cafeNames = new Set(
+                monthRecords
+                    .map(record => (record.brand || '').trim())
+                    .filter(brand => brand && brand.toLowerCase() !== 'cafe' && brand.toLowerCase() !== 'personal brew')
+            );
+
+            if (cafeNames.size === 0) {
+                card.classList.add('hidden');
+                card.classList.remove('flex');
+                return;
+            }
+
+            titleEl.innerText = cafeNames.size >= 4 ? 'Bean Master' : 'Cafe Explorer';
+            copyEl.innerText = `${cafeNames.size} real cafe${cafeNames.size === 1 ? '' : 's'} recorded this month. Keep brewing the adventure!`;
+            card.classList.remove('hidden');
+            card.classList.add('flex');
+        }
+
         function refreshSummaryUI(periodIndex = 0) {
             const cupsEl = document.getElementById('total-cups');
             const spentEl = document.getElementById('total-spent');
@@ -1550,6 +1592,7 @@
             if (homeCupsEl) homeCupsEl.innerText = totalCupsCount;
             if (homeVolumeEl) homeVolumeEl.innerText = (totalCupsCount * 350).toLocaleString('en-US');
             updateHeatmap(stats.dots);
+            updateCaffeineInsight();
         }
 
         async function loadFromSupabaseSession() {
@@ -1730,17 +1773,19 @@
             const list = document.getElementById('brew-breakdown-list');
             if (!list) return;
 
-            if (historyRecords.length === 0) {
+            const activeDateRecords = getRecordsForDate(getActiveDate());
+
+            if (activeDateRecords.length === 0) {
                 list.innerHTML = `
                     <div class="p-8 text-center text-on-surface-variant">
                         <span class="material-symbols-outlined text-4xl opacity-20 block mb-2">coffee</span>
-                        <p class="text-xs font-bold opacity-40 uppercase tracking-widest">No brews recorded yet</p>
+                        <p class="text-xs font-bold opacity-40 uppercase tracking-widest">No brews recorded for this day</p>
                     </div>`;
                 return;
             }
 
             list.innerHTML = '';
-            const displayRecords = historyRecords.slice(0, 3);
+            const displayRecords = activeDateRecords.slice(0, 3);
             displayRecords.forEach(record => {
                 const item = document.createElement('div');
                 item.className = "p-4 flex items-center justify-between transition-colors hover:bg-surface-container active:bg-surface-container-low cursor-pointer";
@@ -3501,6 +3546,7 @@
             const today = new Date();
             const activeDate = new Date();
             activeDate.setDate(activeDate.getDate() + activeDateOffset);
+            const recordedDateKeys = new Set(historyRecords.map(record => getLocalDateKey(record.timestamp)));
 
             // Previous month buffer days
             for (let i = firstDay - 1; i >= 0; i--) {
@@ -3528,8 +3574,8 @@
                 
                 dayContainer.appendChild(dayCircle);
                 
-                // Add paw print random decoration (simulating recorded sips)
-                if (Math.random() > 0.7 && !isSelected) {
+                const dayKey = getLocalDateKey(new Date(year, month, d));
+                if (recordedDateKeys.has(dayKey) && !isSelected) {
                     const paw = document.createElement('span');
                     paw.className = 'material-symbols-outlined text-[10px] text-primary/40 absolute -bottom-1';
                     paw.style.fontVariationSettings = "'FILL' 1";
