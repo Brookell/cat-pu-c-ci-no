@@ -93,11 +93,48 @@
         .iframe-mode #mobile-frame {
             width: 100% !important;
             max-width: none !important;
-            height: 100vh !important;
+            height: 100dvh !important;
             max-height: none !important;
             border: none !important;
             border-radius: 2.5rem !important;
             box-shadow: none !important;
+        }
+
+        @supports not (height: 100dvh) {
+            .iframe-mode #mobile-frame {
+                height: 100vh !important;
+            }
+        }
+
+        @media (max-width: 640px) {
+            html,
+            body {
+                width: 100%;
+                min-height: 100%;
+                overflow: hidden;
+                background: #fcf9f4 !important;
+            }
+
+            body {
+                padding: 0 !important;
+                display: block !important;
+            }
+
+            #mobile-frame {
+                width: 100vw !important;
+                max-width: none !important;
+                height: 100dvh !important;
+                max-height: none !important;
+                border: 0 !important;
+                border-radius: 0 !important;
+                box-shadow: none !important;
+            }
+        }
+
+        @media (max-width: 640px) and (not (height: 100dvh)) {
+            #mobile-frame {
+                height: 100vh !important;
+            }
         }
 
         body, input, textarea, select, button {
