@@ -189,12 +189,15 @@
                 min-height: calc(52px + env(safe-area-inset-bottom)) !important;
                 padding: 0.25rem 0.65rem calc(0.25rem + env(safe-area-inset-bottom)) !important;
                 border-radius: 1rem 1rem 0 0 !important;
+                overscroll-behavior: none !important;
+                touch-action: none !important;
             }
 
             .mobile-bottom-nav .nav-btn {
                 min-width: 3.75rem;
                 padding: 0.25rem 0.55rem !important;
                 transform: none !important;
+                touch-action: manipulation !important;
             }
 
             .mobile-bottom-nav .material-symbols-outlined {
@@ -3205,6 +3208,21 @@
             });
         }
 
+        function lockBottomNavScroll() {
+            const nav = document.querySelector('.mobile-bottom-nav');
+            if (!nav) return;
+
+            nav.addEventListener('touchmove', (event) => {
+                event.preventDefault();
+                event.stopPropagation();
+            }, { passive: false });
+
+            nav.addEventListener('wheel', (event) => {
+                event.preventDefault();
+                event.stopPropagation();
+            }, { passive: false });
+        }
+
         function setTimeToggle(index) {
             const pill = document.getElementById('time-toggle-pill');
             pill.style.left = `calc(6px + ${index * 33.33}%)`;
@@ -3978,6 +3996,8 @@
                 setupModuleDragEvents(mod);
                 // initModuleResizer(mod); // Disabled resize handles (removed horizontal lines)
             });
+
+            lockBottomNavScroll();
 
             // If still on login view (not auto-logged in), keep heatmap at 0
             if (currentUsername === null) {
