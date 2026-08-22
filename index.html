@@ -572,11 +572,6 @@
                             <span class="w-1 h-1 rounded-full bg-outline"></span>
                             <a class="text-[10px] font-bold uppercase tracking-widest text-outline hover:text-primary transition-colors cursor-pointer" href="javascript:void(0)" onclick="showPolicy('terms')">Terms</a>
                         </div>
-                        <button onclick="handleLanguageToggleClick()" data-lang-toggle class="mx-auto mt-2 w-28 h-8 rounded-full bg-surface-container-low border border-surface-container-high p-1 flex items-center relative shadow-inner active:scale-95 transition-transform">
-                            <span id="login-lang-pill" class="absolute left-1 top-1 bottom-1 w-[52px] rounded-full bg-primary shadow-sm transition-all duration-300"></span>
-                            <span id="login-lang-en" class="relative z-10 flex-1 text-[10px] font-black text-on-primary transition-colors">EN</span>
-                            <span id="login-lang-zh" class="relative z-10 flex-1 text-[10px] font-black text-primary transition-colors">中文</span>
-                        </button>
                     </div>
                 </section>
                 
@@ -599,14 +594,8 @@
                 <div class="flex items-center gap-2">
                     <span class="material-symbols-outlined text-[#6f5b40]" data-icon="pets">pets</span>
                     <h1 id="app-title" class="text-xl font-black text-[#6f5b40] tracking-tighter transition-all duration-300 transform">Cat-puccino</h1>
-                    <span id="demo-data-badge" class="hidden text-[8px] font-black uppercase tracking-widest bg-secondary-container text-on-secondary-container px-2 py-0.5 rounded-full">Demo</span>
                 </div>
                 <div class="flex items-center gap-1">
-                    <button onclick="handleLanguageToggleClick()" data-lang-toggle class="w-16 h-8 rounded-full bg-stone-200/60 p-1 flex items-center relative active:scale-95 transition-transform" title="Language">
-                        <span id="app-lang-pill" class="absolute left-1 top-1 bottom-1 w-7 rounded-full bg-primary shadow-sm transition-all duration-300"></span>
-                        <span id="app-lang-en" class="relative z-10 flex-1 text-[9px] font-black text-white transition-colors">EN</span>
-                        <span id="app-lang-zh" class="relative z-10 flex-1 text-[9px] font-black text-primary transition-colors">中</span>
-                    </button>
                     <!-- Edit Dashboard Layout Button (Always hidden to lock layout configuration) -->
                     <button id="btn-edit-layout" onclick="toggleEditLayout()" class="hidden w-10 h-10 items-center justify-center rounded-full hover:bg-stone-200/50 transition-all active:scale-90 duration-200" title="Rearrange Layout" style="display: none !important;">
                         <span id="edit-layout-icon" class="material-symbols-outlined text-[#6f5b40]">dashboard_customize</span>
@@ -945,6 +934,14 @@
                 
                 <!-- Settings List -->
                 <section class="space-y-3">
+                    <div class="w-full mt-8 bg-surface-container-low/90 border border-surface-container-high/50 rounded-xl px-4 py-3 flex items-center justify-between">
+                        <span id="profile-language-label" class="text-xs font-black uppercase tracking-widest text-primary">Language</span>
+                        <button onclick="handleLanguageToggleClick()" data-lang-toggle class="w-28 h-8 rounded-full bg-surface-container-high p-1 flex items-center relative shadow-inner active:scale-95 transition-transform" title="Language">
+                            <span id="profile-lang-pill" class="absolute left-1 top-1 bottom-1 w-[52px] rounded-full bg-primary shadow-sm transition-all duration-300"></span>
+                            <span id="profile-lang-en" class="relative z-10 flex-1 text-[10px] font-black text-on-primary transition-colors">EN</span>
+                            <span id="profile-lang-zh" class="relative z-10 flex-1 text-[10px] font-black text-primary transition-colors">中文</span>
+                        </button>
+                    </div>
                     <button onclick="clearAllData()" class="w-full py-3 mt-8 text-center font-bold text-sm text-outline hover:text-error bg-surface-container hover:bg-error-container/10 rounded-xl transition-all duration-300 active:scale-95 border border-surface-container-high/50 flex items-center justify-center gap-2 group">
                         <span class="material-symbols-outlined text-sm opacity-60 group-hover:opacity-100">delete_sweep</span>
                         Clear All Records
@@ -1512,7 +1509,6 @@
 
         function applyUserDataToUI(username, data = {}) {
             currentUsername = username;
-            updateDemoBadge();
             document.getElementById('profile-name').innerText = data.profileName || username;
             document.querySelectorAll('#tab-profile img').forEach(img => {
                 img.src = data.profileImg || './middle.png';
@@ -1528,18 +1524,6 @@
             refreshSummaryUI();
             updateProgressionUI();
             loadLayoutOrder();
-        }
-
-        function updateDemoBadge() {
-            const badge = document.getElementById('demo-data-badge');
-            if (!badge) return;
-
-            if (currentUsername === 'DemoUser') {
-                badge.classList.remove('hidden');
-                badge.innerText = t('demoBadge');
-            } else {
-                badge.classList.add('hidden');
-            }
         }
 
         function normalizeCloudRecord(row) {
@@ -2537,6 +2521,7 @@
                 recordNewBrew: 'Record a New Brew',
                 caffeineIntensity: 'Caffeine Intensity',
                 brewBreakdown: 'Brew Breakdown',
+                language: 'Language',
                 noBrewsForDay: 'No brews recorded for this day',
                 noBrewsForFilter: 'No records in this category',
                 all: 'All',
@@ -2544,9 +2529,6 @@
                 tea: 'Tea',
                 juice: 'Juice',
                 soda: 'Soda',
-                appTitleHome: 'Cat-puccino',
-                appTitleStats: 'Cat-puccino Stats',
-                appTitleProfile: 'Cat-puccino Profile',
                 cafeExplorer: 'Cafe Explorer',
                 beanMaster: 'Bean Master',
                 realCafes: count => `${count} real cafe${count === 1 ? '' : 's'} recorded this month. Keep brewing the adventure!`
@@ -2571,6 +2553,7 @@
                 recordNewBrew: '记录一杯新饮品',
                 caffeineIntensity: '咖啡因强度',
                 brewBreakdown: '饮品记录',
+                language: '语言',
                 noBrewsForDay: '这一天还没有记录',
                 noBrewsForFilter: '这个分类还没有记录',
                 all: '全部',
@@ -2578,9 +2561,6 @@
                 tea: '茶饮',
                 juice: '果汁',
                 soda: '汽水',
-                appTitleHome: 'Cat-puccino',
-                appTitleStats: 'Cat-puccino 统计',
-                appTitleProfile: 'Cat-puccino 主页',
                 cafeExplorer: '咖啡店探索者',
                 beanMaster: '咖啡豆大师',
                 realCafes: count => `本月已真实记录 ${count} 家咖啡店，继续探索吧！`
@@ -2604,13 +2584,13 @@
             setText('auth-toggle-text', authMode === 'signup' ? t('haveAccount') : t('newHere'));
             setText('auth-toggle-btn', authMode === 'signup' ? t('loginInstead') : t('createAccountLink'));
             setText('demo-link-text', t('demoMode'));
-            setText('demo-data-badge', t('demoBadge'));
             setText('home-cups-label', t('cups'));
             setText('home-volume-label', t('volume'));
             setText('record-new-brew-text', t('recordNewBrew'));
             setText('caffeine-title', t('caffeineIntensity'));
             setText('brew-breakdown-title', t('brewBreakdown'));
-            setText('app-title', t(`appTitle${currentActiveTab.charAt(0).toUpperCase()}${currentActiveTab.slice(1)}`));
+            setText('profile-language-label', t('language'));
+            setText('app-title', 'Cat-puccino');
 
             const emailInput = document.getElementById('login-username');
             const passInput = document.getElementById('login-password');
@@ -2619,7 +2599,6 @@
 
             updateLanguageToggleUI();
             updateHistoryFilterUI();
-            updateDemoBadge();
             updateDateDisplay();
             updateCaffeineInsight();
             renderHistory();
@@ -2628,8 +2607,7 @@
         function updateLanguageToggleUI() {
             const isZh = appLanguage === 'zh';
             [
-                { pill: 'login-lang-pill', en: 'login-lang-en', zh: 'login-lang-zh', zhLeft: 'calc(100% - 56px)' },
-                { pill: 'app-lang-pill', en: 'app-lang-en', zh: 'app-lang-zh', zhLeft: 'calc(100% - 32px)' }
+                { pill: 'profile-lang-pill', en: 'profile-lang-en', zh: 'profile-lang-zh', zhLeft: 'calc(100% - 56px)' }
             ].forEach(ids => {
                 const pill = document.getElementById(ids.pill);
                 const en = document.getElementById(ids.en);
@@ -3461,7 +3439,6 @@
                 document.getElementById('total-spent').innerText = '¥0';
                 renderHistory();
                 refreshSummaryUI();
-                updateDemoBadge();
                 
                 // Restore login button text
                 switchAuthMode('login');
@@ -3492,19 +3469,8 @@
                 editBtn.classList.add('hidden');
             }
 
-            // Update Title with tiny slide animation
-            const titles = {
-                'home': t('appTitleHome'),
-                'stats': t('appTitleStats'),
-                'profile': t('appTitleProfile')
-            };
             const titleEl = document.getElementById('app-title');
-            titleEl.classList.add('opacity-0', '-translate-y-2');
-            
-            setTimeout(() => {
-                titleEl.innerText = titles[activeTab];
-                titleEl.classList.remove('opacity-0', '-translate-y-2');
-            }, 150);
+            if (titleEl) titleEl.innerText = 'Cat-puccino';
 
             tabs.forEach(tab => {
                 const tabContent = document.getElementById('tab-' + tab);
