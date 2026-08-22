@@ -1474,6 +1474,10 @@
             return Boolean(catpuccinoSupabase);
         }
 
+        function getAuthRedirectUrl() {
+            return `${window.location.origin}${window.location.pathname}`;
+        }
+
         function getCurrentProfilePayload() {
             return {
                 profileName: document.getElementById('profile-name').innerText,
@@ -2931,6 +2935,7 @@
                             email,
                             password,
                             options: {
+                                emailRedirectTo: getAuthRedirectUrl(),
                                 data: {
                                     profile_name: email.split('@')[0]
                                 }
