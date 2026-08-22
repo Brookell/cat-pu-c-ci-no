@@ -568,9 +568,9 @@
                             <span id="auth-toggle-text">New here?</span> <a id="auth-toggle-btn" class="text-primary font-bold hover:underline decoration-2 underline-offset-4 transition-all" href="javascript:void(0)" onclick="toggleAuthMode()">Create an account</a>
                         </p>
                         <div class="flex justify-center items-center gap-4 opacity-50">
-                            <a class="text-[10px] font-bold uppercase tracking-widest text-outline hover:text-primary transition-colors cursor-pointer" href="javascript:void(0)" onclick="showPolicy('privacy')">Privacy</a>
+                            <a id="privacy-link" class="text-[10px] font-bold uppercase tracking-widest text-outline hover:text-primary transition-colors cursor-pointer" href="javascript:void(0)" onclick="showPolicy('privacy')">Privacy</a>
                             <span class="w-1 h-1 rounded-full bg-outline"></span>
-                            <a class="text-[10px] font-bold uppercase tracking-widest text-outline hover:text-primary transition-colors cursor-pointer" href="javascript:void(0)" onclick="showPolicy('terms')">Terms</a>
+                            <a id="terms-link" class="text-[10px] font-bold uppercase tracking-widest text-outline hover:text-primary transition-colors cursor-pointer" href="javascript:void(0)" onclick="showPolicy('terms')">Terms</a>
                         </div>
                     </div>
                 </section>
@@ -726,7 +726,7 @@
                             </div>
                         </div>
                         <section id="recent-photos-section" class="mt-0 hidden">
-                            <h3 class="text-xs font-black text-primary tracking-widest uppercase mb-2.5 px-1">Visual Brews ฅ^•ﻌ•^ฅ</h3>
+                            <h3 id="visual-brews-title" class="text-xs font-black text-primary tracking-widest uppercase mb-2.5 px-1">Visual Brews ฅ^•ﻌ•^ฅ</h3>
                             <div id="recent-photos-feed" class="flex gap-3 overflow-x-auto pb-2 hide-scrollbar snap-x">
                                 <!-- Visual cards will be appended here dynamically -->
                             </div>
@@ -774,7 +774,7 @@
                 <section class="grid grid-cols-2 gap-4 mb-6">
                     <div class="bg-surface-container-low p-5 rounded-xl flex flex-col justify-between h-36 relative overflow-hidden group shadow-sm transition-transform duration-300 hover:scale-[1.02] active:scale-95">
                         <div class="z-10">
-                            <span class="text-on-surface-variant text-[10px] font-bold uppercase tracking-wider block mb-1">Total Cups</span>
+                            <span id="stats-total-cups-label" class="text-on-surface-variant text-[10px] font-bold uppercase tracking-wider block mb-1">Total Cups</span>
                             <p id="total-cups" class="text-3xl font-extrabold text-primary transition-all duration-300 inline-block">0</p>
                         </div>
                         <div class="z-10 flex items-center gap-1 text-on-secondary-container bg-secondary-container w-fit px-2 py-1 rounded-full text-[8px] font-bold">
@@ -787,7 +787,7 @@
                     </div>
                     <div class="bg-primary-fixed p-5 rounded-xl flex flex-col justify-between h-36 relative overflow-hidden group shadow-sm transition-transform duration-300 hover:scale-[1.02] active:scale-95">
                         <div class="z-10">
-                            <span class="text-on-primary-fixed-variant text-[10px] font-bold uppercase tracking-wider block mb-1">Spent (¥)</span>
+                            <span id="stats-spent-label" class="text-on-primary-fixed-variant text-[10px] font-bold uppercase tracking-wider block mb-1">Spent (¥)</span>
                             <p id="total-spent" class="text-2xl font-extrabold text-on-primary-fixed mt-1 transition-all duration-300 inline-block">¥0</p>
                         </div>
                         <div class="z-10 flex items-center gap-1 text-on-primary-container bg-primary-container/30 w-fit px-2 py-1 rounded-full text-[8px] font-bold">
@@ -805,14 +805,14 @@
                     <div class="flex items-center justify-between">
                     <h2 id="caffeine-title" class="text-lg font-bold tracking-tight text-primary px-1">Caffeine Intensity</h2>
                         <div class="flex items-center gap-1.5 text-[8px] font-bold uppercase tracking-widest text-on-surface-variant">
-                            <span>Decaf</span>
+                            <span id="heatmap-low-label">Decaf</span>
                             <div class="flex gap-0.5">
                                 <div class="w-2.5 h-2.5 rounded-full bg-surface-container-highest"></div>
                                 <div class="w-2.5 h-2.5 rounded-full bg-primary-container/40"></div>
                                 <div class="w-2.5 h-2.5 rounded-full bg-primary-container/70"></div>
                                 <div class="w-2.5 h-2.5 rounded-full bg-primary"></div>
                             </div>
-                            <span>Espresso</span>
+                            <span id="heatmap-high-label">Espresso</span>
                         </div>
                     </div>
                     <div class="bg-surface-container-lowest/90 backdrop-blur-md p-4 rounded-xl shadow-sm border border-surface-container">
@@ -876,7 +876,7 @@
                     </div>
                     <div>
                         <h1 id="profile-name" class="text-xl font-extrabold text-on-primary-container tracking-tight">Caffeine Cat</h1>
-                        <p class="text-on-surface-variant text-xs font-medium">Lover of Lattes &amp; Naps</p>
+                        <p id="profile-tagline" class="text-on-surface-variant text-xs font-medium">Lover of Lattes &amp; Naps</p>
                     </div>
                 </section>
                 
@@ -884,7 +884,7 @@
                 <section onclick="openProgressionView()" class="bg-surface-container/90 backdrop-blur-sm rounded-xl p-4 space-y-3 shadow-sm mb-4 transition-transform duration-300 hover:scale-[1.02] active:scale-95 cursor-pointer group">
                     <div class="flex justify-between items-center">
                         <div class="space-y-0.5">
-                            <span class="text-[9px] font-black uppercase tracking-widest text-primary/60 group-hover:text-primary transition-colors">Current Rank</span>
+                            <span id="profile-current-rank-label" class="text-[9px] font-black uppercase tracking-widest text-primary/60 group-hover:text-primary transition-colors">Current Rank</span>
                             <h2 id="profile-rank-title" class="text-base font-bold text-primary">Espresso Expert</h2>
                         </div>
                         <div class="flex items-center gap-2">
@@ -908,14 +908,14 @@
                         <span class="material-symbols-outlined text-on-secondary-container text-xl">coffee</span>
                         <div>
                             <div id="profile-lifetime-cups" class="text-lg font-black text-on-secondary-container">0</div>
-                            <div class="text-[8px] font-bold uppercase tracking-wider text-on-secondary-container/70">Cups Tracked</div>
+                            <div id="profile-cups-tracked-label" class="text-[8px] font-bold uppercase tracking-wider text-on-secondary-container/70">Cups Tracked</div>
                         </div>
                     </div>
                     <div class="bg-surface-container-high/90 backdrop-blur-sm rounded-xl p-4 flex flex-col justify-between h-24 shadow-sm transition-transform hover:scale-[1.03] active:scale-95">
                         <span class="material-symbols-outlined text-primary text-xl">bolt</span>
                         <div>
                             <div id="profile-lifetime-caffeine" class="text-lg font-black text-primary">0g</div>
-                            <div class="text-[8px] font-bold uppercase tracking-wider text-primary/70">Caffeine Total</div>
+                            <div id="profile-caffeine-total-label" class="text-[8px] font-bold uppercase tracking-wider text-primary/70">Caffeine Total</div>
                         </div>
                     </div>
                     <div class="col-span-2 bg-tertiary-fixed/90 backdrop-blur-sm rounded-xl p-4 flex items-center justify-between shadow-sm transition-transform hover:scale-[1.02] active:scale-95">
@@ -944,9 +944,9 @@
                     </div>
                     <button onclick="clearAllData()" class="w-full py-3 mt-8 text-center font-bold text-sm text-outline hover:text-error bg-surface-container hover:bg-error-container/10 rounded-xl transition-all duration-300 active:scale-95 border border-surface-container-high/50 flex items-center justify-center gap-2 group">
                         <span class="material-symbols-outlined text-sm opacity-60 group-hover:opacity-100">delete_sweep</span>
-                        Clear All Records
+                        <span id="clear-records-text">Clear All Records</span>
                     </button>
-                    <button onclick="logout()" class="w-full py-3 mt-3 text-center font-bold text-sm text-error bg-error-container/20 rounded-xl hover:bg-error-container/40 active:scale-95 transition-all duration-300 shadow-sm">
+                    <button id="sign-out-text" onclick="logout()" class="w-full py-3 mt-3 text-center font-bold text-sm text-error bg-error-container/20 rounded-xl hover:bg-error-container/40 active:scale-95 transition-all duration-300 shadow-sm">
                         Sign Out
                     </button>
                 </section>
@@ -962,7 +962,7 @@
                     <button onclick="closeProgressionView()" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-high transition-colors active:scale-90">
                         <span class="material-symbols-outlined text-on-surface">arrow_back</span>
                     </button>
-                    <h2 class="text-lg font-extrabold text-on-surface tracking-tight">My Progression</h2>
+                    <h2 id="progression-title" class="text-lg font-extrabold text-on-surface tracking-tight">My Progression</h2>
                     <button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-high transition-colors active:scale-90">
                         <span class="material-symbols-outlined text-on-surface">search</span>
                     </button>
@@ -979,7 +979,7 @@
                                 <span class="material-symbols-outlined text-white text-[50px]" style="font-variation-settings: 'FILL' 1;">pets</span>
                             </div>
                             <div class="space-y-1 flex-1">
-                                <p class="text-[10px] font-black uppercase tracking-widest text-on-surface-variant/60">Current Achievement</p>
+                                <p id="current-achievement-label" class="text-[10px] font-black uppercase tracking-widest text-on-surface-variant/60">Current Achievement</p>
                                 <h3 id="prog-level-title" class="text-3xl font-black text-on-surface leading-[1.1] tracking-tighter">Level 1:<br/>Espresso Beginner</h3>
                             </div>
                         </div>
@@ -1001,7 +1001,7 @@
                     <!-- Brew Ranks Section -->
                     <section class="space-y-6">
                         <div class="flex justify-between items-center px-2">
-                            <h4 class="text-xl font-black text-on-surface tracking-tight">Brew Ranks</h4>
+                            <h4 id="brew-ranks-title" class="text-xl font-black text-on-surface tracking-tight">Brew Ranks</h4>
                             <span id="ranks-unlocked-count" class="bg-secondary-container text-on-secondary-container text-[10px] font-black px-4 py-1.5 rounded-full tracking-widest uppercase">1 Unlocked</span>
                         </div>
                         
@@ -1012,7 +1012,7 @@
 
                     <!-- Meow-stones Section -->
                     <section class="space-y-8">
-                        <h4 class="text-xl font-black text-on-surface tracking-tight px-2">Meow-stones & Badges</h4>
+                        <h4 id="badges-title" class="text-xl font-black text-on-surface tracking-tight px-2">Meow-stones & Badges</h4>
                         
                         <div id="badges-grid" class="grid grid-cols-3 gap-4 sm:gap-6">
                             <!-- Badges are rendered from actual drink history -->
@@ -1064,8 +1064,8 @@
                                 <span class="material-symbols-outlined text-primary text-lg" style="font-variation-settings: 'FILL' 1;">pets</span>
                             </div>
                             <div>
-                                <p class="text-xs font-bold text-on-surface">Activity Legend</p>
-                                <p class="text-[10px] text-on-surface-variant font-medium">Days with paw prints indicate recorded sips!</p>
+                                <p id="activity-legend-title" class="text-xs font-bold text-on-surface">Activity Legend</p>
+                                <p id="activity-legend-desc" class="text-[10px] text-on-surface-variant font-medium">Days with paw prints indicate recorded sips!</p>
                             </div>
                         </div>
                     </div>
@@ -1082,7 +1082,7 @@
                     <button onclick="closeRecordModal()" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-high transition-colors active:scale-90">
                         <span class="material-symbols-outlined text-on-surface">close</span>
                     </button>
-                    <h2 class="text-lg font-extrabold text-on-surface tracking-tight">New Brew</h2>
+                    <h2 id="new-brew-title" class="text-lg font-extrabold text-on-surface tracking-tight">New Brew</h2>
                     <div class="w-10"></div> <!-- Spacer for center alignment -->
                 </header>
 
@@ -1091,7 +1091,7 @@
                     
                     <!-- Drink Details -->
                     <section class="space-y-4">
-                        <h3 class="text-sm font-bold text-on-surface-variant tracking-wide">Drink Details</h3>
+                        <h3 id="drink-details-title" class="text-sm font-bold text-on-surface-variant tracking-wide">Drink Details</h3>
                         <div class="space-y-3">
                             <input id="input-drink-name" type="text" placeholder="Drink Name (e.g. Vanilla Latte)" class="w-full bg-surface-container-low border-none focus:ring-2 focus:ring-primary text-on-surface rounded-xl py-3 px-4 transition-all duration-300 text-xs font-bold placeholder:font-medium placeholder:text-xs placeholder:text-outline/60" />
                             <div class="flex gap-3">
@@ -1116,7 +1116,7 @@
  
                     <!-- Photo Upload -->
                     <section class="space-y-3">
-                        <h3 class="text-sm font-bold text-on-surface-variant tracking-wide">Photo (Optional)</h3>
+                        <h3 id="photo-title" class="text-sm font-bold text-on-surface-variant tracking-wide">Photo (Optional)</h3>
                         <div class="flex items-center gap-4 bg-surface-container-low p-4 rounded-2xl relative overflow-hidden border border-dashed border-outline-variant/40 group hover:border-primary transition-all duration-300">
                             <!-- Click trigger to open file input -->
                             <div onclick="document.getElementById('input-drink-photo').click()" class="w-16 h-16 rounded-xl bg-surface-container-high border-2 border-surface-container-highest flex items-center justify-center cursor-pointer shrink-0 relative overflow-hidden hover:scale-105 active:scale-95 transition-all shadow-inner group">
@@ -1124,7 +1124,7 @@
                                 <img id="photo-upload-preview" class="hidden absolute inset-0 w-full h-full object-cover" />
                             </div>
                             <div class="flex-1 space-y-1">
-                                <p class="text-xs font-bold text-on-surface">Snap your brew!</p>
+                                <p id="photo-upload-title" class="text-xs font-bold text-on-surface">Snap your brew!</p>
                                 <p id="photo-upload-filename" class="text-[10px] text-on-surface-variant font-medium">Add a picture to your visual timeline</p>
                             </div>
                             <!-- Hidden input -->
@@ -1142,7 +1142,7 @@
                         <div class="flex justify-between items-center">
                             <div class="flex items-center gap-2">
                                 <span class="material-symbols-outlined text-primary text-lg" style="font-variation-settings: 'FILL' 1;">water_drop</span>
-                                <h3 class="text-sm font-bold text-on-surface">Sweetness</h3>
+                                <h3 id="sweetness-title" class="text-sm font-bold text-on-surface">Sweetness</h3>
                             </div>
                             <div id="sweetness-badge" class="flex items-center gap-1 bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-[10px] font-bold transition-all duration-300">
                                 <span id="sweetness-desc">Regular</span>
@@ -1155,10 +1155,10 @@
                         <div class="pt-2 pb-2 px-1">
                             <input type="range" min="0" max="120" value="100" class="custom-slider" id="sweetness-slider" oninput="updateSweetness(this.value)">
                             <div class="flex justify-between text-[8px] font-bold uppercase tracking-widest text-on-surface-variant mt-2 px-1">
-                                <span class="text-left">No Sugar</span>
-                                <span class="text-center">Half</span>
-                                <span class="text-center">Regular</span>
-                                <span class="text-right">Extra</span>
+                                <span id="sweetness-no-sugar" class="text-left">No Sugar</span>
+                                <span id="sweetness-half" class="text-center">Half</span>
+                                <span id="sweetness-regular" class="text-center">Regular</span>
+                                <span id="sweetness-extra" class="text-right">Extra</span>
                             </div>
                         </div>
                     </section>
@@ -1168,7 +1168,7 @@
                         <div class="flex justify-between items-center">
                             <div class="flex items-center gap-2">
                                 <span class="material-symbols-outlined text-primary text-lg">ac_unit</span>
-                                <h3 class="text-sm font-bold text-on-surface">Ice Level</h3>
+                                <h3 id="ice-title" class="text-sm font-bold text-on-surface">Ice Level</h3>
                             </div>
                             <div id="ice-badge" class="flex items-center gap-1 bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-[10px] font-bold transition-all duration-300">
                                 <span id="ice-desc">Regular</span>
@@ -1181,10 +1181,10 @@
                         <div class="pt-2 pb-2 px-1">
                             <input type="range" min="0" max="120" value="100" class="custom-slider" id="ice-slider" oninput="updateIceLevel(this.value)">
                             <div class="flex justify-between text-[8px] font-bold uppercase tracking-widest text-on-surface-variant mt-2 px-1">
-                                <span class="text-left">No Ice</span>
-                                <span class="text-center">Less Ice</span>
-                                <span class="text-center">Regular</span>
-                                <span class="text-right">Extra</span>
+                                <span id="ice-no-ice" class="text-left">No Ice</span>
+                                <span id="ice-less-ice" class="text-center">Less Ice</span>
+                                <span id="ice-regular" class="text-center">Regular</span>
+                                <span id="ice-extra" class="text-right">Extra</span>
                             </div>
                         </div>
                     </section>
@@ -1199,17 +1199,17 @@
                                 <span class="material-symbols-outlined">calendar_today</span>
                             </div>
                             <div>
-                                <p class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-0.5">Date & Time</p>
+                                <p id="date-time-label" class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-0.5">Date & Time</p>
                                 <p id="record-date-label" class="text-sm font-bold text-on-surface">Today, Oct 24</p>
                                 <p id="record-time-label" class="text-xs text-on-surface-variant">02:45 PM</p>
                             </div>
                         </div>
-                        <button type="button" class="text-xs font-bold text-primary hover:text-primary-container transition-colors relative z-0 pointer-events-none">Change</button>
+                        <button id="change-date-text" type="button" class="text-xs font-bold text-primary hover:text-primary-container transition-colors relative z-0 pointer-events-none">Change</button>
                     </section>
 
                     <!-- Purr-sonal Review -->
                     <section class="space-y-3">
-                        <h3 class="text-sm font-bold text-on-surface-variant tracking-wide">Purr-sonal Review</h3>
+                        <h3 id="review-title" class="text-sm font-bold text-on-surface-variant tracking-wide">Purr-sonal Review</h3>
                         <div class="bg-surface-container-lowest rounded-3xl p-5 shadow-sm border border-surface-container-high/50 flex flex-col h-40 relative">
                             <textarea id="input-drink-review" class="w-full flex-1 bg-transparent border-none focus:ring-0 text-sm text-on-surface placeholder:text-outline resize-none p-0" placeholder="How was your drink? Any special notes about the beans or the latte art?"></textarea>
                             <div class="flex justify-between items-center pt-3 border-t border-surface-container-high mt-2">
@@ -1263,7 +1263,7 @@
                 
                 <!-- Bottom Action -->
                 <div class="absolute bottom-0 w-full p-6 pt-12 bg-gradient-to-t from-surface via-surface/90 to-transparent z-20">
-                    <button onclick="recordSip()" class="w-full bg-primary hover:bg-primary/90 text-on-primary py-4 rounded-full font-bold text-lg shadow-lg shadow-primary/20 active:scale-95 transition-all">Record My Sip</button>
+                    <button id="record-sip-text" onclick="recordSip()" class="w-full bg-primary hover:bg-primary/90 text-on-primary py-4 rounded-full font-bold text-lg shadow-lg shadow-primary/20 active:scale-95 transition-all">Record My Sip</button>
                 </div>
             </div>
 
@@ -1272,24 +1272,24 @@
                 <!-- Home -->
                 <button onclick="switchTab('home')" id="nav-home" class="flex flex-col items-center justify-center bg-[#bda485]/20 text-[#6f5b40] rounded-full px-5 py-2 scale-110 transition-all active:scale-90 duration-300 nav-btn shadow-sm">
                     <span class="material-symbols-outlined text-[22px]" style="font-variation-settings: 'FILL' 1;">home</span>
-                    <span class="nav-label font-['Plus_Jakarta_Sans'] text-[9px] font-bold uppercase tracking-widest mt-1">Home</span>
+                    <span id="nav-home-label" class="nav-label font-['Plus_Jakarta_Sans'] text-[9px] font-bold uppercase tracking-widest mt-1">Home</span>
                 </button>
                 <!-- Stats -->
                 <button onclick="switchTab('stats')" id="nav-stats" class="flex flex-col items-center justify-center text-[#6f5b40]/50 px-3 py-2 hover:text-[#6f5b40] transition-all active:scale-90 duration-300 nav-btn">
                     <span class="material-symbols-outlined text-[22px]">equalizer</span>
-                    <span class="nav-label font-['Plus_Jakarta_Sans'] text-[9px] font-bold uppercase tracking-widest mt-1">Stats</span>
+                    <span id="nav-stats-label" class="nav-label font-['Plus_Jakarta_Sans'] text-[9px] font-bold uppercase tracking-widest mt-1">Stats</span>
                 </button>
                 <!-- Profile -->
                 <button onclick="switchTab('profile')" id="nav-profile" class="flex flex-col items-center justify-center text-[#6f5b40]/50 px-3 py-2 hover:text-[#6f5b40] transition-all active:scale-90 duration-300 nav-btn">
                     <span class="material-symbols-outlined text-[22px]">person</span>
-                    <span class="nav-label font-['Plus_Jakarta_Sans'] text-[9px] font-bold uppercase tracking-widest mt-1">Profile</span>
+                    <span id="nav-profile-label" class="nav-label font-['Plus_Jakarta_Sans'] text-[9px] font-bold uppercase tracking-widest mt-1">Profile</span>
                 </button>
             </nav>
             <!-- Edit Profile Modal -->
             <div id="edit-profile-modal" class="absolute inset-0 z-[100] flex items-center justify-center p-6 bg-black/40 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300">
                 <div class="bg-surface w-full max-w-sm rounded-3xl shadow-2xl overflow-hidden transform scale-95 transition-transform duration-300" id="edit-profile-card">
                     <div class="p-6 space-y-6">
-                        <h3 class="text-xl font-bold text-on-surface tracking-tight text-center">Edit Profile</h3>
+                        <h3 id="edit-profile-title" class="text-xl font-bold text-on-surface tracking-tight text-center">Edit Profile</h3>
                         <div class="flex justify-center mb-6 relative">
                             <div class="relative group cursor-pointer" onclick="document.getElementById('avatar-upload').click()">
                                 <div class="w-24 h-24 rounded-full overflow-hidden border-4 border-surface shadow-md bg-surface">
@@ -1303,15 +1303,15 @@
                         </div>
                         <button onclick="resetAvatarToDefault(event)" class="w-full py-2.5 rounded-full font-bold text-xs text-primary bg-primary-container/20 hover:bg-primary-container/40 transition-colors active:scale-95 flex items-center justify-center gap-2">
                             <span class="material-symbols-outlined text-sm">restart_alt</span>
-                            Restore Default Avatar
+                            <span id="restore-avatar-text">Restore Default Avatar</span>
                         </button>
                         <div class="space-y-2">
-                            <label class="text-[10px] font-bold uppercase tracking-widest text-outline ml-2">Display Name</label>
+                            <label id="display-name-label" class="text-[10px] font-bold uppercase tracking-widest text-outline ml-2">Display Name</label>
                             <input id="edit-name-input" type="text" class="w-full bg-surface-container border-none focus:ring-2 focus:ring-primary text-on-surface rounded-xl py-3 px-4 transition-all duration-300 font-bold" />
                         </div>
                         <div class="flex gap-3 pt-2">
-                            <button onclick="closeEditProfile()" class="flex-1 py-3 rounded-full font-bold text-sm text-on-surface-variant bg-surface-container hover:bg-surface-container-high transition-colors active:scale-95">Cancel</button>
-                            <button onclick="saveProfile()" class="flex-1 py-3 rounded-full font-bold text-sm text-on-primary bg-primary hover:bg-primary-container hover:text-on-primary-container transition-colors active:scale-95 shadow-md shadow-primary/20">Save</button>
+                            <button id="edit-cancel-text" onclick="closeEditProfile()" class="flex-1 py-3 rounded-full font-bold text-sm text-on-surface-variant bg-surface-container hover:bg-surface-container-high transition-colors active:scale-95">Cancel</button>
+                            <button id="edit-save-text" onclick="saveProfile()" class="flex-1 py-3 rounded-full font-bold text-sm text-on-primary bg-primary hover:bg-primary-container hover:text-on-primary-container transition-colors active:scale-95 shadow-md shadow-primary/20">Save</button>
                         </div>
                     </div>
                 </div>
@@ -1321,14 +1321,14 @@
             <div id="notif-panel" class="absolute inset-0 z-[100] bg-surface/60 backdrop-blur-md opacity-0 pointer-events-none transition-all duration-300 flex justify-end">
                 <div id="notif-content" class="w-full max-w-[320px] h-full bg-surface shadow-[-10px_0_30px_rgba(0,0,0,0.1)] flex flex-col transform translate-x-full transition-transform duration-500 ease-out">
                     <header class="p-6 border-b border-surface-container-high flex justify-between items-center bg-surface-container-lowest">
-                        <h2 class="text-lg font-black text-primary tracking-tight">Notifications</h2>
+                        <h2 id="notifications-title" class="text-lg font-black text-primary tracking-tight">Notifications</h2>
                         <button onclick="toggleNotifications()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-surface-container-high transition-colors">
                             <span class="material-symbols-outlined text-sm">close</span>
                         </button>
                     </header>
                     <div class="flex-1 overflow-y-auto hide-scrollbar p-4 space-y-4">
                         <!-- Welcome Notif -->
-                        <div onclick="showNotifDetail('Hello, Brew Master!', 'Welcome back to Cat-puccino! May your beans be fresh and your froth be perfect today. 🐾 We are so happy to have you here tracking your caffeine journey.')" class="bg-primary-container/10 p-4 rounded-2xl border border-primary-container/20 relative overflow-hidden group cursor-pointer active:scale-[0.98] transition-transform">
+                        <div onclick="showNotifDetail(t('notifWelcomeTitle'), t('notifWelcomeBody'))" class="bg-primary-container/10 p-4 rounded-2xl border border-primary-container/20 relative overflow-hidden group cursor-pointer active:scale-[0.98] transition-transform">
                             <div class="absolute -right-2 -bottom-2 opacity-5 transform group-hover:scale-110 transition-transform">
                                 <span class="material-symbols-outlined text-[60px]">pets</span>
                             </div>
@@ -1337,37 +1337,37 @@
                                     <span class="material-symbols-outlined text-sm">auto_awesome</span>
                                 </div>
                                 <div>
-                                    <h3 class="text-sm font-extrabold text-primary mb-1">Hello, Brew Master!</h3>
-                                    <p class="text-[11px] leading-relaxed text-on-surface-variant font-medium line-clamp-2">Welcome back to Cat-puccino! May your beans be fresh and your froth be perfect today. 🐾</p>
-                                    <span class="text-[8px] font-bold text-outline uppercase mt-2 block tracking-widest">Just now</span>
+                                    <h3 id="notif-welcome-title" class="text-sm font-extrabold text-primary mb-1">Hello, Brew Master!</h3>
+                                    <p id="notif-welcome-desc" class="text-[11px] leading-relaxed text-on-surface-variant font-medium line-clamp-2">Welcome back to Cat-puccino! May your beans be fresh and your froth be perfect today. 🐾</p>
+                                    <span id="notif-just-now" class="text-[8px] font-bold text-outline uppercase mt-2 block tracking-widest">Just now</span>
                                 </div>
                             </div>
                         </div>
                         
                         <!-- Tip Notif -->
-                        <div onclick="showNotifDetail('Quick Tip', 'Did you know? You can tap the mascot on the home screen to see different cute expressions! Also, try swiping left or right on the Week/Month/Year stats toggle for a smoother experience.')" class="bg-surface-container-high/50 p-4 rounded-2xl border border-surface-container-high transition-all hover:bg-surface-container-high cursor-pointer active:scale-[0.98]">
+                        <div onclick="showNotifDetail(t('notifTipTitle'), t('notifTipBody'))" class="bg-surface-container-high/50 p-4 rounded-2xl border border-surface-container-high transition-all hover:bg-surface-container-high cursor-pointer active:scale-[0.98]">
                             <div class="flex gap-3">
                                 <div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container shrink-0">
                                     <span class="material-symbols-outlined text-sm">lightbulb</span>
                                 </div>
                                 <div>
-                                    <h3 class="text-sm font-extrabold text-on-surface mb-1">Quick Tip</h3>
-                                    <p class="text-[11px] leading-relaxed text-on-surface-variant font-medium line-clamp-2">Did you know? You can tap the mascot on the home screen to see different cute expressions!</p>
-                                    <span class="text-[8px] font-bold text-outline uppercase mt-2 block tracking-widest">2 hours ago</span>
+                                    <h3 id="notif-tip-title" class="text-sm font-extrabold text-on-surface mb-1">Quick Tip</h3>
+                                    <p id="notif-tip-desc" class="text-[11px] leading-relaxed text-on-surface-variant font-medium line-clamp-2">Did you know? You can tap the mascot on the home screen to see different cute expressions!</p>
+                                    <span id="notif-two-hours" class="text-[8px] font-bold text-outline uppercase mt-2 block tracking-widest">2 hours ago</span>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Update Notif -->
-                        <div onclick="showNotifDetail('Functional Updates', 'We have added custom price and category tracking! You can now specify how much you spent and what kind of brew it was. Head to the Record page (the ➕ button) to try it out and see your stats update in real-time!')" class="bg-surface-container-high/50 p-4 rounded-2xl border border-surface-container-high transition-all hover:bg-surface-container-high cursor-pointer active:scale-[0.98]">
+                        <div onclick="showNotifDetail(t('notifUpdateTitle'), t('notifUpdateBody'))" class="bg-surface-container-high/50 p-4 rounded-2xl border border-surface-container-high transition-all hover:bg-surface-container-high cursor-pointer active:scale-[0.98]">
                             <div class="flex gap-3">
                                 <div class="w-8 h-8 rounded-full bg-tertiary-container flex items-center justify-center text-on-tertiary-container shrink-0">
                                     <span class="material-symbols-outlined text-sm">history_edu</span>
                                 </div>
                                 <div>
-                                    <h3 class="text-sm font-extrabold text-on-surface mb-1">Functional Updates</h3>
-                                    <p class="text-[11px] leading-relaxed text-on-surface-variant font-medium line-clamp-2">We\'ve added custom price and category tracking! Head to the Record page (the ➕ button) to try it out.</p>
-                                    <span class="text-[8px] font-bold text-outline uppercase mt-2 block tracking-widest">Yesterday</span>
+                                    <h3 id="notif-update-title" class="text-sm font-extrabold text-on-surface mb-1">Functional Updates</h3>
+                                    <p id="notif-update-desc" class="text-[11px] leading-relaxed text-on-surface-variant font-medium line-clamp-2">We\'ve added custom price and category tracking! Head to the Record page (the ➕ button) to try it out.</p>
+                                    <span id="notif-yesterday" class="text-[8px] font-bold text-outline uppercase mt-2 block tracking-widest">Yesterday</span>
                                 </div>
                             </div>
                         </div>
@@ -1386,7 +1386,7 @@
                     </div>
                     <h3 id="notif-detail-title" class="text-2xl font-black text-on-surface tracking-tight mb-4">Notification</h3>
                     <p id="notif-detail-content" class="text-sm font-medium text-on-surface-variant leading-relaxed mb-8">Full content goes here...</p>
-                    <button onclick="closeNotifDetail()" class="w-full py-4 rounded-full font-bold text-sm text-on-primary bg-primary hover:bg-primary-container hover:text-on-primary-container transition-colors active:scale-95 shadow-lg shadow-primary/20">Got it!</button>
+                    <button id="notif-got-it-text" onclick="closeNotifDetail()" class="w-full py-4 rounded-full font-bold text-sm text-on-primary bg-primary hover:bg-primary-container hover:text-on-primary-container transition-colors active:scale-95 shadow-lg shadow-primary/20">Got it!</button>
                 </div>
             </div>
         </div>
@@ -1397,12 +1397,12 @@
                     <span class="material-symbols-outlined text-2xl font-bold">delete_forever</span>
                 </div>
                 <div>
-                    <h4 class="text-sm font-black text-on-background tracking-tight">Delete Drink Record?</h4>
-                    <p class="text-[11px] font-semibold text-outline mt-1.5 leading-relaxed">Are you sure you want to delete this coffee record? This action cannot be undone. ฅ^•ﻌ•^ฅ</p>
+                    <h4 id="delete-confirm-title" class="text-sm font-black text-on-background tracking-tight">Delete Drink Record?</h4>
+                    <p id="delete-confirm-desc" class="text-[11px] font-semibold text-outline mt-1.5 leading-relaxed">Are you sure you want to delete this coffee record? This action cannot be undone. ฅ^•ﻌ•^ฅ</p>
                 </div>
                 <div class="flex gap-3 w-full pt-2">
-                    <button onclick="closeConfirmDialog()" class="flex-1 py-2 rounded-full font-bold text-xs text-on-surface-variant bg-surface-container hover:bg-surface-container-high active:scale-95 transition-colors">Cancel</button>
-                    <button onclick="confirmDeleteActiveRecord()" class="flex-1 py-2 rounded-full font-bold text-xs text-white bg-error hover:bg-error/90 active:scale-95 transition-colors shadow-md shadow-error/10">Delete</button>
+                    <button id="delete-cancel-text" onclick="closeConfirmDialog()" class="flex-1 py-2 rounded-full font-bold text-xs text-on-surface-variant bg-surface-container hover:bg-surface-container-high active:scale-95 transition-colors">Cancel</button>
+                    <button id="delete-confirm-text" onclick="confirmDeleteActiveRecord()" class="flex-1 py-2 rounded-full font-bold text-xs text-white bg-error hover:bg-error/90 active:scale-95 transition-colors shadow-md shadow-error/10">Delete</button>
                 </div>
             </div>
         </div>
@@ -1609,7 +1609,7 @@
 
             if (cupsEl) cupsEl.innerText = stats.cups;
             if (spentEl) spentEl.innerText = '¥' + stats.spent.toLocaleString('en-US');
-            if (avgEl) avgEl.innerText = `AVG ¥${stats.avg}/CUP`;
+            if (avgEl) avgEl.innerText = t('avgCup', stats.avg);
             if (homeCupsEl) homeCupsEl.innerText = totalCupsCount;
             if (homeVolumeEl) homeVolumeEl.innerText = (totalCupsCount * 350).toLocaleString('en-US');
             updateHeatmap(stats.dots);
@@ -1782,7 +1782,7 @@
                         localStorage.setItem('catpuccino_users', JSON.stringify(appData));
                         renderVisualFeed(); // refresh visual feed
                     } catch (retryError) {
-                        alert("Your local storage is completely full. Please click 'Clear All Records' in profile settings to reset your workspace. 😿");
+                        alert(t('storageFull'));
                     }
                 } else {
                     throw e;
@@ -2011,6 +2011,21 @@
             }, 1500);
         }
 
+        function translateSettingText(value, fallbackKey) {
+            const fallback = `${t(fallbackKey)} (100%)`;
+            if (!value) return fallback;
+            if (appLanguage !== 'zh') return value;
+
+            return value
+                .replace('No Sugar', t('noSugar'))
+                .replace('Less Sugar', t('lessSugar'))
+                .replace('Half', t('half'))
+                .replace('Regular', t('regular'))
+                .replace('Extra', t('extra'))
+                .replace('No Ice', t('noIce'))
+                .replace('Less Ice', t('lessIce'));
+        }
+
         function openBrewDetailModal(record) {
             const modal = document.getElementById('modal-brew-detail');
             const card = document.getElementById('brew-detail-card');
@@ -2023,12 +2038,13 @@
             document.getElementById('detail-brew-price').innerText = `¥${record.price}`;
             document.getElementById('detail-brew-name').innerText = record.name || 'New Brew';
             document.getElementById('detail-brew-brand').innerText = record.brand || 'Personal Brew';
-            document.getElementById('detail-brew-sweetness').innerText = record.sweetness || 'Regular (100%)';
-            document.getElementById('detail-brew-ice').innerText = record.iceLevel || 'Regular (100%)';
+            document.getElementById('detail-brew-sweetness').innerText = translateSettingText(record.sweetness, 'regular');
+            document.getElementById('detail-brew-ice').innerText = translateSettingText(record.iceLevel, 'regular');
             
             const dateObj = new Date(record.timestamp);
-            const dateStr = dateObj.toLocaleDateString([], { month: 'short', day: 'numeric', weekday: 'short' });
-            const timeStr = dateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            const locale = appLanguage === 'zh' ? 'zh-CN' : undefined;
+            const dateStr = dateObj.toLocaleDateString(locale, { month: 'short', day: 'numeric', weekday: 'short' });
+            const timeStr = dateObj.toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' });
             document.getElementById('detail-brew-time').innerText = `${dateStr}, ${timeStr}`;
             document.getElementById('detail-brew-category').innerText = record.category || 'Coffee';
 
@@ -2293,15 +2309,16 @@
             yesterday.setDate(today.getDate() - 1);
             
             let dateStr = "";
+            const locale = appLanguage === 'zh' ? 'zh-CN' : 'en-US';
             if (dateObj.toDateString() === today.toDateString()) {
-                dateStr = "Today, " + dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                dateStr = `${t('today')}, ` + dateObj.toLocaleDateString(locale, { month: 'short', day: 'numeric' });
             } else if (dateObj.toDateString() === yesterday.toDateString()) {
-                dateStr = "Yesterday, " + dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                dateStr = `${t('yesterday')}, ` + dateObj.toLocaleDateString(locale, { month: 'short', day: 'numeric' });
             } else {
-                dateStr = dateObj.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+                dateStr = dateObj.toLocaleDateString(locale, { weekday: 'short', month: 'short', day: 'numeric' });
             }
             
-            const timeStr = dateObj.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+            const timeStr = dateObj.toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' });
             
             const dateLbl = document.getElementById('record-date-label');
             const timeLbl = document.getElementById('record-time-label');
@@ -2372,15 +2389,15 @@
             if (descEl) {
                 let desc = '';
                 if (cappedNum == 0) {
-                    desc = 'No Sugar';
+                    desc = t('noSugar');
                 } else if (cappedNum <= 40) {
-                    desc = 'Half';
+                    desc = t('half');
                 } else if (cappedNum < 100) {
-                    desc = 'Less Sugar';
+                    desc = t('lessSugar');
                 } else if (cappedNum == 100) {
-                    desc = 'Regular';
+                    desc = t('regular');
                 } else {
-                    desc = 'Extra';
+                    desc = t('extra');
                 }
                 descEl.innerText = desc;
             }
@@ -2408,15 +2425,15 @@
             if (descEl) {
                 let desc = '';
                 if (cappedNum == 0) {
-                    desc = 'No Sugar';
+                    desc = t('noSugar');
                 } else if (cappedNum <= 40) {
-                    desc = 'Half';
+                    desc = t('half');
                 } else if (cappedNum < 100) {
-                    desc = 'Less Sugar';
+                    desc = t('lessSugar');
                 } else if (cappedNum == 100) {
-                    desc = 'Regular';
+                    desc = t('regular');
                 } else {
-                    desc = 'Extra';
+                    desc = t('extra');
                 }
                 descEl.innerText = desc;
             }
@@ -2437,15 +2454,15 @@
             if (descEl) {
                 let desc = '';
                 if (cappedNum == 0) {
-                    desc = 'No Ice';
+                    desc = t('noIce');
                 } else if (cappedNum <= 40) {
-                    desc = 'Less Ice';
+                    desc = t('lessIce');
                 } else if (cappedNum < 100) {
-                    desc = 'Less Ice';
+                    desc = t('lessIce');
                 } else if (cappedNum == 100) {
-                    desc = 'Regular';
+                    desc = t('regular');
                 } else {
-                    desc = 'Extra';
+                    desc = t('extra');
                 }
                 descEl.innerText = desc;
             }
@@ -2473,15 +2490,15 @@
             if (descEl) {
                 let desc = '';
                 if (cappedNum == 0) {
-                    desc = 'No Ice';
+                    desc = t('noIce');
                 } else if (cappedNum <= 40) {
-                    desc = 'Less Ice';
+                    desc = t('lessIce');
                 } else if (cappedNum < 100) {
-                    desc = 'Less Ice';
+                    desc = t('lessIce');
                 } else if (cappedNum == 100) {
-                    desc = 'Regular';
+                    desc = t('regular');
                 } else {
-                    desc = 'Extra';
+                    desc = t('extra');
                 }
                 descEl.innerText = desc;
             }
@@ -2503,8 +2520,11 @@
         const i18n = {
             en: {
                 loginSubtitle: 'Your daily brew tracker',
+                pageTitle: 'Cat-puccino Drink Tracker',
                 emailPlaceholder: 'Email address',
                 passwordPlaceholder: 'Password',
+                privacy: 'Privacy',
+                terms: 'Terms',
                 login: 'Login',
                 createAccount: 'Create Account',
                 newHere: 'New here?',
@@ -2519,9 +2539,115 @@
                 cups: 'Cups',
                 volume: 'Volume',
                 recordNewBrew: 'Record a New Brew',
+                visualBrews: 'Visual Brews ฅ^•ﻌ•^ฅ',
+                week: 'Week',
+                month: 'Month',
+                year: 'Year',
+                totalCups: 'Total Cups',
+                spent: 'Spent (¥)',
+                avgCup: avg => `AVG ¥${avg}/CUP`,
+                decaf: 'Decaf',
+                espresso: 'Espresso',
                 caffeineIntensity: 'Caffeine Intensity',
                 brewBreakdown: 'Brew Breakdown',
                 language: 'Language',
+                profileTagline: 'Lover of Lattes & Naps',
+                currentRank: 'Current Rank',
+                cupsTracked: 'Cups Tracked',
+                caffeineTotal: 'Caffeine Total',
+                clearAllRecords: 'Clear All Records',
+                signOut: 'Sign Out',
+                home: 'Home',
+                stats: 'Stats',
+                profile: 'Profile',
+                progression: 'My Progression',
+                currentAchievement: 'Current Achievement',
+                brewRanks: 'Brew Ranks',
+                badges: 'Meow-stones & Badges',
+                activityLegend: 'Activity Legend',
+                activityLegendDesc: 'Days with paw prints indicate recorded sips!',
+                newBrew: 'New Brew',
+                drinkDetails: 'Drink Details',
+                drinkNamePlaceholder: 'Drink Name (e.g. Vanilla Latte)',
+                brandPlaceholder: 'Brand / Shop',
+                pricePlaceholder: 'Price',
+                photoOptional: 'Photo (Optional)',
+                snapBrew: 'Snap your brew!',
+                photoTimeline: 'Add a picture to your visual timeline',
+                sweetness: 'Sweetness',
+                iceLevel: 'Ice Level',
+                noSugar: 'No Sugar',
+                half: 'Half',
+                lessSugar: 'Less Sugar',
+                regular: 'Regular',
+                extra: 'Extra',
+                noIce: 'No Ice',
+                lessIce: 'Less Ice',
+                dateTime: 'Date & Time',
+                change: 'Change',
+                review: 'Purr-sonal Review',
+                reviewPlaceholder: 'How was your drink? Any special notes about the beans or the latte art?',
+                recordMySip: 'Record My Sip',
+                editProfile: 'Edit Profile',
+                restoreAvatar: 'Restore Default Avatar',
+                displayName: 'Display Name',
+                cancel: 'Cancel',
+                save: 'Save',
+                notifications: 'Notifications',
+                gotIt: 'Got it!',
+                deleteDrink: 'Delete Drink Record?',
+                deleteConfirmDesc: 'Are you sure you want to delete this coffee record? This action cannot be undone. ฅ^•ﻌ•^ฅ',
+                delete: 'Delete',
+                understand: 'I Understand',
+                nextRank: rank => `Next: ${rank}`,
+                unlocked: count => `${count} Unlocked`,
+                reachLevel: level => `Reach Level ${level} to unlock.`,
+                levelTitle: (level, rank) => `Level ${level}:<br/>${rank}`,
+                streak: days => `${days} Day Streak`,
+                streakStart: 'Start your journey today!',
+                streakGood: 'Great start, keep it up!',
+                streakGreat: "You're on a roll, kitty!",
+                fillAllFields: 'Please fill in all fields',
+                invalidEmailFormat: 'Please enter a valid email address.',
+                shortPassword: 'Password must be at least 6 characters.',
+                accountCreated: 'Account created. Preparing your cozy brew space...',
+                invalidEmailPassword: 'Invalid email or password',
+                emailTaken: 'Email already taken',
+                emailAlreadyRegistered: 'This email already has an account. Try logging in instead.',
+                emailPasswordWrong: 'Email or password is incorrect. Please try again.',
+                confirmEmailFirst: 'Please confirm your email first, then log in.',
+                storageFull: "Your local storage is completely full. Please click 'Clear All Records' in profile settings to reset your workspace. 😿",
+                recordSuccess: 'Congratulations! Your coffee card is ready! ☕🐾',
+                clearConfirm: 'Are you sure you want to clear all your brew records? This action cannot be undone.',
+                clearSuccess: 'All data has been cleared.',
+                privacyTitle: 'Privacy Policy',
+                termsTitle: 'Terms of Service',
+                privacyBody: `
+                    <p class="mb-2">At Cat-puccino, we value your privacy above everything else. Signed-in accounts sync drink records, profile details, and progress to this app's Supabase backend so your sip diary can be restored after refreshes and future device changes.</p>
+                    <p class="font-bold text-primary mt-3 mb-1">Account-owned Records</p>
+                    <p class="mb-2">Supabase Row Level Security is enabled so signed-in users can only access their own Cat-puccino records. The app also keeps a small browser <code>localStorage</code> cache for smoother loading and demo mode.</p>
+                    <p class="font-bold text-primary mt-3 mb-1">Your Control</p>
+                    <p>You can clear your brew records from profile settings at any time. Demo mode remains local-only.</p>
+                `,
+                termsBody: `
+                    <p class="font-bold text-primary mb-1">Terms of Cat-puccino Journey</p>
+                    <p class="mb-2">Welcome to Cat-puccino! By entering this app or using the Demo Mode, you agree to embark on a beautiful, coffee-fueled journey with complete fun and responsibility.</p>
+                    <p class="font-bold text-error mb-1">Caffeine Health Reminder</p>
+                    <p class="mb-2">While tracking your caffeine is fun, please make sure not to exceed the safe daily caffeine limit, typically 400mg. Listen to your body and drink plenty of water alongside your favorite espressos.</p>
+                    <p>This application is created for lifestyle, habit tracking, and entertainment purposes. It does not provide professional medical advice.</p>
+                `,
+                notifWelcomeTitle: 'Hello, Brew Master!',
+                notifWelcomeDesc: 'Welcome back to Cat-puccino! May your beans be fresh and your froth be perfect today. 🐾',
+                notifWelcomeBody: 'Welcome back to Cat-puccino! May your beans be fresh and your froth be perfect today. 🐾 We are so happy to have you here tracking your caffeine journey.',
+                notifTipTitle: 'Quick Tip',
+                notifTipDesc: 'Tap the mascot on the home screen to see different cute expressions!',
+                notifTipBody: 'Did you know? You can tap the mascot on the home screen to see different cute expressions! Also, try swiping left or right on the Week/Month/Year stats toggle for a smoother experience.',
+                notifUpdateTitle: 'Functional Updates',
+                notifUpdateDesc: "We've added custom price and category tracking! Head to the Record page to try it out.",
+                notifUpdateBody: 'We have added custom price and category tracking! You can now specify how much you spent and what kind of brew it was. Head to the Record page to try it out and see your stats update in real-time!',
+                justNow: 'Just now',
+                twoHoursAgo: '2 hours ago',
+                yesterdayTime: 'Yesterday',
                 noBrewsForDay: 'No brews recorded for this day',
                 noBrewsForFilter: 'No records in this category',
                 all: 'All',
@@ -2535,8 +2661,11 @@
             },
             zh: {
                 loginSubtitle: '你的每日饮品记录',
+                pageTitle: 'Cat-puccino 饮品记录',
                 emailPlaceholder: '邮箱地址',
                 passwordPlaceholder: '密码',
+                privacy: '隐私',
+                terms: '条款',
                 login: '登录',
                 createAccount: '创建账号',
                 newHere: '第一次来？',
@@ -2551,9 +2680,115 @@
                 cups: '杯数',
                 volume: '容量',
                 recordNewBrew: '记录一杯新饮品',
+                visualBrews: '饮品相册 ฅ^•ﻌ•^ฅ',
+                week: '本周',
+                month: '本月',
+                year: '今年',
+                totalCups: '总杯数',
+                spent: '消费金额 (¥)',
+                avgCup: avg => `平均 ¥${avg}/杯`,
+                decaf: '低',
+                espresso: '高',
                 caffeineIntensity: '咖啡因强度',
                 brewBreakdown: '饮品记录',
                 language: '语言',
+                profileTagline: '拿铁和午睡爱好者',
+                currentRank: '当前等级',
+                cupsTracked: '已记录杯数',
+                caffeineTotal: '咖啡因总量',
+                clearAllRecords: '清空所有记录',
+                signOut: '退出登录',
+                home: '首页',
+                stats: '统计',
+                profile: '我的',
+                progression: '我的成长',
+                currentAchievement: '当前成就',
+                brewRanks: '饮品等级',
+                badges: '猫爪徽章',
+                activityLegend: '活动说明',
+                activityLegendDesc: '带猫爪的日期表示当天有饮品记录',
+                newBrew: '新饮品',
+                drinkDetails: '饮品信息',
+                drinkNamePlaceholder: '饮品名称（例如：香草拿铁）',
+                brandPlaceholder: '品牌 / 店铺',
+                pricePlaceholder: '价格',
+                photoOptional: '照片（可选）',
+                snapBrew: '拍下这杯饮品！',
+                photoTimeline: '添加图片到你的饮品时间线',
+                sweetness: '甜度',
+                iceLevel: '冰量',
+                noSugar: '无糖',
+                half: '半糖',
+                lessSugar: '少糖',
+                regular: '正常',
+                extra: '加量',
+                noIce: '去冰',
+                lessIce: '少冰',
+                dateTime: '日期和时间',
+                change: '更改',
+                review: '个人评价',
+                reviewPlaceholder: '这杯怎么样？可以记录豆子、口味或拉花感受',
+                recordMySip: '记录这杯',
+                editProfile: '编辑资料',
+                restoreAvatar: '恢复默认头像',
+                displayName: '显示名称',
+                cancel: '取消',
+                save: '保存',
+                notifications: '通知',
+                gotIt: '知道了',
+                deleteDrink: '删除这条饮品记录？',
+                deleteConfirmDesc: '确定要删除这条咖啡记录吗？此操作无法撤销。ฅ^•ﻌ•^ฅ',
+                delete: '删除',
+                understand: '我知道了',
+                nextRank: rank => `下一级：${rank}`,
+                unlocked: count => `已解锁 ${count} 个`,
+                reachLevel: level => `达到 ${level} 级后解锁`,
+                levelTitle: (level, rank) => `${level} 级：<br/>${rank}`,
+                streak: days => `连续 ${days} 天`,
+                streakStart: '今天开始记录吧！',
+                streakGood: '开局不错，继续保持！',
+                streakGreat: '状态很好，继续冲！',
+                fillAllFields: '请填写邮箱和密码',
+                invalidEmailFormat: '请输入有效的邮箱地址',
+                shortPassword: '密码至少需要 6 位',
+                accountCreated: '账号已创建，正在准备你的饮品空间...',
+                invalidEmailPassword: '邮箱或密码不正确',
+                emailTaken: '这个邮箱已经被注册',
+                emailAlreadyRegistered: '这个邮箱已经有账号了，请直接登录',
+                emailPasswordWrong: '邮箱或密码不正确，请重试',
+                confirmEmailFirst: '请先完成邮箱验证，然后再登录',
+                storageFull: '你的本地存储空间已满。请到个人页点击“清空所有记录”来重置空间。😿',
+                recordSuccess: '记录成功！你的饮品卡片已经准备好啦 ☕🐾',
+                clearConfirm: '确定要清空所有饮品记录吗？此操作无法撤销。',
+                clearSuccess: '所有记录已清空。',
+                privacyTitle: '隐私政策',
+                termsTitle: '服务条款',
+                privacyBody: `
+                    <p class="mb-2">Cat-puccino 重视你的隐私。登录账号会把饮品记录、个人资料和成长进度同步到这个应用的 Supabase 后端，方便刷新或未来更换设备后恢复。</p>
+                    <p class="font-bold text-primary mt-3 mb-1">账号归属记录</p>
+                    <p class="mb-2">Supabase 已启用行级安全策略，登录用户只能访问自己的 Cat-puccino 数据。应用也会在浏览器本地保存少量缓存，用于更顺滑的加载和演示模式。</p>
+                    <p class="font-bold text-primary mt-3 mb-1">你的控制权</p>
+                    <p>你可以随时在个人页清空自己的饮品记录。演示模式只保存在本地。</p>
+                `,
+                termsBody: `
+                    <p class="font-bold text-primary mb-1">Cat-puccino 使用条款</p>
+                    <p class="mb-2">欢迎使用 Cat-puccino。进入应用或使用演示模式，即表示你会以轻松、负责的方式记录自己的饮品习惯。</p>
+                    <p class="font-bold text-error mb-1">咖啡因健康提醒</p>
+                    <p class="mb-2">记录咖啡因很有趣，但也请注意不要超过安全摄入量，通常建议每日不超过 400mg。请留意身体感受，也记得多喝水。</p>
+                    <p>本应用用于生活习惯记录和娱乐，不提供专业医疗建议。</p>
+                `,
+                notifWelcomeTitle: '你好，饮品大师！',
+                notifWelcomeDesc: '欢迎回到 Cat-puccino！祝你今天也有新鲜咖啡豆和完美奶泡 🐾',
+                notifWelcomeBody: '欢迎回到 Cat-puccino！祝你今天也有新鲜咖啡豆和完美奶泡。很开心陪你一起记录咖啡因旅程。',
+                notifTipTitle: '小提示',
+                notifTipDesc: '点击首页的小猫，可以看到不同的可爱反应！',
+                notifTipBody: '你知道吗？点击首页的小猫，可以看到不同的可爱反应。也可以左右滑动统计页的本周/本月/今年切换条。',
+                notifUpdateTitle: '功能更新',
+                notifUpdateDesc: '现在可以记录自定义价格和饮品分类啦！去记录页试试看。',
+                notifUpdateBody: '我们加入了自定义价格和饮品分类。你可以记录花了多少钱、喝了哪种饮品，并实时看到统计变化。',
+                justNow: '刚刚',
+                twoHoursAgo: '2 小时前',
+                yesterdayTime: '昨天',
                 noBrewsForDay: '这一天还没有记录',
                 noBrewsForFilter: '这个分类还没有记录',
                 all: '全部',
@@ -2579,7 +2814,10 @@
 
         function applyLanguage() {
             document.documentElement.lang = appLanguage === 'zh' ? 'zh-CN' : 'en';
+            document.title = t('pageTitle');
             setText('login-subtitle', t('loginSubtitle'));
+            setText('privacy-link', t('privacy'));
+            setText('terms-link', t('terms'));
             setText('auth-btn-text', authMode === 'signup' ? t('createAccount') : t('login'));
             setText('auth-toggle-text', authMode === 'signup' ? t('haveAccount') : t('newHere'));
             setText('auth-toggle-btn', authMode === 'signup' ? t('loginInstead') : t('createAccountLink'));
@@ -2587,21 +2825,99 @@
             setText('home-cups-label', t('cups'));
             setText('home-volume-label', t('volume'));
             setText('record-new-brew-text', t('recordNewBrew'));
+            setText('visual-brews-title', t('visualBrews'));
+            setText('time-btn-0', t('week'));
+            setText('time-btn-1', t('month'));
+            setText('time-btn-2', t('year'));
+            setText('stats-total-cups-label', t('totalCups'));
+            setText('stats-spent-label', t('spent'));
+            setText('heatmap-low-label', t('decaf'));
+            setText('heatmap-high-label', t('espresso'));
             setText('caffeine-title', t('caffeineIntensity'));
             setText('brew-breakdown-title', t('brewBreakdown'));
+            setText('profile-tagline', t('profileTagline'));
+            setText('profile-current-rank-label', t('currentRank'));
+            setText('profile-cups-tracked-label', t('cupsTracked'));
+            setText('profile-caffeine-total-label', t('caffeineTotal'));
             setText('profile-language-label', t('language'));
+            setText('clear-records-text', t('clearAllRecords'));
+            setText('sign-out-text', t('signOut'));
+            setText('nav-home-label', t('home'));
+            setText('nav-stats-label', t('stats'));
+            setText('nav-profile-label', t('profile'));
+            setText('progression-title', t('progression'));
+            setText('current-achievement-label', t('currentAchievement'));
+            setText('brew-ranks-title', t('brewRanks'));
+            setText('badges-title', t('badges'));
+            setText('activity-legend-title', t('activityLegend'));
+            setText('activity-legend-desc', t('activityLegendDesc'));
+            setText('new-brew-title', t('newBrew'));
+            setText('drink-details-title', t('drinkDetails'));
+            setText('photo-title', t('photoOptional'));
+            setText('photo-upload-title', t('snapBrew'));
+            setText('photo-upload-filename', t('photoTimeline'));
+            setText('sweetness-title', t('sweetness'));
+            setText('ice-title', t('iceLevel'));
+            setText('sweetness-no-sugar', t('noSugar'));
+            setText('sweetness-half', t('half'));
+            setText('sweetness-regular', t('regular'));
+            setText('sweetness-extra', t('extra'));
+            setText('ice-no-ice', t('noIce'));
+            setText('ice-less-ice', t('lessIce'));
+            setText('ice-regular', t('regular'));
+            setText('ice-extra', t('extra'));
+            setText('date-time-label', t('dateTime'));
+            setText('change-date-text', t('change'));
+            setText('review-title', t('review'));
+            setText('record-sip-text', t('recordMySip'));
+            setText('edit-profile-title', t('editProfile'));
+            setText('restore-avatar-text', t('restoreAvatar'));
+            setText('display-name-label', t('displayName'));
+            setText('edit-cancel-text', t('cancel'));
+            setText('edit-save-text', t('save'));
+            setText('notifications-title', t('notifications'));
+            setText('notif-welcome-title', t('notifWelcomeTitle'));
+            setText('notif-welcome-desc', t('notifWelcomeDesc'));
+            setText('notif-tip-title', t('notifTipTitle'));
+            setText('notif-tip-desc', t('notifTipDesc'));
+            setText('notif-update-title', t('notifUpdateTitle'));
+            setText('notif-update-desc', t('notifUpdateDesc'));
+            setText('notif-just-now', t('justNow'));
+            setText('notif-two-hours', t('twoHoursAgo'));
+            setText('notif-yesterday', t('yesterdayTime'));
+            setText('notif-got-it-text', t('gotIt'));
+            setText('delete-confirm-title', t('deleteDrink'));
+            setText('delete-confirm-desc', t('deleteConfirmDesc'));
+            setText('delete-cancel-text', t('cancel'));
+            setText('delete-confirm-text', t('delete'));
+            setText('policy-understand-text', t('understand'));
+            setText('detail-sweetness-label', t('sweetness'));
+            setText('detail-ice-label', t('iceLevel'));
+            setText('detail-review-label', t('review'));
+            setText('detail-delete-text', t('delete'));
             setText('app-title', 'Cat-puccino');
 
             const emailInput = document.getElementById('login-username');
             const passInput = document.getElementById('login-password');
+            const drinkNameInput = document.getElementById('input-drink-name');
+            const drinkBrandInput = document.getElementById('input-drink-brand');
+            const drinkPriceInput = document.getElementById('input-drink-price');
+            const reviewInput = document.getElementById('input-drink-review');
             if (emailInput) emailInput.placeholder = t('emailPlaceholder');
             if (passInput) passInput.placeholder = t('passwordPlaceholder');
+            if (drinkNameInput) drinkNameInput.placeholder = t('drinkNamePlaceholder');
+            if (drinkBrandInput) drinkBrandInput.placeholder = t('brandPlaceholder');
+            if (drinkPriceInput) drinkPriceInput.placeholder = t('pricePlaceholder');
+            if (reviewInput) reviewInput.placeholder = t('reviewPlaceholder');
 
             updateLanguageToggleUI();
             updateHistoryFilterUI();
             updateDateDisplay();
             updateCaffeineInsight();
+            updateSweetness(document.getElementById('sweetness-slider')?.value || 100);
+            updateIceLevel(document.getElementById('ice-slider')?.value || 100);
             renderHistory();
+            updateProgressionUI();
         }
 
         function updateLanguageToggleUI() {
@@ -2665,18 +2981,30 @@
             });
         }
 
-        const rankTitles = [
-            "Espresso Beginner", "Latte Lover", "Macchiato Master", "Bean Legend", "Caffeine King"
-        ];
-        const rankDescriptions = [
-            "Your journey starts here.", "Appreciating the creamy layers.", "A refined palette for coffee.", "The elite of the coffee world.", "God-tier caffeine consumption."
-        ];
+        const rankTitleSets = {
+            en: ["Espresso Beginner", "Latte Lover", "Macchiato Master", "Bean Legend", "Caffeine King"],
+            zh: ["浓缩新手", "拿铁爱好者", "玛奇朵大师", "咖啡豆传说", "咖啡因王者"]
+        };
+        const rankDescriptionSets = {
+            en: ["Your journey starts here.", "Appreciating the creamy layers.", "A refined palette for coffee.", "The elite of the coffee world.", "God-tier caffeine consumption."],
+            zh: ["你的记录旅程从这里开始。", "开始懂得奶香与咖啡的层次。", "已经有很不错的饮品品味。", "咖啡世界里的高阶玩家。", "咖啡因宇宙的顶级存在。"]
+        };
+
+        function getRankTitles() {
+            return rankTitleSets[appLanguage] || rankTitleSets.en;
+        }
+
+        function getRankDescriptions() {
+            return rankDescriptionSets[appLanguage] || rankDescriptionSets.en;
+        }
 
         function renderRanks() {
             const container = document.getElementById('ranks-list-container');
             const unlockedEl = document.getElementById('ranks-unlocked-count');
             if (!container) return;
 
+            const rankTitles = getRankTitles();
+            const rankDescriptions = getRankDescriptions();
             const currentRankIdx = Math.min(Math.floor((currentLevel - 1) / 2), rankTitles.length - 1);
             let html = '';
             let unlockedCount = 0;
@@ -2703,7 +3031,7 @@
                     unlockedCount++;
                     html += `
                         <div class="bg-primary-container/20 p-5 rounded-3xl border-2 border-primary-container/40 flex items-center justify-between shadow-md shadow-primary/5 transition-transform hover:scale-[1.02] active:scale-95 relative overflow-hidden">
-                            <div class="absolute top-4 right-4 bg-primary text-white text-[8px] font-black px-2 py-0.5 rounded-sm tracking-widest uppercase">Current</div>
+                            <div class="absolute top-4 right-4 bg-primary text-white text-[8px] font-black px-2 py-0.5 rounded-sm tracking-widest uppercase">${t('currentRank')}</div>
                             <div class="flex items-center gap-4">
                                 <div class="w-14 h-14 bg-primary rounded-2xl flex items-center justify-center text-white shadow-md shadow-primary/30">
                                     <span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">coffee</span>
@@ -2724,7 +3052,7 @@
                                 </div>
                                 <div>
                                     <h5 class="text-base font-black text-on-surface-variant/80">${title}</h5>
-                                    <p class="text-xs text-on-surface-variant/60">Reach Level ${idx * 2 + 1} to unlock.</p>
+                                    <p class="text-xs text-on-surface-variant/60">${t('reachLevel', idx * 2 + 1)}</p>
                                 </div>
                             </div>
                             <span class="material-symbols-outlined text-outline-variant text-xl">lock</span>
@@ -2733,7 +3061,7 @@
             });
 
             container.innerHTML = html;
-            if (unlockedEl) unlockedEl.innerText = `${unlockedCount} Unlocked`;
+            if (unlockedEl) unlockedEl.innerText = t('unlocked', unlockedCount);
         }
 
         function getBadgeDefinitions() {
@@ -2874,15 +3202,16 @@
             if (cupsEl) cupsEl.innerText = totalCupsCount;
             if (volumeEl) volumeEl.innerText = (totalCupsCount * 350);
 
+            const rankTitles = getRankTitles();
             const xpNeeded = currentLevel * 500;
             const progress = (currentXP / xpNeeded) * 100;
             const rankIdx = Math.min(Math.floor((currentLevel - 1) / 2), rankTitles.length - 1);
             const nextRankIdx = Math.min(rankIdx + 1, rankTitles.length - 1);
 
-            if (levelTitle) levelTitle.innerHTML = `Level ${currentLevel}:<br/>${rankTitles[rankIdx]}`;
+            if (levelTitle) levelTitle.innerHTML = t('levelTitle', currentLevel, rankTitles[rankIdx]);
             if (xpText) xpText.innerText = `${currentXP} / ${xpNeeded} XP`;
             if (barFill) barFill.style.width = `${progress}%`;
-            if (nextRank) nextRank.innerText = `Next: ${rankTitles[nextRankIdx]}`;
+            if (nextRank) nextRank.innerText = t('nextRank', rankTitles[nextRankIdx]);
 
             // Update Profile Tab Card
             if (profileRankTitle) profileRankTitle.innerText = rankTitles[rankIdx];
@@ -2898,15 +3227,15 @@
             }
             if (profileStreakDays) {
                 const currentStreak = calculateStreak();
-                profileStreakDays.innerText = `${currentStreak} Day Streak`;
+                profileStreakDays.innerText = t('streak', currentStreak);
                 
                 if (profileStreakDesc) {
                     if (currentStreak === 0) {
-                        profileStreakDesc.innerText = "Start your journey today!";
+                        profileStreakDesc.innerText = t('streakStart');
                     } else if (currentStreak <= 3) {
-                        profileStreakDesc.innerText = "Great start, keep it up!";
+                        profileStreakDesc.innerText = t('streakGood');
                     } else {
-                        profileStreakDesc.innerText = "You're on a roll, kitty!";
+                        profileStreakDesc.innerText = t('streakGreat');
                     }
                 }
             }
@@ -3034,7 +3363,7 @@
                 removeDrinkPhoto();
                 
                 // Show success toast
-                showToast("Congratulations! Your coffee card is ready! ☕🐾");
+                showToast(t('recordSuccess'));
                 
                 // Wait slightly before opening the newly created record's details modal
                 setTimeout(() => {
@@ -3125,17 +3454,17 @@
             const password = passIn.value.trim();
 
             if (!email || !password) {
-                showLoginError('Please fill in all fields');
+                showLoginError(t('fillAllFields'));
                 return;
             }
 
             if (!isValidEmail(email)) {
-                showLoginError('Please enter a valid email address.');
+                showLoginError(t('invalidEmailFormat'));
                 return;
             }
 
             if (password.length < 6) {
-                showLoginError('Password must be at least 6 characters.');
+                showLoginError(t('shortPassword'));
                 return;
             }
 
@@ -3165,7 +3494,7 @@
                             return;
                         }
                         currentSupabaseUser = data.session.user;
-                        showAuthMessage('Account created. Preparing your cozy brew space...', 'success', 2500);
+                        showAuthMessage(t('accountCreated'), 'success', 2500);
                     } else {
                         const { data, error } = await catpuccinoSupabase.auth.signInWithPassword({
                             email,
@@ -3176,7 +3505,7 @@
                     }
 
                     if (!currentSupabaseUser) {
-                        showAuthMessage('Please confirm your email first, then log in.', 'info', 0);
+                        showAuthMessage(t('confirmEmailFirst'), 'info', 0);
                         setAuthButtonLoading(false);
                         return;
                     }
@@ -3187,14 +3516,14 @@
                     const users = JSON.parse(localStorage.getItem('catpuccino_users') || '{}');
                     if (authMode === 'signup') {
                         if (users[email]) {
-                            showLoginError('Email already taken');
+                            showLoginError(t('emailTaken'));
                             setAuthButtonLoading(false);
                             return;
                         }
                         users[email] = { password, profileName: email, totalCups: 0, totalSpent: 0 };
                         localStorage.setItem('catpuccino_users', JSON.stringify(users));
                     } else if (!users[email] || users[email].password !== password) {
-                        showLoginError('Invalid email or password');
+                        showLoginError(t('invalidEmailPassword'));
                         setAuthButtonLoading(false);
                         return;
                     }
@@ -3204,11 +3533,11 @@
                 console.error('Authentication failed:', error);
                 let message = error.message || 'Authentication failed';
                 if (/email not confirmed/i.test(message)) {
-                    message = 'Please confirm your email first, then log in.';
+                    message = t('confirmEmailFirst');
                 } else if (/invalid login credentials/i.test(message)) {
-                    message = 'Email or password is incorrect. Please try again.';
+                    message = t('emailPasswordWrong');
                 } else if (/user already registered|already registered/i.test(message)) {
-                    message = 'This email already has an account. Try logging in instead.';
+                    message = t('emailAlreadyRegistered');
                     switchAuthMode('login');
                 }
                 showAuthMessage(message, 'error');
@@ -3321,25 +3650,11 @@
             const content = document.getElementById('policy-content');
             
             if (type === 'privacy') {
-                title.innerText = 'Privacy Policy';
-                content.innerHTML = `
-                    <p class="font-bold text-primary mb-1">🐾 Your Privacy is Purr-fectly Safe!</p>
-                    <p class="mb-2">At Cat-puccino, we value your privacy above everything else. Signed-in accounts sync drink records, profile details, and progress to this app's Supabase backend so your sip diary can be restored after refreshes and future device changes.</p>
-                    <p class="font-bold text-primary mt-3 mb-1">🔒 Account-owned Records</p>
-                    <p class="mb-2">Supabase Row Level Security is enabled so signed-in users can only access their own Cat-puccino records. The app also keeps a small browser <code>localStorage</code> cache for smoother loading and demo mode.</p>
-                    <p class="font-bold text-primary mt-3 mb-1">🍪 Local Storage Usage</p>
-                    <p>You can clear your brew records from profile settings at any time. Demo mode remains local-only.</p>
-                `;
+                title.innerText = t('privacyTitle');
+                content.innerHTML = t('privacyBody');
             } else {
-                title.innerText = 'Terms of Service';
-                content.innerHTML = `
-                    <p class="font-bold text-primary mb-1">☕ Terms of Cat-puccino Journey</p>
-                    <p class="mb-2">Welcome to Cat-puccino! By entering this app or using the Demo Mode, you agree to embark on a beautiful, coffee-fueled journey with complete fun and responsibility.</p>
-                    <p class="font-bold text-primary mt-3 mb-1">⚠️ Drink Responsibly</p>
-                    <p class="mb-2">While tracking your caffeine is fun, please make sure not to exceed the safe daily caffeine limit (typically 400mg). Listen to your body and make sure to drink plenty of water alongside your favorite espressos!</p>
-                    <p class="font-bold text-primary mt-3 mb-1">📱 Disclaimer</p>
-                    <p>This application is created for lifestyle, habit tracking, and entertainment purposes. It does not provide professional medical advice. Always consult your health care provider for specific intake advice.</p>
-                `;
+                title.innerText = t('termsTitle');
+                content.innerHTML = t('termsBody');
             }
             
             modal.classList.remove('hidden', 'pointer-events-none');
@@ -3574,7 +3889,7 @@
                 setTimeout(() => {
                     cupsEl.innerText = current.cups;
                     spentEl.innerText = '¥' + current.spent.toLocaleString('en-US');
-                    avgEl.innerText = `AVG ¥${current.avg}/CUP`;
+                    avgEl.innerText = t('avgCup', current.avg);
                     cupsEl.classList.remove('opacity-0', 'translate-y-2');
                     spentEl.classList.remove('opacity-0', 'translate-y-2');
                     avgEl.classList.remove('opacity-0');
@@ -3670,7 +3985,7 @@
         }
 
         async function clearAllData() {
-            if (confirm('Are you sure you want to clear all your brew records? This action cannot be undone.')) {
+            if (confirm(t('clearConfirm'))) {
                 if (isSupabaseEnabled() && currentSupabaseUser) {
                     const { error } = await catpuccinoSupabase
                         .from('catpuccino_drink_records')
@@ -3701,7 +4016,7 @@
                 saveToStorage();
                 
                 // Success Toast
-                alert('All data has been cleared.');
+                alert(t('clearSuccess'));
             }
         }
 
@@ -4394,7 +4709,7 @@
                 <!-- Content filled via JavaScript -->
             </div>
             <div class="mt-5 pt-3 border-t border-surface-container-high flex justify-end">
-                <button onclick="closePolicyModal()" class="bg-primary hover:bg-primary-container text-white py-2 px-5 rounded-full font-bold text-xs transition-colors active:scale-95">I Understand</button>
+                <button id="policy-understand-text" onclick="closePolicyModal()" class="bg-primary hover:bg-primary-container text-white py-2 px-5 rounded-full font-bold text-xs transition-colors active:scale-95">I Understand</button>
             </div>
         </div>
     </div>
@@ -4423,18 +4738,18 @@
                 <!-- Specs Pill Grid -->
                 <div class="grid grid-cols-2 gap-3">
                     <div class="bg-surface-container-low p-3 rounded-2xl flex flex-col justify-between h-16 border border-surface-container-high">
-                        <span class="text-[8px] font-black uppercase tracking-widest text-outline">Sweetness</span>
+                        <span id="detail-sweetness-label" class="text-[8px] font-black uppercase tracking-widest text-outline">Sweetness</span>
                         <p id="detail-brew-sweetness" class="text-xs font-extrabold text-primary truncate mt-0.5">Regular (100%)</p>
                     </div>
                     <div class="bg-surface-container-low p-3 rounded-2xl flex flex-col justify-between h-16 border border-surface-container-high">
-                        <span class="text-[8px] font-black uppercase tracking-widest text-outline">Ice Level</span>
+                        <span id="detail-ice-label" class="text-[8px] font-black uppercase tracking-widest text-outline">Ice Level</span>
                         <p id="detail-brew-ice" class="text-xs font-extrabold text-primary truncate mt-0.5">Regular (100%)</p>
                     </div>
                 </div>
 
                 <!-- Purr-sonal Review -->
                 <div id="detail-brew-review-container" class="bg-surface-container-low p-4 rounded-2xl border border-surface-container-high space-y-1.5 hidden">
-                    <span class="text-[8px] font-black uppercase tracking-widest text-outline block">Purr-sonal Review</span>
+                    <span id="detail-review-label" class="text-[8px] font-black uppercase tracking-widest text-outline block">Purr-sonal Review</span>
                     <p id="detail-brew-review" class="text-xs text-on-surface italic leading-relaxed font-semibold">Great coffee!</p>
                 </div>
 
@@ -4451,7 +4766,7 @@
                 <div class="pt-3 border-t border-surface-container/60">
                     <button onclick="deleteActiveRecord()" class="w-full py-2.5 rounded-2xl bg-error/10 hover:bg-error text-error hover:text-white font-extrabold text-xs tracking-widest uppercase flex items-center justify-center gap-2 active:scale-[0.98] transition-all duration-200">
                         <span class="material-symbols-outlined text-sm">delete</span>
-                        Delete Record
+                        <span id="detail-delete-text">Delete Record</span>
                     </button>
                 </div>
             </div>
