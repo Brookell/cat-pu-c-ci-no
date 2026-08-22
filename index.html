@@ -633,7 +633,7 @@
             </div>
 
             <!-- ----- Stats View ----- -->
-            <div id="tab-stats" class="absolute inset-0 overflow-y-auto hide-scrollbar px-6 pt-24 pb-32 transition-all duration-500 ease-in-out opacity-0 scale-95 pointer-events-none z-10 block">
+            <div id="tab-stats" aria-hidden="true" class="absolute inset-0 overflow-y-auto hide-scrollbar px-6 pt-24 pb-32 transition-all duration-500 ease-in-out opacity-0 scale-95 pointer-events-none z-10 block">
                 <!-- Smooth Toggle Selector -->
                 <section class="flex justify-center mb-6">
                     <div id="time-toggle-container" class="bg-surface-container p-1.5 rounded-full flex w-full max-w-xs shadow-inner relative isolate cursor-grab active:cursor-grabbing">
@@ -668,7 +668,7 @@
                         </div>
                         <div class="z-10 flex items-center gap-1 text-on-primary-container bg-primary-container/30 w-fit px-2 py-1 rounded-full text-[8px] font-bold">
                             <span class="material-symbols-outlined text-[10px]">payments</span>
-                            AVG ¥0/CUP
+                            <span id="avg-spent">AVG ¥0/CUP</span>
                         </div>
                         <div class="absolute -right-4 -bottom-4 opacity-10 group-hover:scale-110 group-hover:rotate-12 transition-all duration-500">
                             <span class="material-symbols-outlined text-[90px]">pets</span>
@@ -730,7 +730,7 @@
             </div>
 
             <!-- ----- Profile View ----- -->
-            <div id="tab-profile" class="absolute inset-0 overflow-y-auto hide-scrollbar px-6 pt-20 pb-36 transition-all duration-500 ease-in-out opacity-0 scale-95 pointer-events-none z-10 block">
+            <div id="tab-profile" aria-hidden="true" class="absolute inset-0 overflow-y-auto hide-scrollbar px-6 pt-20 pb-36 transition-all duration-500 ease-in-out opacity-0 scale-95 pointer-events-none z-10 block">
                 <!-- Profile Hero Section -->
                 <section class="relative flex flex-col items-center text-center space-y-2 mb-4">
                     <div onclick="openEditProfile()" class="relative group cursor-pointer transition-transform duration-300 hover:scale-105 active:scale-95">
@@ -1335,9 +1335,14 @@
             updateDateDisplay();
         }
 
-        function updateDateDisplay() {
+        function getActiveDate() {
             const dateObj = new Date();
             dateObj.setDate(dateObj.getDate() + activeDateOffset);
+            return dateObj;
+        }
+
+        function updateDateDisplay() {
+            const dateObj = getActiveDate();
             
             const options = { weekday: 'long', month: 'short', day: 'numeric' };
             const dateStr = dateObj.toLocaleDateString('en-US', options);
@@ -1409,14 +1414,9 @@
             currentLevel = data.level || 1;
             currentXP = data.xp || 0;
 
-            const cupsEl = document.getElementById('total-cups');
-            const spentEl = document.getElementById('total-spent');
-            if (cupsEl) cupsEl.innerText = totalCupsCount;
-            if (spentEl) spentEl.innerText = '¥' + totalSpentAmount.toLocaleString('en-US');
-
             renderHistory();
+            refreshSummaryUI();
             updateProgressionUI();
-            updateHeatmap(totalCupsCount > 0 ? 14 : 0);
             loadLayoutOrder();
         }
 
@@ -1433,6 +1433,54 @@
                 timestamp: new Date(row.recorded_at).getTime(),
                 review: row.review || ''
             };
+        }
+
+        function getPeriodStart(periodIndex) {
+            const start = new Date();
+            start.setHours(0, 0, 0, 0);
+
+            if (periodIndex === 0) {
+                const day = start.getDay();
+                const diff = day === 0 ? 6 : day - 1;
+                start.setDate(start.getDate() - diff);
+            } else if (periodIndex === 1) {
+                start.setDate(1);
+            } else {
+                start.setMonth(0, 1);
+            }
+
+            return start.getTime();
+        }
+
+        function getPeriodStats(periodIndex) {
+            const startTime = getPeriodStart(periodIndex);
+            const periodRecords = historyRecords.filter(record => Number(record.timestamp || 0) >= startTime);
+            const cups = periodRecords.length;
+            const spent = periodRecords.reduce((sum, record) => sum + (Number(record.price) || 0), 0);
+            const avg = cups > 0 ? Math.round(spent / cups) : 0;
+
+            return {
+                cups,
+                spent,
+                avg,
+                dots: Math.min(cups, periodIndex === 0 ? 21 : periodIndex === 1 ? 31 : 35)
+            };
+        }
+
+        function refreshSummaryUI(periodIndex = 0) {
+            const cupsEl = document.getElementById('total-cups');
+            const spentEl = document.getElementById('total-spent');
+            const avgEl = document.getElementById('avg-spent');
+            const homeCupsEl = document.getElementById('home-cups');
+            const homeVolumeEl = document.getElementById('home-volume');
+            const stats = getPeriodStats(periodIndex);
+
+            if (cupsEl) cupsEl.innerText = stats.cups;
+            if (spentEl) spentEl.innerText = '¥' + stats.spent.toLocaleString('en-US');
+            if (avgEl) avgEl.innerText = `AVG ¥${stats.avg}/CUP`;
+            if (homeCupsEl) homeCupsEl.innerText = totalCupsCount;
+            if (homeVolumeEl) homeVolumeEl.innerText = (totalCupsCount * 350).toLocaleString('en-US');
+            updateHeatmap(stats.dots);
         }
 
         async function loadFromSupabaseSession() {
@@ -2535,6 +2583,8 @@
                     
                     // Update History List
                     renderHistory();
+                    refreshSummaryUI();
+                    updateProgressionUI();
      
                     // Save to storage
                     saveToStorage();
@@ -2903,7 +2953,7 @@
                 document.getElementById('total-cups').innerText = '0';
                 document.getElementById('total-spent').innerText = '¥0';
                 renderHistory();
-                updateHeatmap(0);
+                refreshSummaryUI();
                 
                 // Restore login button text
                 document.getElementById('login-btn-submit').innerHTML = '<span id="auth-btn-text">Login</span>';
@@ -2956,6 +3006,7 @@
                     // Show content with cross-fade and gentle scale
                     tabContent.classList.remove('opacity-0', 'scale-95', 'pointer-events-none', 'z-10');
                     tabContent.classList.add('opacity-100', 'scale-100', 'z-20');
+                    tabContent.setAttribute('aria-hidden', 'false');
                     
                     // Activate Nav button
                     navBtn.className = "flex flex-col items-center justify-center bg-[#bda485]/20 text-[#6f5b40] rounded-full px-5 py-2 scale-110 transition-all duration-500 ease-out nav-btn shadow-sm";
@@ -2964,6 +3015,7 @@
                     // Hide content
                     tabContent.classList.remove('opacity-100', 'scale-100', 'z-20');
                     tabContent.classList.add('opacity-0', 'scale-95', 'pointer-events-none', 'z-10');
+                    tabContent.setAttribute('aria-hidden', 'true');
                     
                     // Deactivate Nav button
                     navBtn.className = "flex flex-col items-center justify-center text-[#6f5b40]/50 px-3 py-2 hover:text-[#6f5b40] transition-all duration-500 ease-out active:scale-90 nav-btn";
@@ -2987,27 +3039,24 @@
                 }
             }
 
-            // Update Stats Data (Mock values for prototype)
-            const stats = [
-                { cups: 12, spent: 300, dots: 21 },    // Week
-                { cups: 54, spent: 1350, dots: 31 },   // Month
-                { cups: 642, spent: 16050, dots: 35 }  // Year
-            ];
-            
-            const current = stats[index];
+            const current = getPeriodStats(index);
             const cupsEl = document.getElementById('total-cups');
             const spentEl = document.getElementById('total-spent');
+            const avgEl = document.getElementById('avg-spent');
             
-            if (cupsEl && spentEl) {
+            if (cupsEl && spentEl && avgEl) {
                 // Animation for numbers
                 cupsEl.classList.add('opacity-0', 'translate-y-2');
                 spentEl.classList.add('opacity-0', 'translate-y-2');
+                avgEl.classList.add('opacity-0');
                 
                 setTimeout(() => {
                     cupsEl.innerText = current.cups;
                     spentEl.innerText = '¥' + current.spent.toLocaleString('en-US');
+                    avgEl.innerText = `AVG ¥${current.avg}/CUP`;
                     cupsEl.classList.remove('opacity-0', 'translate-y-2');
                     spentEl.classList.remove('opacity-0', 'translate-y-2');
+                    avgEl.classList.remove('opacity-0');
                     
                     // Update Heatmap
                     updateHeatmap(current.dots);
@@ -3124,8 +3173,8 @@
                 document.getElementById('total-cups').innerText = '0';
                 document.getElementById('total-spent').innerText = '¥0';
                 renderHistory();
+                refreshSummaryUI();
                 updateProgressionUI();
-                updateHeatmap(0);
                 
                 // Save state
                 saveToStorage();
@@ -3737,6 +3786,8 @@
 
         // Initialize heatmap and swipe on load
         window.addEventListener('DOMContentLoaded', () => {
+            updateDateDisplay();
+            initRecordDateTime();
             loadFromStorage();
             loadLayoutOrder();
             
