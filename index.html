@@ -757,9 +757,9 @@
             <div id="tab-stats" aria-hidden="true" class="absolute inset-0 overflow-y-auto hide-scrollbar px-6 pt-24 pb-32 transition-all duration-500 ease-in-out opacity-0 scale-95 pointer-events-none z-10 block">
                 <!-- Smooth Toggle Selector -->
                 <section class="flex justify-center mb-6">
-                    <div id="time-toggle-container" class="bg-surface-container p-1.5 rounded-full flex w-full max-w-xs shadow-inner relative isolate cursor-grab active:cursor-grabbing">
+                    <div id="time-toggle-container" class="bg-surface-container p-1.5 rounded-full flex w-full max-w-xs shadow-inner relative isolate cursor-grab active:cursor-grabbing overflow-hidden">
                         <!-- Sliding Pill Background -->
-                        <div id="time-toggle-pill" class="absolute top-1.5 bottom-1.5 w-[calc(33.33%-4px)] bg-primary rounded-full shadow-md transition-all duration-500 ease-out -z-10" style="left: 6px;"></div>
+                        <div id="time-toggle-pill" class="absolute top-1.5 bottom-1.5 bg-primary rounded-full shadow-md transition-all duration-500 ease-out -z-10" style="left: 6px; width: calc(33.33% - 4px);"></div>
                         
                         <button onclick="setTimeToggle(0)" id="time-btn-0" class="flex-1 py-2 text-xs font-bold text-on-primary transition-colors duration-500 rounded-full active:scale-95">Week</button>
                         <button onclick="setTimeToggle(1)" id="time-btn-1" class="flex-1 py-2 text-xs font-bold text-on-surface-variant transition-colors duration-500 rounded-full active:scale-95">Month</button>
@@ -778,7 +778,7 @@
                             <span class="material-symbols-outlined text-[10px]">trending_up</span>
                             0% VS LAST
                         </div>
-                        <div class="absolute -right-4 -bottom-4 opacity-5 group-hover:scale-110 group-hover:-rotate-12 transition-all duration-500">
+                        <div class="absolute -right-4 -bottom-4 opacity-5 transition-transform duration-500 pointer-events-none max-w-full max-h-full overflow-hidden">
                             <span class="material-symbols-outlined text-[100px]">local_cafe</span>
                         </div>
                     </div>
@@ -791,7 +791,7 @@
                             <span class="material-symbols-outlined text-[10px]">payments</span>
                             <span id="avg-spent">AVG ¥0/CUP</span>
                         </div>
-                        <div class="absolute -right-4 -bottom-4 opacity-10 group-hover:scale-110 group-hover:rotate-12 transition-all duration-500">
+                        <div class="absolute -right-4 -bottom-4 opacity-10 transition-transform duration-500 pointer-events-none max-w-full max-h-full overflow-hidden">
                             <span class="material-symbols-outlined text-[90px]">pets</span>
                         </div>
                     </div>
@@ -994,67 +994,8 @@
                     <section class="space-y-8">
                         <h4 class="text-xl font-black text-on-surface tracking-tight px-2">Meow-stones & Badges</h4>
                         
-                        <div class="grid grid-cols-3 gap-6">
-                            <!-- Badge 1 -->
-                            <div class="flex flex-col items-center gap-2 group cursor-pointer">
-                                <div class="w-20 h-20 bg-error-container/20 rounded-full flex items-center justify-center transition-all group-hover:scale-110 active:scale-95">
-                                    <span class="material-symbols-outlined text-error text-3xl">sunny</span>
-                                </div>
-                                <div class="text-center">
-                                    <h6 class="text-xs font-black text-on-surface">Early Bird</h6>
-                                    <p class="text-[9px] font-bold text-on-surface-variant uppercase tracking-wide">Before 8 AM</p>
-                                </div>
-                            </div>
-                            <!-- Badge 2 (Selected) -->
-                            <div class="flex flex-col items-center gap-2 group cursor-pointer relative">
-                                <div class="w-20 h-20 bg-primary-container rounded-full flex items-center justify-center border-4 border-primary shadow-lg shadow-primary/20 transition-all group-hover:scale-110 active:scale-95">
-                                    <span class="material-symbols-outlined text-white text-3xl" style="font-variation-settings: 'FILL' 1;">bolt</span>
-                                </div>
-                                <div class="text-center">
-                                    <h6 class="text-xs font-black text-primary">Streak Purr</h6>
-                                    <p class="text-[9px] font-bold text-on-surface-variant uppercase tracking-wide">7 Days In A Row</p>
-                                </div>
-                            </div>
-                            <!-- Badge 3 -->
-                            <div class="flex flex-col items-center gap-2 group cursor-pointer">
-                                <div class="w-20 h-20 bg-surface-container rounded-full flex items-center justify-center text-outline-variant transition-all group-hover:scale-110 group-hover:bg-primary/10 group-hover:text-primary active:scale-95">
-                                    <span class="material-symbols-outlined text-3xl">category</span>
-                                </div>
-                                <div class="text-center">
-                                    <h6 class="text-xs font-black text-on-surface opacity-40">Connoisseur</h6>
-                                    <p class="text-[9px] font-bold text-on-surface-variant/40 uppercase tracking-wide">5 Categories</p>
-                                </div>
-                            </div>
-                            <!-- Badge 4 -->
-                            <div class="flex flex-col items-center gap-2 group cursor-pointer">
-                                <div class="w-20 h-20 bg-surface-container rounded-full flex items-center justify-center text-outline-variant transition-all group-hover:scale-110 group-hover:bg-primary/10 group-hover:text-primary active:scale-95">
-                                    <span class="material-symbols-outlined text-3xl">dark_mode</span>
-                                </div>
-                                <div class="text-center">
-                                    <h6 class="text-xs font-black text-on-surface opacity-40">Midnight Snack</h6>
-                                    <p class="text-[9px] font-bold text-on-surface-variant/40 uppercase tracking-wide">Post 10 PM</p>
-                                </div>
-                            </div>
-                            <!-- Badge 5 -->
-                            <div class="flex flex-col items-center gap-2 group cursor-pointer">
-                                <div class="w-20 h-20 bg-surface-container rounded-full flex items-center justify-center text-outline-variant transition-all group-hover:scale-110 group-hover:bg-primary/10 group-hover:text-primary active:scale-95">
-                                    <span class="material-symbols-outlined text-3xl">favorite</span>
-                                </div>
-                                <div class="text-center">
-                                    <h6 class="text-xs font-black text-on-surface opacity-40">Kind Soul</h6>
-                                    <p class="text-[9px] font-bold text-on-surface-variant/40 uppercase tracking-wide">Tip & Share</p>
-                                </div>
-                            </div>
-                            <!-- Badge 6 -->
-                            <div class="flex flex-col items-center gap-2 group cursor-pointer">
-                                <div class="w-20 h-20 bg-surface-container rounded-full flex items-center justify-center text-outline-variant transition-all group-hover:scale-110 group-hover:bg-primary/10 group-hover:text-primary active:scale-95">
-                                    <span class="material-symbols-outlined text-3xl">auto_awesome</span>
-                                </div>
-                                <div class="text-center">
-                                    <h6 class="text-xs font-black text-on-surface opacity-40">Mystery Sip</h6>
-                                    <p class="text-[9px] font-bold text-on-surface-variant/40 uppercase tracking-wide">Try Special Menu</p>
-                                </div>
-                            </div>
+                        <div id="badges-grid" class="grid grid-cols-3 gap-4 sm:gap-6">
+                            <!-- Badges are rendered from actual drink history -->
                         </div>
                     </section>
                 </div>
@@ -1340,6 +1281,10 @@
                                 <input type="file" id="avatar-upload" class="hidden" accept="image/*" onchange="previewAvatar(this)">
                             </div>
                         </div>
+                        <button onclick="resetAvatarToDefault(event)" class="w-full py-2.5 rounded-full font-bold text-xs text-primary bg-primary-container/20 hover:bg-primary-container/40 transition-colors active:scale-95 flex items-center justify-center gap-2">
+                            <span class="material-symbols-outlined text-sm">restart_alt</span>
+                            Restore Default Avatar
+                        </button>
                         <div class="space-y-2">
                             <label class="text-[10px] font-bold uppercase tracking-widest text-outline ml-2">Display Name</label>
                             <input id="edit-name-input" type="text" class="w-full bg-surface-container border-none focus:ring-2 focus:ring-primary text-on-surface rounded-xl py-3 px-4 transition-all duration-300 font-bold" />
@@ -2180,6 +2125,15 @@
             card.classList.add('scale-95');
         }
 
+        function resetAvatarToDefault(event) {
+            if (event) event.preventDefault();
+            const preview = document.getElementById('edit-avatar-preview');
+            const upload = document.getElementById('avatar-upload');
+            if (preview) preview.src = './middle.png';
+            if (upload) upload.value = '';
+            tempAvatarData = './middle.png';
+        }
+
         function saveProfile() {
             const nameEl = document.getElementById('profile-name');
             const inputEl = document.getElementById('edit-name-input');
@@ -2516,6 +2470,86 @@
             if (unlockedEl) unlockedEl.innerText = `${unlockedCount} Unlocked`;
         }
 
+        function getBadgeDefinitions() {
+            const uniqueCategories = new Set(historyRecords.map(record => record.category).filter(Boolean));
+            const hasEarlyBird = historyRecords.some(record => new Date(record.timestamp).getHours() < 8);
+            const hasMidnight = historyRecords.some(record => new Date(record.timestamp).getHours() >= 22);
+            const hasReviewed = historyRecords.some(record => record.review && record.review.trim().length > 0);
+            const hasPhoto = historyRecords.some(record => Boolean(record.photo));
+            const streak = calculateStreak();
+
+            return [
+                {
+                    title: 'First Join',
+                    desc: 'Welcome Brew',
+                    icon: 'pets',
+                    unlocked: true
+                },
+                {
+                    title: 'Early Bird',
+                    desc: 'Before 8 AM',
+                    icon: 'sunny',
+                    unlocked: hasEarlyBird
+                },
+                {
+                    title: 'Streak Purr',
+                    desc: '7 Days In A Row',
+                    icon: 'bolt',
+                    unlocked: streak >= 7
+                },
+                {
+                    title: 'Connoisseur',
+                    desc: '5 Categories',
+                    icon: 'category',
+                    unlocked: uniqueCategories.size >= 5
+                },
+                {
+                    title: 'Midnight Sip',
+                    desc: 'Post 10 PM',
+                    icon: 'dark_mode',
+                    unlocked: hasMidnight
+                },
+                {
+                    title: 'Story Teller',
+                    desc: 'Write A Review',
+                    icon: 'rate_review',
+                    unlocked: hasReviewed
+                },
+                {
+                    title: 'Photo Brew',
+                    desc: 'Add A Picture',
+                    icon: 'photo_camera',
+                    unlocked: hasPhoto
+                }
+            ];
+        }
+
+        function renderBadges() {
+            const grid = document.getElementById('badges-grid');
+            if (!grid) return;
+
+            grid.innerHTML = getBadgeDefinitions().map(badge => {
+                const unlockedIconClass = badge.unlocked
+                    ? 'bg-primary-container text-white border-4 border-primary shadow-lg shadow-primary/20'
+                    : 'bg-surface-container text-outline-variant';
+                const titleClass = badge.unlocked ? 'text-primary' : 'text-on-surface opacity-40';
+                const descClass = badge.unlocked ? 'text-on-surface-variant' : 'text-on-surface-variant/40';
+                const fillStyle = badge.unlocked ? "style=\"font-variation-settings: 'FILL' 1;\"" : '';
+
+                return `
+                    <div class="flex flex-col items-center gap-2 group ${badge.unlocked ? 'cursor-default' : 'cursor-not-allowed'}">
+                        <div class="w-16 h-16 sm:w-20 sm:h-20 ${unlockedIconClass} rounded-full flex items-center justify-center transition-all ${badge.unlocked ? 'group-hover:scale-105 active:scale-95' : ''}">
+                            <span class="material-symbols-outlined text-3xl" ${fillStyle}>${badge.icon}</span>
+                        </div>
+                        <div class="text-center">
+                            <h6 class="text-xs font-black ${titleClass}">${badge.title}</h6>
+                            <p class="text-[9px] font-bold ${descClass} uppercase tracking-wide">${badge.desc}</p>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
         function calculateStreak() {
             if (!historyRecords || historyRecords.length === 0) return 0;
             
@@ -2612,6 +2646,7 @@
             }
             
             renderRanks();
+            renderBadges();
         }
 
         let catMeowTimeout = null;
@@ -3225,7 +3260,14 @@
 
         function setTimeToggle(index) {
             const pill = document.getElementById('time-toggle-pill');
-            pill.style.left = `calc(6px + ${index * 33.33}%)`;
+            const toggleContainer = document.getElementById('time-toggle-container');
+            if (pill && toggleContainer) {
+                const inset = 6;
+                const availableWidth = toggleContainer.clientWidth - inset * 2;
+                const segmentWidth = availableWidth / 3;
+                pill.style.width = `${segmentWidth}px`;
+                pill.style.left = `${inset + segmentWidth * index}px`;
+            }
             
             for (let i = 0; i < 3; i++) {
                 const btn = document.getElementById(`time-btn-${i}`);
@@ -3998,6 +4040,7 @@
             });
 
             lockBottomNavScroll();
+            setTimeToggle(0);
 
             // If still on login view (not auto-logged in), keep heatmap at 0
             if (currentUsername === null) {
