@@ -2,7 +2,7 @@
 <html class="light" lang="en">
 <head>
     <meta charset="utf-8" />
-    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport" />
     <title>Cat-puccino Drink Tracker</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.56.0/dist/umd/supabase.min.js"></script>
@@ -114,6 +114,9 @@
                 max-width: 100%;
                 overflow: hidden;
                 overscroll-behavior: none;
+                touch-action: pan-y;
+                -webkit-text-size-adjust: 100%;
+                text-size-adjust: 100%;
                 background: #fcf9f4 !important;
             }
 
@@ -3258,6 +3261,30 @@
             }, { passive: false });
         }
 
+        function lockViewportScale() {
+            let lastTouchEnd = 0;
+
+            document.addEventListener('touchmove', (event) => {
+                if (event.touches && event.touches.length > 1) {
+                    event.preventDefault();
+                }
+            }, { passive: false });
+
+            document.addEventListener('touchend', (event) => {
+                const now = Date.now();
+                if (now - lastTouchEnd <= 300) {
+                    event.preventDefault();
+                }
+                lastTouchEnd = now;
+            }, { passive: false });
+
+            ['gesturestart', 'gesturechange', 'gestureend'].forEach(eventName => {
+                document.addEventListener(eventName, (event) => {
+                    event.preventDefault();
+                }, { passive: false });
+            });
+        }
+
         function setTimeToggle(index) {
             const pill = document.getElementById('time-toggle-pill');
             const toggleContainer = document.getElementById('time-toggle-container');
@@ -4040,6 +4067,7 @@
             });
 
             lockBottomNavScroll();
+            lockViewportScale();
             setTimeToggle(0);
 
             // If still on login view (not auto-logged in), keep heatmap at 0
