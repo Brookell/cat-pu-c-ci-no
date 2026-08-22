@@ -409,7 +409,7 @@
                 <section class="w-full space-y-4">
                     <!-- Username & Password Option -->
                     <div class="space-y-3">
-                        <div id="login-error" class="hidden text-center text-xs font-bold text-error bg-error/10 py-2 rounded-lg animate-pulse"></div>
+                        <div id="auth-message" class="hidden text-center text-xs font-bold py-2.5 px-3 rounded-2xl leading-relaxed"></div>
                         
                         <div class="relative group">
                             <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
@@ -2627,32 +2627,71 @@
 
         let authMode = 'login'; // 'login' or 'signup'
 
-        function toggleAuthMode() {
+        function setAuthButtonLoading(isLoading) {
+            const btn = document.getElementById('login-btn-submit');
+            if (!btn) return;
+
+            if (isLoading) {
+                btn.innerHTML = '<span class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>';
+                btn.classList.add('pointer-events-none', 'opacity-80');
+            } else {
+                btn.innerHTML = `<span id="auth-btn-text">${authMode === 'signup' ? 'Create Account' : 'Login'}</span>`;
+                btn.classList.remove('pointer-events-none', 'opacity-80');
+            }
+        }
+
+        function showAuthMessage(message, type = 'error', timeout = 5000) {
+            const messageEl = document.getElementById('auth-message');
+            if (!messageEl) return;
+
+            const styles = {
+                error: 'text-error bg-error/10',
+                success: 'text-primary bg-primary-container/25',
+                info: 'text-on-secondary-container bg-secondary-container/45'
+            };
+
+            messageEl.innerText = message;
+            messageEl.className = `text-center text-xs font-bold py-2.5 px-3 rounded-2xl leading-relaxed ${styles[type] || styles.error}`;
+            messageEl.classList.remove('hidden');
+
+            if (timeout > 0) {
+                setTimeout(() => messageEl.classList.add('hidden'), timeout);
+            }
+        }
+
+        function hideAuthMessage() {
+            const messageEl = document.getElementById('auth-message');
+            if (messageEl) messageEl.classList.add('hidden');
+        }
+
+        function isValidEmail(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        }
+
+        function switchAuthMode(nextMode) {
+            authMode = nextMode;
             const title = document.getElementById('auth-btn-text');
             const toggleText = document.getElementById('auth-toggle-text');
             const toggleBtn = document.getElementById('auth-toggle-btn');
-            const errorEl = document.getElementById('login-error');
-            
-            errorEl.classList.add('hidden');
-            
-            if (authMode === 'login') {
-                authMode = 'signup';
+
+            if (authMode === 'signup') {
                 title.innerText = 'Create Account';
                 toggleText.innerText = 'Already have an account?';
                 toggleBtn.innerText = 'Login instead';
             } else {
-                authMode = 'login';
                 title.innerText = 'Login';
                 toggleText.innerText = 'New here?';
                 toggleBtn.innerText = 'Create an account';
             }
         }
 
+        function toggleAuthMode() {
+            hideAuthMessage();
+            switchAuthMode(authMode === 'login' ? 'signup' : 'login');
+        }
+
         function showLoginError(msg) {
-            const errorEl = document.getElementById('login-error');
-            errorEl.innerText = msg;
-            errorEl.classList.remove('hidden');
-            setTimeout(() => errorEl.classList.add('hidden'), 3000);
+            showAuthMessage(msg, 'error');
         }
 
         async function handleAuth() {
@@ -2668,8 +2707,18 @@
                 return;
             }
 
-            btn.innerHTML = '<span class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>';
-            btn.classList.add('pointer-events-none', 'opacity-80');
+            if (!isValidEmail(email)) {
+                showLoginError('Please enter a valid email address.');
+                return;
+            }
+
+            if (password.length < 6) {
+                showLoginError('Password must be at least 6 characters.');
+                return;
+            }
+
+            hideAuthMessage();
+            setAuthButtonLoading(true);
 
             try {
                 if (isSupabaseEnabled()) {
@@ -2686,12 +2735,14 @@
                         if (error) throw error;
                         if (!data.session) {
                             currentSupabaseUser = null;
-                            showLoginError('Account created. Please confirm your email, then log in.');
-                            btn.innerHTML = '<span id="auth-btn-text">Create Account</span>';
-                            btn.classList.remove('pointer-events-none', 'opacity-80');
+                            switchAuthMode('login');
+                            passIn.value = '';
+                            showAuthMessage(`Almost there! We sent a confirmation link to ${email}. Verify your email, then come back and log in.`, 'success', 0);
+                            setAuthButtonLoading(false);
                             return;
                         }
                         currentSupabaseUser = data.session.user;
+                        showAuthMessage('Account created. Preparing your cozy brew space...', 'success', 2500);
                     } else {
                         const { data, error } = await catpuccinoSupabase.auth.signInWithPassword({
                             email,
@@ -2702,7 +2753,8 @@
                     }
 
                     if (!currentSupabaseUser) {
-                        showLoginError('Please confirm your email, then log in.');
+                        showAuthMessage('Please confirm your email first, then log in.', 'info', 0);
+                        setAuthButtonLoading(false);
                         return;
                     }
 
@@ -2713,21 +2765,31 @@
                     if (authMode === 'signup') {
                         if (users[email]) {
                             showLoginError('Email already taken');
+                            setAuthButtonLoading(false);
                             return;
                         }
                         users[email] = { password, profileName: email, totalCups: 0, totalSpent: 0 };
                         localStorage.setItem('catpuccino_users', JSON.stringify(users));
                     } else if (!users[email] || users[email].password !== password) {
                         showLoginError('Invalid email or password');
+                        setAuthButtonLoading(false);
                         return;
                     }
                     currentUsername = email;
                 }
             } catch (error) {
                 console.error('Authentication failed:', error);
-                showLoginError(error.message || 'Authentication failed');
-                btn.innerHTML = `<span id="auth-btn-text">${authMode === 'signup' ? 'Create Account' : 'Login'}</span>`;
-                btn.classList.remove('pointer-events-none', 'opacity-80');
+                let message = error.message || 'Authentication failed';
+                if (/email not confirmed/i.test(message)) {
+                    message = 'Please confirm your email first, then log in.';
+                } else if (/invalid login credentials/i.test(message)) {
+                    message = 'Email or password is incorrect. Please try again.';
+                } else if (/user already registered|already registered/i.test(message)) {
+                    message = 'This email already has an account. Try logging in instead.';
+                    switchAuthMode('login');
+                }
+                showAuthMessage(message, 'error');
+                setAuthButtonLoading(false);
                 return;
             }
 
@@ -2956,8 +3018,9 @@
                 refreshSummaryUI();
                 
                 // Restore login button text
-                document.getElementById('login-btn-submit').innerHTML = '<span id="auth-btn-text">Login</span>';
-                document.getElementById('login-btn-submit').classList.remove('pointer-events-none', 'opacity-80');
+                switchAuthMode('login');
+                setAuthButtonLoading(false);
+                hideAuthMessage();
                 
                 // Fade and scale in login view
                 viewLogin.style.display = 'block';
