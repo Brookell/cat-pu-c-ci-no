@@ -10,7 +10,8 @@
 
 ![HTML5](https://img.shields.io/badge/HTML5-static_app-EA6A47?style=for-the-badge)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-CDN-5C8D89?style=for-the-badge)
-![JavaScript](https://img.shields.io/badge/JavaScript-localStorage-D9A441?style=for-the-badge)
+![JavaScript](https://img.shields.io/badge/JavaScript-cloud_sync-D9A441?style=for-the-badge)
+![Supabase](https://img.shields.io/badge/Supabase-Postgres_Auth-3FCF8E?style=for-the-badge)
 ![Cat Theme](https://img.shields.io/badge/Cat_Theme-cozy_brew-6F5B40?style=for-the-badge)
 
 </div>
@@ -39,7 +40,7 @@
 
 Cat-puccino Drink Tracker is a cozy, cat-themed drink tracking web app prototype for logging coffee, milk tea, juice, soda, and other daily beverages. It turns everyday drink logging into a soft little cafe ritual: record what you drank, collect visual memories, watch your stats grow, and let the app feel like a tiny pocket cafe.
 
-The project is currently a static front-end prototype. It runs directly in the browser and stores user data locally with `localStorage`, so no backend, database, or real authentication service is required.
+The project is currently a static front-end app backed by Supabase. It runs directly in the browser, uses Supabase Auth for email/password accounts, stores drink data in Supabase Postgres, and keeps a small `localStorage` cache for smoother loading and demo mode.
 
 ### What Makes It Fun
 
@@ -77,11 +78,11 @@ The project is currently a static front-end prototype. It runs directly in the b
 | Structure | HTML5 |
 | Styling | CSS3, Tailwind CSS CDN |
 | Interaction | JavaScript |
-| Storage | Browser `localStorage` |
+| Storage | Supabase Postgres, browser `localStorage` cache |
 | Typography | Google Fonts: Plus Jakarta Sans |
 | Icons | Google Material Symbols |
 | Build | None required |
-| Backend | None in current prototype |
+| Backend | Supabase Auth, Supabase Database, Row Level Security |
 
 ### How To Play
 
@@ -151,12 +152,12 @@ Core design notes:
 
 ### Data Storage
 
-The prototype stores data in the browser with `localStorage`, including local users, drink records, uploaded image previews, layout order, module sizes, and Bento card preferences. Clearing browser storage or switching devices will remove or hide existing local records.
+Signed-in accounts store profile and drink records in Supabase Postgres. Row Level Security is enabled so authenticated users can only access their own Cat-puccino rows. The app also uses browser `localStorage` for a lightweight cache, layout preferences, and local-only demo mode.
 
 ### Roadmap
 
-- Add a real backend and database
-- Add secure authentication
+- Add Supabase Storage for uploaded drink photos
+- Replace base64 image records with storage-backed photo URLs
 - Support cloud sync across devices
 - Improve accessibility and keyboard navigation
 - Add export/import for drink records
@@ -179,7 +180,7 @@ No license has been specified yet.
 
 Cat-puccino Drink Tracker 是一个温暖、可爱、带有猫咪主题的饮品记录 Web App 原型。它可以用来记录咖啡、奶茶、果汁、汽水以及其他日常饮品，把“记录今天喝了什么”变成一个小小的咖啡馆仪式：记录饮品、收藏照片、查看统计、积累等级，让每一杯都留下痕迹。
 
-当前项目是一个静态前端原型，可以直接在浏览器中运行。用户数据通过浏览器的 `localStorage` 保存在本地，因此不需要后端账号系统，也不需要数据库配置。
+当前项目是一个接入 Supabase 的静态前端应用，可以直接在浏览器中运行。它使用 Supabase Auth 进行邮箱/密码账号登录，使用 Supabase Postgres 存储饮品数据，并保留少量 `localStorage` 缓存用于更顺滑的加载和 Demo 模式。
 
 ### 有趣之处
 
@@ -217,11 +218,11 @@ Cat-puccino Drink Tracker 是一个温暖、可爱、带有猫咪主题的饮品
 | 页面结构 | HTML5 |
 | 样式 | CSS3, Tailwind CSS CDN |
 | 交互 | JavaScript |
-| 数据存储 | 浏览器 `localStorage` |
+| 数据存储 | Supabase Postgres，浏览器 `localStorage` 缓存 |
 | 字体 | Google Fonts: Plus Jakarta Sans |
 | 图标 | Google Material Symbols |
 | 构建工具 | 当前版本不需要 |
-| 后端 | 当前原型暂无后端 |
+| 后端 | Supabase Auth，Supabase Database，Row Level Security |
 
 ### 玩法说明
 
@@ -291,12 +292,12 @@ http://localhost:8000
 
 ### 数据存储
 
-当前原型使用浏览器 `localStorage` 存储数据，包括本地用户、饮品记录、上传图片预览、首页模块顺序、模块尺寸和 Bento 卡片偏好。清除浏览器存储，或在其他浏览器/设备中打开应用，都可能导致原有本地数据不可见。
+登录账号会把用户资料和饮品记录保存到 Supabase Postgres。项目已启用 Row Level Security，确保登录用户只能访问自己的 Cat-puccino 数据。浏览器 `localStorage` 仍用于轻量缓存、布局偏好和本地 Demo 模式。
 
 ### 后续计划
 
-- 增加真实后端和数据库
-- 增加安全的用户认证
+- 增加 Supabase Storage，用于保存上传的饮品照片
+- 将 base64 图片记录升级为基于 Storage 的图片 URL
 - 支持跨设备云同步
 - 改进无障碍体验和键盘操作
 - 支持饮品记录导出/导入

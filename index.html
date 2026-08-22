@@ -5,6 +5,7 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>Cat-puccino Drink Tracker</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.56.0/dist/umd/supabase.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
     <script>
@@ -414,7 +415,7 @@
                             <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
                                 <span class="material-symbols-outlined text-outline group-focus-within:text-primary transition-colors duration-300">person</span>
                             </div>
-                            <input id="login-username" class="w-full bg-surface-container-low border-none focus:ring-2 focus:ring-primary-container text-on-surface rounded-full py-3.5 pl-12 pr-5 transition-all duration-300 placeholder:text-outline/60 font-medium" placeholder="Username" type="text"/>
+                            <input id="login-username" class="w-full bg-surface-container-low border-none focus:ring-2 focus:ring-primary-container text-on-surface rounded-full py-3.5 pl-12 pr-5 transition-all duration-300 placeholder:text-outline/60 font-medium" placeholder="Email address" type="email"/>
                         </div>
 
                         <div class="relative group">
@@ -1372,6 +1373,194 @@
 
         // Persistence Logic
         let currentUsername = null;
+        let currentSupabaseUser = null;
+        let isCloudSyncing = false;
+
+        const SUPABASE_URL = 'https://lgtwqjnmxuzdikyscmow.supabase.co';
+        const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_vASnfAdl87OI7_7HPsEI1Q_c8KZQxMc';
+        const catpuccinoSupabase = window.supabase?.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+
+        function isSupabaseEnabled() {
+            return Boolean(catpuccinoSupabase);
+        }
+
+        function getCurrentProfilePayload() {
+            return {
+                profileName: document.getElementById('profile-name').innerText,
+                profileImg: document.querySelector('#tab-profile img').src,
+                totalCups: totalCupsCount,
+                totalSpent: totalSpentAmount,
+                records: historyRecords,
+                level: currentLevel,
+                xp: currentXP
+            };
+        }
+
+        function applyUserDataToUI(username, data = {}) {
+            currentUsername = username;
+            document.getElementById('profile-name').innerText = data.profileName || username;
+            document.querySelectorAll('#tab-profile img').forEach(img => {
+                img.src = data.profileImg || './middle.png';
+            });
+
+            totalCupsCount = data.totalCups || 0;
+            totalSpentAmount = data.totalSpent || 0;
+            historyRecords = data.records || [];
+            currentLevel = data.level || 1;
+            currentXP = data.xp || 0;
+
+            const cupsEl = document.getElementById('total-cups');
+            const spentEl = document.getElementById('total-spent');
+            if (cupsEl) cupsEl.innerText = totalCupsCount;
+            if (spentEl) spentEl.innerText = '¥' + totalSpentAmount.toLocaleString('en-US');
+
+            renderHistory();
+            updateProgressionUI();
+            updateHeatmap(totalCupsCount > 0 ? 14 : 0);
+            loadLayoutOrder();
+        }
+
+        function normalizeCloudRecord(row) {
+            return {
+                id: row.id,
+                name: row.name,
+                brand: row.brand,
+                price: Number(row.price || 0),
+                category: row.category,
+                sweetness: row.sweetness,
+                iceLevel: row.ice_level,
+                photo: row.photo,
+                timestamp: new Date(row.recorded_at).getTime(),
+                review: row.review || ''
+            };
+        }
+
+        async function loadFromSupabaseSession() {
+            if (!isSupabaseEnabled()) return false;
+
+            const { data: sessionData } = await catpuccinoSupabase.auth.getSession();
+            const user = sessionData?.session?.user;
+            if (!user) return false;
+
+            currentSupabaseUser = user;
+            currentUsername = user.email || user.id;
+
+            const [
+                { data: profile, error: profileError },
+                { data: records, error: recordsError },
+                { data: preferences, error: preferencesError }
+            ] = await Promise.all([
+                catpuccinoSupabase
+                    .from('catpuccino_profiles')
+                    .select('*')
+                    .eq('user_id', user.id)
+                    .maybeSingle(),
+                catpuccinoSupabase
+                    .from('catpuccino_drink_records')
+                    .select('*')
+                    .eq('user_id', user.id)
+                    .order('recorded_at', { ascending: false }),
+                catpuccinoSupabase
+                    .from('catpuccino_user_preferences')
+                    .select('*')
+                    .eq('user_id', user.id)
+                    .maybeSingle()
+            ]);
+
+            if (profileError) throw profileError;
+            if (recordsError) throw recordsError;
+            if (preferencesError) throw preferencesError;
+
+            if (!profile) {
+                await catpuccinoSupabase.from('catpuccino_profiles').insert({
+                    user_id: user.id,
+                    username: user.email,
+                    profile_name: user.email?.split('@')[0] || 'Caffeine Cat',
+                    profile_img: './middle.png'
+                });
+            }
+
+            const cloudRecords = (records || []).map(normalizeCloudRecord);
+            const totalSpent = cloudRecords.reduce((sum, record) => sum + Number(record.price || 0), 0);
+            const profileData = {
+                profileName: profile?.profile_name || user.email?.split('@')[0] || 'Caffeine Cat',
+                profileImg: profile?.profile_img || './middle.png',
+                totalCups: profile?.total_cups ?? cloudRecords.length,
+                totalSpent: Number(profile?.total_spent ?? totalSpent),
+                records: cloudRecords,
+                level: profile?.level || 1,
+                xp: profile?.xp || 0
+            };
+
+            if (preferences) {
+                localStorage.setItem(`catpuccino_layout_${currentUsername}`, JSON.stringify(preferences.layout_order || []));
+                localStorage.setItem(`catpuccino_layout_sizes_${currentUsername}`, JSON.stringify(preferences.layout_sizes || {}));
+                localStorage.setItem(`catpuccino_layout_heights_${currentUsername}`, JSON.stringify(preferences.layout_heights || {}));
+                localStorage.setItem(`catpuccino_bento_sizes_${currentUsername}`, JSON.stringify(preferences.bento_sizes || {}));
+            }
+
+            applyUserDataToUI(currentUsername, profileData);
+            localStorage.setItem('catpuccino_session', currentUsername);
+            return true;
+        }
+
+        async function syncPreferencesToSupabase(partialPreferences = {}) {
+            if (!isSupabaseEnabled() || !currentSupabaseUser) return;
+
+            try {
+                await catpuccinoSupabase.from('catpuccino_user_preferences').upsert({
+                    user_id: currentSupabaseUser.id,
+                    ...partialPreferences
+                }, { onConflict: 'user_id' });
+            } catch (error) {
+                console.error('Supabase preference sync failed:', error);
+            }
+        }
+
+        async function syncToSupabase() {
+            if (!isSupabaseEnabled() || !currentSupabaseUser || isCloudSyncing) return;
+
+            isCloudSyncing = true;
+            try {
+                const payload = getCurrentProfilePayload();
+                await catpuccinoSupabase.from('catpuccino_profiles').upsert({
+                    user_id: currentSupabaseUser.id,
+                    username: currentSupabaseUser.email,
+                    profile_name: payload.profileName,
+                    profile_img: payload.profileImg,
+                    total_cups: payload.totalCups,
+                    total_spent: payload.totalSpent,
+                    level: payload.level,
+                    xp: payload.xp
+                }, { onConflict: 'user_id' });
+
+                await catpuccinoSupabase
+                    .from('catpuccino_drink_records')
+                    .delete()
+                    .eq('user_id', currentSupabaseUser.id);
+
+                if (historyRecords.length > 0) {
+                    const recordsPayload = historyRecords.map(record => ({
+                        user_id: currentSupabaseUser.id,
+                        name: record.name || 'New Brew',
+                        brand: record.brand || 'Cafe',
+                        price: Number(record.price || 0),
+                        category: record.category || 'Coffee',
+                        sweetness: record.sweetness || null,
+                        ice_level: record.iceLevel || null,
+                        photo: record.photo || null,
+                        review: record.review || null,
+                        recorded_at: new Date(record.timestamp || Date.now()).toISOString()
+                    }));
+                    await catpuccinoSupabase.from('catpuccino_drink_records').insert(recordsPayload);
+                }
+            } catch (error) {
+                console.error('Supabase sync failed:', error);
+                showAppToast('Cloud sync paused. Local copy saved.');
+            } finally {
+                isCloudSyncing = false;
+            }
+        }
 
         function saveToStorage() {
             if (!currentUsername) return;
@@ -1380,17 +1569,12 @@
                 const appData = JSON.parse(localStorage.getItem('catpuccino_users') || '{}');
                 appData[currentUsername] = {
                     ...appData[currentUsername],
-                    profileName: document.getElementById('profile-name').innerText,
-                    profileImg: document.querySelector('#tab-profile img').src,
-                    totalCups: totalCupsCount,
-                    totalSpent: totalSpentAmount,
-                    records: historyRecords,
-                    level: currentLevel,
-                    xp: currentXP
+                    ...getCurrentProfilePayload()
                 };
                 
                 localStorage.setItem('catpuccino_users', JSON.stringify(appData));
                 localStorage.setItem('catpuccino_session', currentUsername);
+                syncToSupabase();
             } catch (e) {
                 if (e.name === 'QuotaExceededError' || e.code === 22) {
                     console.warn("Storage quota exceeded! Pruning older image logs to free up space...");
@@ -1734,7 +1918,19 @@
             closeBrewDetailModal();
         }
  
-        function loadFromStorage() {
+        async function loadFromStorage() {
+            try {
+                const loadedCloudSession = await loadFromSupabaseSession();
+                if (loadedCloudSession) {
+                    viewLogin.style.display = 'none';
+                    viewApp.classList.remove('opacity-0', 'pointer-events-none', 'scale-105');
+                    viewApp.classList.add('opacity-100', 'scale-100');
+                    return;
+                }
+            } catch (error) {
+                console.error('Unable to load Supabase session:', error);
+            }
+
             const session = localStorage.getItem('catpuccino_session');
             if (session) {
                 currentUsername = session;
@@ -1742,38 +1938,12 @@
                 const data = appData[currentUsername];
                 
                 if (data) {
-                    // Load profile
-                    document.getElementById('profile-name').innerText = data.profileName || currentUsername;
-                    document.querySelectorAll('#tab-profile img').forEach(img => {
-                        img.src = data.profileImg || './middle.png';
-                    });
-                    
-                    // Load stats
-                    totalCupsCount = data.totalCups || 0;
-                    totalSpentAmount = data.totalSpent || 0;
-                    historyRecords = data.records || [];
-                    currentLevel = data.level || 1;
-                    currentXP = data.xp || 0;
-                    
-                    // Update UI
-                    const cupsEl = document.getElementById('total-cups');
-                    const spentEl = document.getElementById('total-spent');
-                    if (cupsEl) cupsEl.innerText = totalCupsCount;
-                    if (spentEl) spentEl.innerText = '¥' + totalSpentAmount.toLocaleString('en-US');
-                    
-                    renderHistory();
-                    updateProgressionUI();
-
-                    // Update Heatmap
-                    updateHeatmap(totalCupsCount > 0 ? 14 : 0);
+                    applyUserDataToUI(currentUsername, data);
 
                     // Skip login screen
                     viewLogin.style.display = 'none';
                     viewApp.classList.remove('opacity-0', 'pointer-events-none', 'scale-105');
                     viewApp.classList.add('opacity-100', 'scale-100');
-                    
-                    // Restore custom layout order
-                    loadLayoutOrder();
                 }
             }
         }
@@ -2435,57 +2605,113 @@
             setTimeout(() => errorEl.classList.add('hidden'), 3000);
         }
 
-        function handleAuth() {
+        async function handleAuth() {
             const userIn = document.getElementById('login-username');
             const passIn = document.getElementById('login-password');
             const btn = document.getElementById('login-btn-submit');
             
-            const username = userIn.value.trim();
+            const email = userIn.value.trim();
             const password = passIn.value.trim();
 
-            if (!username || !password) {
+            if (!email || !password) {
                 showLoginError('Please fill in all fields');
                 return;
             }
 
-            const users = JSON.parse(localStorage.getItem('catpuccino_users') || '{}');
+            btn.innerHTML = '<span class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>';
+            btn.classList.add('pointer-events-none', 'opacity-80');
 
-            if (authMode === 'signup') {
-                if (users[username]) {
-                    showLoginError('Username already taken');
-                    return;
+            try {
+                if (isSupabaseEnabled()) {
+                    if (authMode === 'signup') {
+                        const { data, error } = await catpuccinoSupabase.auth.signUp({
+                            email,
+                            password,
+                            options: {
+                                data: {
+                                    profile_name: email.split('@')[0]
+                                }
+                            }
+                        });
+                        if (error) throw error;
+                        if (!data.session) {
+                            currentSupabaseUser = null;
+                            showLoginError('Account created. Please confirm your email, then log in.');
+                            btn.innerHTML = '<span id="auth-btn-text">Create Account</span>';
+                            btn.classList.remove('pointer-events-none', 'opacity-80');
+                            return;
+                        }
+                        currentSupabaseUser = data.session.user;
+                    } else {
+                        const { data, error } = await catpuccinoSupabase.auth.signInWithPassword({
+                            email,
+                            password
+                        });
+                        if (error) throw error;
+                        currentSupabaseUser = data.session?.user;
+                    }
+
+                    if (!currentSupabaseUser) {
+                        showLoginError('Please confirm your email, then log in.');
+                        return;
+                    }
+
+                    currentUsername = currentSupabaseUser.email || email;
+                    await loadFromSupabaseSession();
+                } else {
+                    const users = JSON.parse(localStorage.getItem('catpuccino_users') || '{}');
+                    if (authMode === 'signup') {
+                        if (users[email]) {
+                            showLoginError('Email already taken');
+                            return;
+                        }
+                        users[email] = { password, profileName: email, totalCups: 0, totalSpent: 0 };
+                        localStorage.setItem('catpuccino_users', JSON.stringify(users));
+                    } else if (!users[email] || users[email].password !== password) {
+                        showLoginError('Invalid email or password');
+                        return;
+                    }
+                    currentUsername = email;
                 }
-                // Create user
-                users[username] = { password, profileName: username, totalCups: 0, totalSpent: 0 };
-                localStorage.setItem('catpuccino_users', JSON.stringify(users));
-            } else {
-                if (!users[username] || users[username].password !== password) {
-                    showLoginError('Invalid username or password');
-                    return;
+            } catch (error) {
+                console.error('Authentication failed:', error);
+                showLoginError(error.message || 'Authentication failed');
+                btn.innerHTML = `<span id="auth-btn-text">${authMode === 'signup' ? 'Create Account' : 'Login'}</span>`;
+                btn.classList.remove('pointer-events-none', 'opacity-80');
+                return;
+            }
+
+            if (currentUsername) {
+                const users = JSON.parse(localStorage.getItem('catpuccino_users') || '{}');
+                if (!users[currentUsername]) {
+                    users[currentUsername] = {
+                        profileName: currentUsername,
+                        totalCups: totalCupsCount,
+                        totalSpent: totalSpentAmount,
+                        records: historyRecords,
+                        level: currentLevel,
+                        xp: currentXP
+                    };
+                    localStorage.setItem('catpuccino_users', JSON.stringify(users));
                 }
             }
 
             // Success - Proceed
-            currentUsername = username;
-            btn.innerHTML = '<span class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>';
-            btn.classList.add('pointer-events-none', 'opacity-80');
-
             setTimeout(() => {
                 viewLogin.classList.remove('opacity-100', 'scale-100');
                 viewLogin.classList.add('opacity-0', 'scale-105', 'pointer-events-none');
                 
                 setTimeout(() => {
-                    // Update data for the UI
-                    loadFromStorage(); 
                     viewApp.classList.remove('opacity-0', 'pointer-events-none', 'scale-105');
                     viewApp.classList.add('opacity-100', 'scale-100');
                     saveToStorage();
                 }, 300);
-            }, 1000);
+            }, 600);
         }
 
         function login() {
             // Social buttons just bypass with a default user
+            currentSupabaseUser = null;
             currentUsername = 'Guest';
             const users = JSON.parse(localStorage.getItem('catpuccino_users') || '{}');
             if (!users['Guest']) {
@@ -2506,6 +2732,7 @@
 
         function loginAsDemo() {
             const demoUser = 'DemoUser';
+            currentSupabaseUser = null;
             currentUsername = demoUser;
             
             const mockRecords = [
@@ -2562,11 +2789,11 @@
                 title.innerText = 'Privacy Policy';
                 content.innerHTML = `
                     <p class="font-bold text-primary mb-1">🐾 Your Privacy is Purr-fectly Safe!</p>
-                    <p class="mb-2">At Cat-puccino, we value your privacy above everything else. All your drink records, caffeine intake logs, spending history, and custom profiles are stored <strong>strictly locally</strong> in your browser's <code>localStorage</code>.</p>
-                    <p class="font-bold text-primary mt-3 mb-1">🔒 Zero Data Transmission</p>
-                    <p class="mb-2">We do not transmit, sync, analyze, or upload your data to any external servers or third parties. What you brew stays on your device. You can clear all data instantly inside your profile settings at any time.</p>
+                    <p class="mb-2">At Cat-puccino, we value your privacy above everything else. Signed-in accounts sync drink records, profile details, and progress to this app's Supabase backend so your sip diary can be restored after refreshes and future device changes.</p>
+                    <p class="font-bold text-primary mt-3 mb-1">🔒 Account-owned Records</p>
+                    <p class="mb-2">Supabase Row Level Security is enabled so signed-in users can only access their own Cat-puccino records. The app also keeps a small browser <code>localStorage</code> cache for smoother loading and demo mode.</p>
                     <p class="font-bold text-primary mt-3 mb-1">🍪 Local Storage Usage</p>
-                    <p>We only use local storage to keep your session and preferences saved so you don't lose your adorable milestones or hydration streaks when you refresh the page.</p>
+                    <p>You can clear your brew records from profile settings at any time. Demo mode remains local-only.</p>
                 `;
             } else {
                 title.innerText = 'Terms of Service';
@@ -2653,12 +2880,17 @@
             hideEmojiPicker();
         }
 
-        function logout() {
+        async function logout() {
+            if (isSupabaseEnabled() && currentSupabaseUser) {
+                await catpuccinoSupabase.auth.signOut();
+            }
+
             // Fade and scale out app view
             viewApp.classList.remove('opacity-100', 'scale-100');
             viewApp.classList.add('opacity-0', 'pointer-events-none', 'scale-105');
             
             setTimeout(() => {
+                currentSupabaseUser = null;
                 currentUsername = null;
                 localStorage.removeItem('catpuccino_session');
                 
@@ -2867,8 +3099,21 @@
             modal.classList.remove('translate-x-0', 'opacity-100');
         }
 
-        function clearAllData() {
+        async function clearAllData() {
             if (confirm('Are you sure you want to clear all your brew records? This action cannot be undone.')) {
+                if (isSupabaseEnabled() && currentSupabaseUser) {
+                    const { error } = await catpuccinoSupabase
+                        .from('catpuccino_drink_records')
+                        .delete()
+                        .eq('user_id', currentSupabaseUser.id);
+
+                    if (error) {
+                        console.error('Unable to clear cloud records:', error);
+                        showAppToast('Cloud clear failed. Try again.');
+                        return;
+                    }
+                }
+
                 totalCupsCount = 0;
                 totalSpentAmount = 0;
                 historyRecords = [];
@@ -3207,6 +3452,7 @@
             const order = Array.from(container.children).map(child => child.id);
             const userKey = currentUsername ? `catpuccino_layout_${currentUsername}` : 'catpuccino_layout_global';
             localStorage.setItem(userKey, JSON.stringify(order));
+            syncPreferencesToSupabase({ layout_order: order });
         }
 
         // --- Module Size Control ---
@@ -3258,6 +3504,7 @@
             
             const userKey = currentUsername ? `catpuccino_layout_sizes_${currentUsername}` : 'catpuccino_layout_sizes_global';
             localStorage.setItem(userKey, JSON.stringify(sizesMap));
+            syncPreferencesToSupabase({ layout_sizes: sizesMap });
         }
 
         function loadLayoutSizes() {
@@ -3321,6 +3568,7 @@
             
             const userKey = currentUsername ? `catpuccino_bento_sizes_${currentUsername}` : 'catpuccino_bento_sizes_global';
             localStorage.setItem(userKey, JSON.stringify(bentoSizes));
+            syncPreferencesToSupabase({ bento_sizes: bentoSizes });
         }
 
         function loadBentoSizes() {
@@ -3431,6 +3679,7 @@
             });
             const userKey = currentUsername ? `catpuccino_layout_heights_${currentUsername}` : 'catpuccino_layout_heights_global';
             localStorage.setItem(userKey, JSON.stringify(heightsMap));
+            syncPreferencesToSupabase({ layout_heights: heightsMap });
         }
 
         function loadLayoutHeights() {
