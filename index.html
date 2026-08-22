@@ -111,27 +111,83 @@
             body {
                 width: 100%;
                 min-height: 100%;
+                max-width: 100%;
                 overflow: hidden;
+                overscroll-behavior: none;
                 background: #fcf9f4 !important;
             }
 
             body {
                 padding: 0 !important;
                 display: block !important;
+                height: 100dvh !important;
+                position: fixed !important;
+                inset: 0 !important;
             }
 
             #mobile-frame {
-                width: 100vw !important;
+                position: fixed !important;
+                inset: 0 !important;
+                width: 100% !important;
                 max-width: none !important;
                 height: 100dvh !important;
                 max-height: none !important;
                 border: 0 !important;
                 border-radius: 0 !important;
                 box-shadow: none !important;
+                overflow-x: hidden !important;
+                touch-action: pan-y;
+            }
+
+            #view-login,
+            #view-app,
+            #tab-home,
+            #tab-stats,
+            #tab-profile,
+            #view-progression,
+            #view-calendar,
+            #view-record {
+                max-width: 100% !important;
+                overflow-x: hidden !important;
+            }
+
+            #tab-home,
+            #tab-profile {
+                padding-bottom: 5.5rem !important;
+            }
+
+            #tab-stats {
+                padding-bottom: 5rem !important;
+            }
+
+            .mobile-bottom-nav {
+                min-height: calc(52px + env(safe-area-inset-bottom)) !important;
+                padding: 0.25rem 0.65rem calc(0.25rem + env(safe-area-inset-bottom)) !important;
+                border-radius: 1rem 1rem 0 0 !important;
+            }
+
+            .mobile-bottom-nav .nav-btn {
+                min-width: 3.75rem;
+                padding: 0.25rem 0.55rem !important;
+                transform: none !important;
+            }
+
+            .mobile-bottom-nav .material-symbols-outlined {
+                font-size: 19px !important;
+            }
+
+            .mobile-bottom-nav .nav-label {
+                font-size: 7.5px !important;
+                margin-top: 0.1rem !important;
+                letter-spacing: 0.06em !important;
             }
         }
 
         @media (max-width: 640px) and (not (height: 100dvh)) {
+            body {
+                height: 100vh !important;
+            }
+
             #mobile-frame {
                 height: 100vh !important;
             }
@@ -1223,21 +1279,21 @@
             </div>
 
             <!-- ----- Shared BottomNavBar ----- -->
-            <nav class="absolute bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-3 bg-[#fdfcfb]/80 backdrop-blur-2xl shadow-[0_-8px_32px_rgba(111,91,64,0.08)] rounded-t-3xl border-t border-surface-container-highest">
+            <nav class="mobile-bottom-nav absolute bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-3 bg-[#fdfcfb]/80 backdrop-blur-2xl shadow-[0_-8px_32px_rgba(111,91,64,0.08)] rounded-t-3xl border-t border-surface-container-highest">
                 <!-- Home -->
                 <button onclick="switchTab('home')" id="nav-home" class="flex flex-col items-center justify-center bg-[#bda485]/20 text-[#6f5b40] rounded-full px-5 py-2 scale-110 transition-all active:scale-90 duration-300 nav-btn shadow-sm">
                     <span class="material-symbols-outlined text-[22px]" style="font-variation-settings: 'FILL' 1;">home</span>
-                    <span class="font-['Plus_Jakarta_Sans'] text-[9px] font-bold uppercase tracking-widest mt-1">Home</span>
+                    <span class="nav-label font-['Plus_Jakarta_Sans'] text-[9px] font-bold uppercase tracking-widest mt-1">Home</span>
                 </button>
                 <!-- Stats -->
                 <button onclick="switchTab('stats')" id="nav-stats" class="flex flex-col items-center justify-center text-[#6f5b40]/50 px-3 py-2 hover:text-[#6f5b40] transition-all active:scale-90 duration-300 nav-btn">
                     <span class="material-symbols-outlined text-[22px]">equalizer</span>
-                    <span class="font-['Plus_Jakarta_Sans'] text-[9px] font-bold uppercase tracking-widest mt-1">Stats</span>
+                    <span class="nav-label font-['Plus_Jakarta_Sans'] text-[9px] font-bold uppercase tracking-widest mt-1">Stats</span>
                 </button>
                 <!-- Profile -->
                 <button onclick="switchTab('profile')" id="nav-profile" class="flex flex-col items-center justify-center text-[#6f5b40]/50 px-3 py-2 hover:text-[#6f5b40] transition-all active:scale-90 duration-300 nav-btn">
                     <span class="material-symbols-outlined text-[22px]">person</span>
-                    <span class="font-['Plus_Jakarta_Sans'] text-[9px] font-bold uppercase tracking-widest mt-1">Profile</span>
+                    <span class="nav-label font-['Plus_Jakarta_Sans'] text-[9px] font-bold uppercase tracking-widest mt-1">Profile</span>
                 </button>
             </nav>
             <!-- Edit Profile Modal -->
