@@ -526,7 +526,7 @@
                         <div class="absolute top-0 -right-2 bg-secondary-container text-on-secondary-container px-2.5 py-0.5 rounded-full text-[9px] font-bold tracking-widest uppercase shadow-sm transform rotate-12">Meow</div>
                     </div>
                     <h1 class="text-3xl font-black text-primary tracking-tighter mb-0.5">Cat-puccino</h1>
-                    <p class="text-on-surface-variant text-xs font-medium tracking-tight">Your daily brew tracker</p>
+                    <p id="login-subtitle" class="text-on-surface-variant text-xs font-medium tracking-tight">Your daily brew tracker</p>
                 </header>
                 
                 <!-- Login Card -->
@@ -557,7 +557,7 @@
                         <div class="text-center pt-2 animate-pulse">
                             <a href="javascript:void(0)" onclick="loginAsDemo()" class="inline-flex items-center gap-1.5 text-xs font-extrabold text-primary hover:text-primary-container transition-colors tracking-wide uppercase active:scale-95 transform select-none">
                                 <span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">visibility</span>
-                                Try Demo Mode
+                                <span id="demo-link-text">Try Demo Mode</span>
                             </a>
                         </div>
                     </div>
@@ -572,6 +572,11 @@
                             <span class="w-1 h-1 rounded-full bg-outline"></span>
                             <a class="text-[10px] font-bold uppercase tracking-widest text-outline hover:text-primary transition-colors cursor-pointer" href="javascript:void(0)" onclick="showPolicy('terms')">Terms</a>
                         </div>
+                        <button onclick="handleLanguageToggleClick()" data-lang-toggle class="mx-auto mt-2 w-28 h-8 rounded-full bg-surface-container-low border border-surface-container-high p-1 flex items-center relative shadow-inner active:scale-95 transition-transform">
+                            <span id="login-lang-pill" class="absolute left-1 top-1 bottom-1 w-[52px] rounded-full bg-primary shadow-sm transition-all duration-300"></span>
+                            <span id="login-lang-en" class="relative z-10 flex-1 text-[10px] font-black text-on-primary transition-colors">EN</span>
+                            <span id="login-lang-zh" class="relative z-10 flex-1 text-[10px] font-black text-primary transition-colors">中文</span>
+                        </button>
                     </div>
                 </section>
                 
@@ -594,8 +599,14 @@
                 <div class="flex items-center gap-2">
                     <span class="material-symbols-outlined text-[#6f5b40]" data-icon="pets">pets</span>
                     <h1 id="app-title" class="text-xl font-black text-[#6f5b40] tracking-tighter transition-all duration-300 transform">Cat-puccino</h1>
+                    <span id="demo-data-badge" class="hidden text-[8px] font-black uppercase tracking-widest bg-secondary-container text-on-secondary-container px-2 py-0.5 rounded-full">Demo</span>
                 </div>
                 <div class="flex items-center gap-1">
+                    <button onclick="handleLanguageToggleClick()" data-lang-toggle class="w-16 h-8 rounded-full bg-stone-200/60 p-1 flex items-center relative active:scale-95 transition-transform" title="Language">
+                        <span id="app-lang-pill" class="absolute left-1 top-1 bottom-1 w-7 rounded-full bg-primary shadow-sm transition-all duration-300"></span>
+                        <span id="app-lang-en" class="relative z-10 flex-1 text-[9px] font-black text-white transition-colors">EN</span>
+                        <span id="app-lang-zh" class="relative z-10 flex-1 text-[9px] font-black text-primary transition-colors">中</span>
+                    </button>
                     <!-- Edit Dashboard Layout Button (Always hidden to lock layout configuration) -->
                     <button id="btn-edit-layout" onclick="toggleEditLayout()" class="hidden w-10 h-10 items-center justify-center rounded-full hover:bg-stone-200/50 transition-all active:scale-90 duration-200" title="Rearrange Layout" style="display: none !important;">
                         <span id="edit-layout-icon" class="material-symbols-outlined text-[#6f5b40]">dashboard_customize</span>
@@ -692,7 +703,7 @@
                                 </div>
                                 <span class="material-symbols-outlined text-primary text-2xl">local_cafe</span>
                                 <div>
-                                    <p class="text-[9px] font-bold uppercase tracking-widest text-outline">Cups</p>
+                                    <p id="home-cups-label" class="text-[9px] font-bold uppercase tracking-widest text-outline">Cups</p>
                                     <p class="text-lg font-black text-primary"><span id="home-cups">0</span><span class="text-xs font-normal text-outline"> cups</span></p>
                                 </div>
                             </div>
@@ -705,7 +716,7 @@
                                 </div>
                                 <span class="material-symbols-outlined text-primary text-2xl">water_drop</span>
                                 <div>
-                                    <p class="text-[9px] font-bold uppercase tracking-widest text-outline">Volume</p>
+                                    <p id="home-volume-label" class="text-[9px] font-bold uppercase tracking-widest text-outline">Volume</p>
                                     <p class="text-lg font-black text-primary"><span id="home-volume">0</span><span class="text-xs font-normal text-outline"> ml</span></p>
                                 </div>
                             </div>
@@ -749,7 +760,7 @@
                         <section class="mt-0">
                             <button onclick="openRecordModal()" class="w-full bg-primary hover:bg-primary/90 text-on-primary py-3.5 px-6 rounded-2xl font-black text-xs tracking-widest uppercase shadow-md flex items-center justify-center gap-2 active:scale-[0.98] transition-all duration-300 select-none">
                                 <span class="material-symbols-outlined text-base">add_circle</span>
-                                Record a New Brew
+                                <span id="record-new-brew-text">Record a New Brew</span>
                             </button>
                         </section>
                     </div>
@@ -803,7 +814,7 @@
                 <!-- Playful Activity Heatmap -->
                 <section class="space-y-4 mb-6">
                     <div class="flex items-center justify-between">
-                        <h2 class="text-lg font-bold tracking-tight text-primary px-1">Caffeine Intensity</h2>
+                    <h2 id="caffeine-title" class="text-lg font-bold tracking-tight text-primary px-1">Caffeine Intensity</h2>
                         <div class="flex items-center gap-1.5 text-[8px] font-bold uppercase tracking-widest text-on-surface-variant">
                             <span>Decaf</span>
                             <div class="flex gap-0.5">
@@ -842,7 +853,16 @@
                 
                 <!-- Stats Details List -->
                 <section class="space-y-4 mb-6">
-                    <h2 class="text-lg font-bold tracking-tight text-primary px-1">Brew Breakdown</h2>
+                    <div class="flex items-center justify-between gap-3 px-1">
+                        <h2 id="brew-breakdown-title" class="text-lg font-bold tracking-tight text-primary">Brew Breakdown</h2>
+                    </div>
+                    <div id="history-filter-bar" class="flex gap-2 overflow-x-auto hide-scrollbar px-1 pb-1">
+                        <button onclick="setHistoryFilter('All')" data-history-filter="All" class="history-filter-btn shrink-0 px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-colors bg-primary text-white">All</button>
+                        <button onclick="setHistoryFilter('Coffee')" data-history-filter="Coffee" class="history-filter-btn shrink-0 px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-colors bg-surface-container text-primary">Coffee</button>
+                        <button onclick="setHistoryFilter('Tea')" data-history-filter="Tea" class="history-filter-btn shrink-0 px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-colors bg-surface-container text-primary">Tea</button>
+                        <button onclick="setHistoryFilter('Juice')" data-history-filter="Juice" class="history-filter-btn shrink-0 px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-colors bg-surface-container text-primary">Juice</button>
+                        <button onclick="setHistoryFilter('Soda')" data-history-filter="Soda" class="history-filter-btn shrink-0 px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-colors bg-surface-container text-primary">Soda</button>
+                    </div>
                     <div id="brew-breakdown-list" class="bg-surface-container-high/90 backdrop-blur-md rounded-xl overflow-hidden divide-y divide-surface-container shadow-sm">
                         <!-- Items will be added here -->
                         <div class="p-8 text-center text-on-surface-variant">
@@ -1433,11 +1453,11 @@
             const valueEl = document.getElementById('date-value');
             
             if (activeDateOffset === 0) {
-                labelEl.innerText = 'Today';
+                labelEl.innerText = t('today');
             } else if (activeDateOffset === -1) {
-                labelEl.innerText = 'Yesterday';
+                labelEl.innerText = t('yesterday');
             } else if (activeDateOffset === 1) {
-                labelEl.innerText = 'Tomorrow';
+                labelEl.innerText = t('tomorrow');
             } else {
                 labelEl.innerText = dateObj.getFullYear().toString();
             }
@@ -1492,6 +1512,7 @@
 
         function applyUserDataToUI(username, data = {}) {
             currentUsername = username;
+            updateDemoBadge();
             document.getElementById('profile-name').innerText = data.profileName || username;
             document.querySelectorAll('#tab-profile img').forEach(img => {
                 img.src = data.profileImg || './middle.png';
@@ -1507,6 +1528,18 @@
             refreshSummaryUI();
             updateProgressionUI();
             loadLayoutOrder();
+        }
+
+        function updateDemoBadge() {
+            const badge = document.getElementById('demo-data-badge');
+            if (!badge) return;
+
+            if (currentUsername === 'DemoUser') {
+                badge.classList.remove('hidden');
+                badge.innerText = t('demoBadge');
+            } else {
+                badge.classList.add('hidden');
+            }
         }
 
         function normalizeCloudRecord(row) {
@@ -1576,8 +1609,8 @@
                 return;
             }
 
-            titleEl.innerText = cafeNames.size >= 4 ? 'Bean Master' : 'Cafe Explorer';
-            copyEl.innerText = `${cafeNames.size} real cafe${cafeNames.size === 1 ? '' : 's'} recorded this month. Keep brewing the adventure!`;
+            titleEl.innerText = cafeNames.size >= 4 ? t('beanMaster') : t('cafeExplorer');
+            copyEl.innerText = t('realCafes', cafeNames.size);
             card.classList.remove('hidden');
             card.classList.add('flex');
         }
@@ -1778,18 +1811,21 @@
             if (!list) return;
 
             const activeDateRecords = getRecordsForDate(getActiveDate());
+            const filteredRecords = activeHistoryFilter === 'All'
+                ? activeDateRecords
+                : activeDateRecords.filter(record => record.category === activeHistoryFilter);
 
-            if (activeDateRecords.length === 0) {
+            if (filteredRecords.length === 0) {
                 list.innerHTML = `
                     <div class="p-8 text-center text-on-surface-variant">
                         <span class="material-symbols-outlined text-4xl opacity-20 block mb-2">coffee</span>
-                        <p class="text-xs font-bold opacity-40 uppercase tracking-widest">No brews recorded for this day</p>
+                        <p class="text-xs font-bold opacity-40 uppercase tracking-widest">${activeDateRecords.length === 0 ? t('noBrewsForDay') : t('noBrewsForFilter')}</p>
                     </div>`;
                 return;
             }
 
             list.innerHTML = '';
-            const displayRecords = activeDateRecords.slice(0, 3);
+            const displayRecords = filteredRecords.slice(0, 3);
             displayRecords.forEach(record => {
                 const item = document.createElement('div');
                 item.className = "p-4 flex items-center justify-between transition-colors hover:bg-surface-container active:bg-surface-container-low cursor-pointer";
@@ -1819,6 +1855,32 @@
                 list.appendChild(item);
             });
             renderVisualFeed();
+        }
+
+        function updateHistoryFilterUI() {
+            const labels = {
+                All: t('all'),
+                Coffee: t('coffee'),
+                Tea: t('tea'),
+                Juice: t('juice'),
+                Soda: t('soda')
+            };
+
+            document.querySelectorAll('.history-filter-btn').forEach(btn => {
+                const filter = btn.dataset.historyFilter;
+                btn.innerText = labels[filter] || filter;
+                const isActive = filter === activeHistoryFilter;
+                btn.classList.toggle('bg-primary', isActive);
+                btn.classList.toggle('text-white', isActive);
+                btn.classList.toggle('bg-surface-container', !isActive);
+                btn.classList.toggle('text-primary', !isActive);
+            });
+        }
+
+        function setHistoryFilter(filter) {
+            activeHistoryFilter = filter;
+            updateHistoryFilterUI();
+            renderHistory();
         }
 
         let uploadedDrinkPhotoData = null;
@@ -2449,7 +2511,181 @@
         let currentActiveTab = 'home';
         let currentLevel = 1;
         let currentXP = 0;
+        let appLanguage = localStorage.getItem('catpuccino_language') || 'en';
+        let activeHistoryFilter = 'All';
+        let suppressLanguageClick = false;
         const avgPrice = 25;
+
+        const i18n = {
+            en: {
+                loginSubtitle: 'Your daily brew tracker',
+                emailPlaceholder: 'Email address',
+                passwordPlaceholder: 'Password',
+                login: 'Login',
+                createAccount: 'Create Account',
+                newHere: 'New here?',
+                haveAccount: 'Already brewing?',
+                createAccountLink: 'Create an account',
+                loginInstead: 'Login instead',
+                demoMode: 'Try Demo Mode',
+                demoBadge: 'Demo',
+                today: 'Today',
+                yesterday: 'Yesterday',
+                tomorrow: 'Tomorrow',
+                cups: 'Cups',
+                volume: 'Volume',
+                recordNewBrew: 'Record a New Brew',
+                caffeineIntensity: 'Caffeine Intensity',
+                brewBreakdown: 'Brew Breakdown',
+                noBrewsForDay: 'No brews recorded for this day',
+                noBrewsForFilter: 'No records in this category',
+                all: 'All',
+                coffee: 'Coffee',
+                tea: 'Tea',
+                juice: 'Juice',
+                soda: 'Soda',
+                appTitleHome: 'Cat-puccino',
+                appTitleStats: 'Cat-puccino Stats',
+                appTitleProfile: 'Cat-puccino Profile',
+                cafeExplorer: 'Cafe Explorer',
+                beanMaster: 'Bean Master',
+                realCafes: count => `${count} real cafe${count === 1 ? '' : 's'} recorded this month. Keep brewing the adventure!`
+            },
+            zh: {
+                loginSubtitle: '你的每日饮品记录',
+                emailPlaceholder: '邮箱地址',
+                passwordPlaceholder: '密码',
+                login: '登录',
+                createAccount: '创建账号',
+                newHere: '第一次来？',
+                haveAccount: '已经有账号？',
+                createAccountLink: '创建账号',
+                loginInstead: '去登录',
+                demoMode: '体验演示数据',
+                demoBadge: '演示',
+                today: '今天',
+                yesterday: '昨天',
+                tomorrow: '明天',
+                cups: '杯数',
+                volume: '容量',
+                recordNewBrew: '记录一杯新饮品',
+                caffeineIntensity: '咖啡因强度',
+                brewBreakdown: '饮品记录',
+                noBrewsForDay: '这一天还没有记录',
+                noBrewsForFilter: '这个分类还没有记录',
+                all: '全部',
+                coffee: '咖啡',
+                tea: '茶饮',
+                juice: '果汁',
+                soda: '汽水',
+                appTitleHome: 'Cat-puccino',
+                appTitleStats: 'Cat-puccino 统计',
+                appTitleProfile: 'Cat-puccino 主页',
+                cafeExplorer: '咖啡店探索者',
+                beanMaster: '咖啡豆大师',
+                realCafes: count => `本月已真实记录 ${count} 家咖啡店，继续探索吧！`
+            }
+        };
+
+        function t(key, ...args) {
+            const value = i18n[appLanguage]?.[key] ?? i18n.en[key] ?? key;
+            return typeof value === 'function' ? value(...args) : value;
+        }
+
+        function setText(id, text) {
+            const el = document.getElementById(id);
+            if (el) el.innerText = text;
+        }
+
+        function applyLanguage() {
+            document.documentElement.lang = appLanguage === 'zh' ? 'zh-CN' : 'en';
+            setText('login-subtitle', t('loginSubtitle'));
+            setText('auth-btn-text', authMode === 'signup' ? t('createAccount') : t('login'));
+            setText('auth-toggle-text', authMode === 'signup' ? t('haveAccount') : t('newHere'));
+            setText('auth-toggle-btn', authMode === 'signup' ? t('loginInstead') : t('createAccountLink'));
+            setText('demo-link-text', t('demoMode'));
+            setText('demo-data-badge', t('demoBadge'));
+            setText('home-cups-label', t('cups'));
+            setText('home-volume-label', t('volume'));
+            setText('record-new-brew-text', t('recordNewBrew'));
+            setText('caffeine-title', t('caffeineIntensity'));
+            setText('brew-breakdown-title', t('brewBreakdown'));
+            setText('app-title', t(`appTitle${currentActiveTab.charAt(0).toUpperCase()}${currentActiveTab.slice(1)}`));
+
+            const emailInput = document.getElementById('login-username');
+            const passInput = document.getElementById('login-password');
+            if (emailInput) emailInput.placeholder = t('emailPlaceholder');
+            if (passInput) passInput.placeholder = t('passwordPlaceholder');
+
+            updateLanguageToggleUI();
+            updateHistoryFilterUI();
+            updateDemoBadge();
+            updateDateDisplay();
+            updateCaffeineInsight();
+            renderHistory();
+        }
+
+        function updateLanguageToggleUI() {
+            const isZh = appLanguage === 'zh';
+            [
+                { pill: 'login-lang-pill', en: 'login-lang-en', zh: 'login-lang-zh', zhLeft: 'calc(100% - 56px)' },
+                { pill: 'app-lang-pill', en: 'app-lang-en', zh: 'app-lang-zh', zhLeft: 'calc(100% - 32px)' }
+            ].forEach(ids => {
+                const pill = document.getElementById(ids.pill);
+                const en = document.getElementById(ids.en);
+                const zh = document.getElementById(ids.zh);
+                if (pill) pill.style.left = isZh ? ids.zhLeft : '4px';
+                if (en) {
+                    en.classList.toggle('text-on-primary', !isZh);
+                    en.classList.toggle('text-white', !isZh);
+                    en.classList.toggle('text-primary', isZh);
+                }
+                if (zh) {
+                    zh.classList.toggle('text-on-primary', isZh);
+                    zh.classList.toggle('text-white', isZh);
+                    zh.classList.toggle('text-primary', !isZh);
+                }
+            });
+        }
+
+        function toggleLanguage() {
+            appLanguage = appLanguage === 'en' ? 'zh' : 'en';
+            localStorage.setItem('catpuccino_language', appLanguage);
+            applyLanguage();
+        }
+
+        function handleLanguageToggleClick() {
+            if (suppressLanguageClick) {
+                suppressLanguageClick = false;
+                return;
+            }
+            toggleLanguage();
+        }
+
+        function bindLanguageSwipe() {
+            document.querySelectorAll('[data-lang-toggle]').forEach(toggle => {
+                let startX = 0;
+
+                toggle.addEventListener('touchstart', event => {
+                    startX = event.touches[0].clientX;
+                }, { passive: true });
+
+                toggle.addEventListener('touchend', event => {
+                    const diff = event.changedTouches[0].clientX - startX;
+                    if (Math.abs(diff) < 18) return;
+                    const nextLanguage = diff > 0 ? 'zh' : 'en';
+                    if (appLanguage !== nextLanguage) {
+                        suppressLanguageClick = true;
+                        appLanguage = nextLanguage;
+                        localStorage.setItem('catpuccino_language', appLanguage);
+                        applyLanguage();
+                        setTimeout(() => {
+                            suppressLanguageClick = false;
+                        }, 350);
+                    }
+                }, { passive: true });
+            });
+        }
 
         const rankTitles = [
             "Espresso Beginner", "Latte Lover", "Macchiato Master", "Bean Legend", "Caffeine King"
@@ -2843,7 +3079,7 @@
                 btn.innerHTML = '<span class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>';
                 btn.classList.add('pointer-events-none', 'opacity-80');
             } else {
-                btn.innerHTML = `<span id="auth-btn-text">${authMode === 'signup' ? 'Create Account' : 'Login'}</span>`;
+                btn.innerHTML = `<span id="auth-btn-text">${authMode === 'signup' ? t('createAccount') : t('login')}</span>`;
                 btn.classList.remove('pointer-events-none', 'opacity-80');
             }
         }
@@ -2883,13 +3119,13 @@
             const toggleBtn = document.getElementById('auth-toggle-btn');
 
             if (authMode === 'signup') {
-                title.innerText = 'Create Account';
-                toggleText.innerText = 'Already have an account?';
-                toggleBtn.innerText = 'Login instead';
+                title.innerText = t('createAccount');
+                toggleText.innerText = t('haveAccount');
+                toggleBtn.innerText = t('loginInstead');
             } else {
-                title.innerText = 'Login';
-                toggleText.innerText = 'New here?';
-                toggleBtn.innerText = 'Create an account';
+                title.innerText = t('login');
+                toggleText.innerText = t('newHere');
+                toggleBtn.innerText = t('createAccountLink');
             }
         }
 
@@ -3225,6 +3461,7 @@
                 document.getElementById('total-spent').innerText = '¥0';
                 renderHistory();
                 refreshSummaryUI();
+                updateDemoBadge();
                 
                 // Restore login button text
                 switchAuthMode('login');
@@ -3257,9 +3494,9 @@
 
             // Update Title with tiny slide animation
             const titles = {
-                'home': 'Cat-puccino',
-                'stats': 'Cat-puccino Stats',
-                'profile': 'Cat-puccino Profile'
+                'home': t('appTitleHome'),
+                'stats': t('appTitleStats'),
+                'profile': t('appTitleProfile')
             };
             const titleEl = document.getElementById('app-title');
             titleEl.classList.add('opacity-0', '-translate-y-2');
@@ -4105,10 +4342,10 @@
 
         // Initialize heatmap and swipe on load
         window.addEventListener('DOMContentLoaded', () => {
-            updateDateDisplay();
             initRecordDateTime();
             loadFromStorage();
             loadLayoutOrder();
+            applyLanguage();
             
             // Bind Dashboard Drag and Drop events
             const modules = document.querySelectorAll('.home-module');
@@ -4119,6 +4356,7 @@
 
             lockBottomNavScroll();
             lockViewportScale();
+            bindLanguageSwipe();
             setTimeToggle(0);
 
             // If still on login view (not auto-logged in), keep heatmap at 0
