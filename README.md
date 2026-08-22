@@ -1,6 +1,33 @@
+<div align="center">
+
+<img src="./cat-cup.png" alt="Cat-puccino cup cat mascot" width="170" />
+
 # Cat-puccino Drink Tracker
 
-Language: [English](#english) | [中文](#中文)
+**A cozy cat cafe-style drink diary for every sip, cup, craving, and tiny caffeine ritual.**
+
+[English](#english) | [中文](#中文)
+
+![HTML5](https://img.shields.io/badge/HTML5-static_app-EA6A47?style=for-the-badge)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-CDN-5C8D89?style=for-the-badge)
+![JavaScript](https://img.shields.io/badge/JavaScript-localStorage-D9A441?style=for-the-badge)
+![Cat Theme](https://img.shields.io/badge/Cat_Theme-cozy_brew-6F5B40?style=for-the-badge)
+
+</div>
+
+---
+
+<div align="center">
+
+| Login | Daily Log |
+| --- | --- |
+| <img src="./login_screen/screen.png" alt="Cat-puccino login screen" width="260" /> | <img src="./home_daily_log/screen.png" alt="Cat-puccino daily log screen" width="260" /> |
+
+| Calendar & Stats | Profile |
+| --- | --- |
+| <img src="./calendar_stats/screen.png" alt="Cat-puccino calendar and stats screen" width="260" /> | <img src="./user_profile/screen.png" alt="Cat-puccino user profile screen" width="260" /> |
+
+</div>
 
 ---
 
@@ -8,9 +35,24 @@ Language: [English](#english) | [中文](#中文)
 
 [Switch to 中文](#中文)
 
-Cat-puccino Drink Tracker is a cozy, cat-themed drink tracking web app prototype for logging coffee, milk tea, juice, soda, and other daily beverages. It combines a playful cafe-inspired visual style with practical tracking features, helping users record what they drank, review their habits, and build a lightweight personal drink diary.
+### The Idea
 
-The project is currently implemented as a static front-end prototype. It runs directly in the browser and stores user data locally with `localStorage`, so no backend account system or database setup is required.
+Cat-puccino Drink Tracker is a cozy, cat-themed drink tracking web app prototype for logging coffee, milk tea, juice, soda, and other daily beverages. It turns everyday drink logging into a soft little cafe ritual: record what you drank, collect visual memories, watch your stats grow, and let the app feel like a tiny pocket cafe.
+
+The project is currently a static front-end prototype. It runs directly in the browser and stores user data locally with `localStorage`, so no backend, database, or real authentication service is required.
+
+### What Makes It Fun
+
+<table>
+  <tr>
+    <td><strong>Cat Cafe Mood</strong><br />Creamy colors, espresso accents, rounded cards, and cat-inspired details make the tracker feel warm instead of clinical.</td>
+    <td><strong>Sip Diary</strong><br />Every drink can include name, shop, price, category, sweetness, ice level, review, and a photo.</td>
+  </tr>
+  <tr>
+    <td><strong>Progression</strong><br />XP, ranks, streaks, and lifetime stats give the app a light game-like loop.</td>
+    <td><strong>Personal Dashboard</strong><br />Home modules can be reordered, resized, and saved, so the tracker feels like your own counter space.</td>
+  </tr>
+</table>
 
 ### Features
 
@@ -19,41 +61,42 @@ The project is currently implemented as a static front-end prototype. It runs di
 - Daily drink logging with name, brand/shop, category, price, sweetness, ice level, photo, and personal review
 - Home dashboard with daily summary cards
 - Recent drink photo timeline
-- Stats page for weekly, monthly, and yearly summaries
+- Weekly, monthly, and yearly stats
 - Calendar view for checking drink records by date
 - Profile page with lifetime stats, streaks, and progression
 - Rank and XP system to make tracking feel more game-like
 - Customizable home layout with drag, reorder, resize, and saved preferences
 - Notification panel and detail modal
 - Privacy and terms modal content
-- Mobile-first interface framed like an app screen
+- Mobile-first app-like interface
 
 ### Tech Stack
 
-- HTML5
-- CSS3
-- Tailwind CSS via CDN
-- JavaScript
-- Browser `localStorage`
-- Google Fonts: Plus Jakarta Sans
-- Google Material Symbols
-
-No package manager, build tool, framework, or server-side runtime is required for the current version.
+| Layer | Technology |
+| --- | --- |
+| Structure | HTML5 |
+| Styling | CSS3, Tailwind CSS CDN |
+| Interaction | JavaScript |
+| Storage | Browser `localStorage` |
+| Typography | Google Fonts: Plus Jakarta Sans |
+| Icons | Google Material Symbols |
+| Build | None required |
+| Backend | None in current prototype |
 
 ### How To Play
 
-Cat-puccino is part tracker and part cozy collection game.
+Cat-puccino is part drink tracker and part cozy collection game.
 
 1. Open the app.
 2. Create a local account, log in, or use the demo account.
 3. Tap **Record Sip** to add a new drink.
-4. Fill in drink details such as drink name, brand, category, price, sweetness, ice level, and review.
-5. Add a photo if you want to build a visual timeline of your drinks.
-6. Check the home dashboard to see today's cups and total volume.
-7. Visit the stats tab to compare your weekly, monthly, or yearly drink habits.
-8. Open the calendar to browse records by day.
-9. Use the profile page to track lifetime progress, streaks, caffeine-themed rank progress, and achievements.
-10. Customize the home dashboard layout to make the app feel personal.
+4. Fill in drink name, brand, category, price, sweetness, ice level, and review.
+5. Add a photo to build your visual drink timeline.
+6. Check the home dashboard for today's cups and volume.
+7. Visit the stats tab to compare weekly, monthly, or yearly habits.
+8. Open the calendar to browse drinks by date.
+9. Use the profile page to track lifetime progress, streaks, ranks, and achievements.
+10. Customize the home dashboard layout until it feels just right.
 
 Because the app uses local browser storage, all records stay on the current device and browser unless the data is cleared.
 
@@ -97,33 +140,20 @@ http://localhost:8000
 
 The visual identity follows a warm boutique cafe mood: soft cream surfaces, espresso brown accents, plush rounded controls, layered cards, subtle texture, and cat-inspired details. The design goal is to feel friendly and comforting while still providing useful drink tracking tools.
 
-Key design ideas include:
+Core design notes:
 
 - Warm coffee and cream color palette
 - Mobile-first app-like layout
 - Soft rounded UI components
-- Tonal layering instead of harsh borders
-- Playful cat elements without overwhelming the interface
-- Cozy dashboard experience for repeated daily use
+- Tonal layering instead of harsh divider lines
+- Playful cat details that support the product personality
+- A cozy dashboard experience designed for repeated daily use
 
 ### Data Storage
 
-The prototype stores data in the browser with `localStorage`, including:
+The prototype stores data in the browser with `localStorage`, including local users, drink records, uploaded image previews, layout order, module sizes, and Bento card preferences. Clearing browser storage or switching devices will remove or hide existing local records.
 
-- Local users
-- Drink records
-- Uploaded image previews
-- Layout order
-- Module sizes
-- Bento card preferences
-
-Clearing browser storage or using the app in another browser/device will remove or hide existing local data.
-
-### Current Status
-
-This is a front-end prototype focused on interface, interaction, and product concept validation. It is suitable for demoing the app flow and testing the feel of the product.
-
-### Future Improvements
+### Roadmap
 
 - Add a real backend and database
 - Add secure authentication
@@ -145,9 +175,24 @@ No license has been specified yet.
 
 [切换到 English](#english)
 
-Cat-puccino Drink Tracker 是一个温暖、可爱、带有猫咪主题的饮品记录 Web App 原型。它可以用来记录咖啡、奶茶、果汁、汽水以及其他日常饮品，把实用的饮品追踪功能和咖啡馆风格的视觉体验结合起来，帮助用户记录自己喝了什么、回顾饮品习惯，并建立一份轻量的个人饮品日记。
+### 项目概念
+
+Cat-puccino Drink Tracker 是一个温暖、可爱、带有猫咪主题的饮品记录 Web App 原型。它可以用来记录咖啡、奶茶、果汁、汽水以及其他日常饮品，把“记录今天喝了什么”变成一个小小的咖啡馆仪式：记录饮品、收藏照片、查看统计、积累等级，让每一杯都留下痕迹。
 
 当前项目是一个静态前端原型，可以直接在浏览器中运行。用户数据通过浏览器的 `localStorage` 保存在本地，因此不需要后端账号系统，也不需要数据库配置。
+
+### 有趣之处
+
+<table>
+  <tr>
+    <td><strong>猫咪咖啡馆氛围</strong><br />奶油色背景、咖啡色强调、圆润卡片和猫咪细节，让饮品记录不再像冷冰冰的数据表。</td>
+    <td><strong>饮品日记</strong><br />每杯饮品都可以记录名称、店铺、价格、分类、甜度、冰量、评价和照片。</td>
+  </tr>
+  <tr>
+    <td><strong>成长系统</strong><br />XP、等级、连续记录天数和累计数据，让日常记录拥有轻量的游戏循环。</td>
+    <td><strong>个人仪表盘</strong><br />首页模块可以拖拽、排序、调整大小并保存偏好，像整理自己的咖啡小桌面。</td>
+  </tr>
+</table>
 
 ### 项目功能
 
@@ -156,7 +201,7 @@ Cat-puccino Drink Tracker 是一个温暖、可爱、带有猫咪主题的饮品
 - 每日饮品记录：饮品名称、品牌/店铺、分类、价格、甜度、冰量、图片和个人评价
 - 首页仪表盘，展示当天饮品摘要
 - 最近饮品图片时间线
-- 统计页面，支持周、月、年维度查看
+- 周、月、年维度统计
 - 日历视图，用于按日期查看饮品记录
 - 个人主页，展示累计数据、连续记录天数和成长进度
 - 等级与 XP 系统，让记录过程更有游戏感
@@ -167,15 +212,16 @@ Cat-puccino Drink Tracker 是一个温暖、可爱、带有猫咪主题的饮品
 
 ### 技术栈
 
-- HTML5
-- CSS3
-- Tailwind CSS CDN
-- JavaScript
-- 浏览器 `localStorage`
-- Google Fonts: Plus Jakarta Sans
-- Google Material Symbols
-
-当前版本不依赖包管理器、构建工具、前端框架或服务端运行环境。
+| 层级 | 技术 |
+| --- | --- |
+| 页面结构 | HTML5 |
+| 样式 | CSS3, Tailwind CSS CDN |
+| 交互 | JavaScript |
+| 数据存储 | 浏览器 `localStorage` |
+| 字体 | Google Fonts: Plus Jakarta Sans |
+| 图标 | Google Material Symbols |
+| 构建工具 | 当前版本不需要 |
+| 后端 | 当前原型暂无后端 |
 
 ### 玩法说明
 
@@ -245,20 +291,7 @@ http://localhost:8000
 
 ### 数据存储
 
-当前原型使用浏览器 `localStorage` 存储数据，包括：
-
-- 本地用户
-- 饮品记录
-- 上传图片预览
-- 首页模块顺序
-- 模块尺寸
-- Bento 卡片偏好
-
-清除浏览器存储，或在其他浏览器/设备中打开应用，都可能导致原有本地数据不可见。
-
-### 当前状态
-
-本项目目前是一个以前端界面、交互流程和产品概念验证为重点的静态原型，适合用于展示核心 App 流程、测试视觉风格和验证产品体验。
+当前原型使用浏览器 `localStorage` 存储数据，包括本地用户、饮品记录、上传图片预览、首页模块顺序、模块尺寸和 Bento 卡片偏好。清除浏览器存储，或在其他浏览器/设备中打开应用，都可能导致原有本地数据不可见。
 
 ### 后续计划
 
