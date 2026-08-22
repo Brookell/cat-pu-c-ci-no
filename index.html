@@ -1147,13 +1147,13 @@
                             <div id="sweetness-badge" class="flex items-center gap-1 bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-[10px] font-bold transition-all duration-300">
                                 <span id="sweetness-desc">Regular</span>
                                 <span class="flex items-center gap-0.5 ml-1">
-                                    <input type="number" id="sweetness-num-input" min="0" max="120" value="100" class="w-8 bg-transparent border-none p-0 text-center font-extrabold text-[10px] text-on-secondary-container focus:ring-0 focus:outline-none" oninput="handleSweetnessInput(this.value)" />
+                                    <input type="number" id="sweetness-num-input" min="0" max="120" step="10" value="100" class="w-8 bg-transparent border-none p-0 text-center font-extrabold text-[10px] text-on-secondary-container focus:ring-0 focus:outline-none" oninput="handleSweetnessInput(this.value)" />
                                     <span>%</span>
                                 </span>
                             </div>
                         </div>
                         <div class="pt-2 pb-2 px-1">
-                            <input type="range" min="0" max="120" value="100" class="custom-slider" id="sweetness-slider" oninput="updateSweetness(this.value)">
+                            <input type="range" min="0" max="120" step="10" value="100" class="custom-slider" id="sweetness-slider" oninput="updateSweetness(this.value)">
                             <div class="flex justify-between text-[8px] font-bold uppercase tracking-widest text-on-surface-variant mt-2 px-1">
                                 <span id="sweetness-no-sugar" class="text-left">No Sugar</span>
                                 <span id="sweetness-half" class="text-center">Half</span>
@@ -1173,13 +1173,13 @@
                             <div id="ice-badge" class="flex items-center gap-1 bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-[10px] font-bold transition-all duration-300">
                                 <span id="ice-desc">Regular</span>
                                 <span class="flex items-center gap-0.5 ml-1">
-                                    <input type="number" id="ice-num-input" min="0" max="120" value="100" class="w-8 bg-transparent border-none p-0 text-center font-extrabold text-[10px] text-on-secondary-container focus:ring-0 focus:outline-none" oninput="handleIceInput(this.value)" />
+                                    <input type="number" id="ice-num-input" min="0" max="120" step="10" value="100" class="w-8 bg-transparent border-none p-0 text-center font-extrabold text-[10px] text-on-secondary-container focus:ring-0 focus:outline-none" oninput="handleIceInput(this.value)" />
                                     <span>%</span>
                                 </span>
                             </div>
                         </div>
                         <div class="pt-2 pb-2 px-1">
-                            <input type="range" min="0" max="120" value="100" class="custom-slider" id="ice-slider" oninput="updateIceLevel(this.value)">
+                            <input type="range" min="0" max="120" step="10" value="100" class="custom-slider" id="ice-slider" oninput="updateIceLevel(this.value)">
                             <div class="flex justify-between text-[8px] font-bold uppercase tracking-widest text-on-surface-variant mt-2 px-1">
                                 <span id="ice-no-ice" class="text-left">No Ice</span>
                                 <span id="ice-less-ice" class="text-center">Less Ice</span>
@@ -2374,14 +2374,22 @@
             }
         }
 
+        function snapToTen(value) {
+            const num = parseInt(value, 10) || 0;
+            return Math.min(Math.max(Math.round(num / 10) * 10, 0), 120);
+        }
+
         function updateSweetness(val) {
-            const num = parseInt(val, 10) || 0;
-            const cappedNum = Math.min(Math.max(num, 0), 120);
+            const cappedNum = snapToTen(val);
 
             // Update numeric input to match slider
             const numInput = document.getElementById('sweetness-num-input');
             if (numInput && parseInt(numInput.value, 10) !== cappedNum) {
                 numInput.value = cappedNum;
+            }
+            const slider = document.getElementById('sweetness-slider');
+            if (slider && parseInt(slider.value, 10) !== cappedNum) {
+                slider.value = cappedNum;
             }
 
             // Update description label based on value
@@ -2411,13 +2419,16 @@
         }
 
         function handleSweetnessInput(val) {
-            const num = parseInt(val, 10) || 0;
-            const cappedNum = Math.min(Math.max(num, 0), 120);
+            const cappedNum = snapToTen(val);
             
             // Sync range slider
             const slider = document.getElementById('sweetness-slider');
             if (slider && parseInt(slider.value, 10) !== cappedNum) {
                 slider.value = cappedNum;
+            }
+            const numInput = document.getElementById('sweetness-num-input');
+            if (numInput && parseInt(numInput.value, 10) !== cappedNum) {
+                numInput.value = cappedNum;
             }
             
             // Sync description label
@@ -2440,13 +2451,16 @@
         }
 
         function updateIceLevel(val) {
-            const num = parseInt(val, 10) || 0;
-            const cappedNum = Math.min(Math.max(num, 0), 120);
+            const cappedNum = snapToTen(val);
 
             // Update numeric input to match slider
             const numInput = document.getElementById('ice-num-input');
             if (numInput && parseInt(numInput.value, 10) !== cappedNum) {
                 numInput.value = cappedNum;
+            }
+            const slider = document.getElementById('ice-slider');
+            if (slider && parseInt(slider.value, 10) !== cappedNum) {
+                slider.value = cappedNum;
             }
 
             // Update description label based on value
@@ -2476,13 +2490,16 @@
         }
 
         function handleIceInput(val) {
-            const num = parseInt(val, 10) || 0;
-            const cappedNum = Math.min(Math.max(num, 0), 120);
+            const cappedNum = snapToTen(val);
 
             // Sync range slider
             const slider = document.getElementById('ice-slider');
             if (slider && parseInt(slider.value, 10) !== cappedNum) {
                 slider.value = cappedNum;
+            }
+            const numInput = document.getElementById('ice-num-input');
+            if (numInput && parseInt(numInput.value, 10) !== cappedNum) {
+                numInput.value = cappedNum;
             }
 
             // Sync description label
